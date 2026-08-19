@@ -85,7 +85,20 @@ payload = {"taken_at": now.isoformat().replace("+00:00", "Z"),
 f = OUT / f"{stamp}_gw{gw}.json"
 f.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
-print(f"Snapshot: {f.name}   GW{gw}–{last}")
+# --- nyesés: fordulónként a 3 legfrissebb marad a munkakönyvtárban.
+# Nem veszik el semmi: a git-történet a törölt snapshotokat is megőrzi
+# (`git log --diff-filter=D --name-only -- proj/`). A deadline előtti utolsó
+# mindig benne van, mert a forduló váltásakor új gw-csoport indul.
+KEEP = 3
+groups = {}
+for p in OUT.glob("*_gw*.json"):
+    groups.setdefault(p.name.split("_gw")[-1], []).append(p)
+pruned = 0
+for _, ps in groups.items():
+    for p in sorted(ps)[:-KEEP]:
+        p.unlink(); pruned += 1
+
+print(f"Snapshot: {f.name}   GW{gw}–{last}" + (f"   (nyesve {pruned} régi)" if pruned else ""))
 for k, n in notes.items():
     print(f"  {n['label']:<24} {n['players']:>3} játékos" +
           (f", {n['skipped']} kihagyva" if n.get("skipped") else "") + f"   — {n['note']}")

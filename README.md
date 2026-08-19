@@ -3,7 +3,8 @@
 Egy draft-rendszerű FPL liga értékelése: **több független rangsor**, saját vonal-pontozás,
 és fordulónkénti **projektált vs. valós** H2H eredmény.
 
-**Élő oldal:** https://runci0923.github.io/fpl-draft/
+**Élő oldal:** https://runci0923.github.io/fpl-draft/ — a forduló (landing) ·
+[draft-elemzés](https://runci0923.github.io/fpl-draft/draft.html)
 
 A publikus oldalon a résztvevők csak keresztnévvel szerepelnek, csapatnév nélkül.
 
@@ -50,3 +51,8 @@ FPL hivatalos `ep_next` (baseline)
   (18:03 UTC vs. 19:55 CEST). A `build_h2h.py` ezen felül a fájl `taken_at` mezője szerint
   rendez, nem fájlnév szerint — ez a második védelmi vonal.
 - A **forrás dönti el, ki nyer.** A rangsorok Spearman-egyezése 0,48–0,79.
+- **Az igazolásokat nem kell külön követni.** Publikus tranzakció-végpont nincs (404), de az
+  `element-status` mindig az aktuális birtoklást adja, és minden futás ebből épít. A változás
+  a `rosters.json` git-diffjében olvasható: `git log -p rosters.json`.
+- **A snapshot-nyesés nem veszteség.** Fordulónként 3 marad a munkakönyvtárban; a törölteket
+  a git megőrzi (`git log --diff-filter=D --name-only -- proj/`).

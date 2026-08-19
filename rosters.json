@@ -1,0 +1,156 @@
+{
+ "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
+ "taken_at": "2026-08-19T18:18:17Z",
+ "rosters": {
+  "Krisztian": {
+   "GKP": [
+    "Raya (ARS) · pick 49",
+    "Lammens (MUN) · pick 85"
+   ],
+   "DEF": [
+    "J.Timber (ARS) · pick 36",
+    "Rúben (MCI) · pick 37",
+    "Truffert (BOU) · pick 60",
+    "Mukiele (SUN) · pick 61",
+    "Palestra (CHE) · pick 72"
+   ],
+   "MID": [
+    "Semenyo (MCI) · pick 13",
+    "Dewsbury-Hall (EVE) · pick 24",
+    "Bruno G. (ARS) · pick 25",
+    "Rayan (BOU) · pick 48",
+    "Neto (CHE) · pick 73"
+   ],
+   "FWD": [
+    "Haaland (MCI) · pick 1",
+    "Watkins (AVL) · pick 12",
+    "Woltemade (NEW) · pick 84"
+   ]
+  },
+  "Daniel": {
+   "GKP": [
+    "A.Becker (LIV) · pick 62",
+    "Kelleher (BRE) · pick 86"
+   ],
+   "DEF": [
+    "N.Williams (NFO) · pick 35",
+    "Pedro Porro (TOT) · pick 47",
+    "Van Hecke (TOT) · pick 71",
+    "Konsa (AVL) · pick 74",
+    "Collins (BRE) · pick 83"
+   ],
+   "MID": [
+    "B.Fernandes (MUN) · pick 2",
+    "Wirtz (LIV) · pick 11",
+    "Cunha (MUN) · pick 23",
+    "Wilson (LEE) · pick 38",
+    "Tavernier (BOU) · pick 59"
+   ],
+   "FWD": [
+    "Gyökeres (ARS) · pick 14",
+    "Mateta (CRY) · pick 26",
+    "Richarlison (TOT) · pick 50"
+   ]
+  },
+  "Attila": {
+   "GKP": [
+    "Donnarumma (MCI) · pick 63",
+    "Martinez (AVL) · pick 87"
+   ],
+   "DEF": [
+    "Senesi (TOT) · pick 51",
+    "Muñoz (CRY) · pick 58",
+    "Milenković (NFO) · pick 70",
+    "Maguire (MUN) · pick 75",
+    "White (ARS) · pick 82"
+   ],
+   "MID": [
+    "Saka (ARS) · pick 3",
+    "Szoboszlai (LIV) · pick 10",
+    "Rice (ARS) · pick 22",
+    "Tzolis (ARS) · pick 27",
+    "Anderson (MCI) · pick 46"
+   ],
+   "FWD": [
+    "Calvert-Lewin (LEE) · pick 15",
+    "Brobbey (SUN) · pick 34",
+    "Evanilson (BOU) · pick 39"
+   ]
+  },
+  "David": {
+   "GKP": [
+    "Kinsky (TOT) · pick 76",
+    "Sels (NFO) · pick 88"
+   ],
+   "DEF": [
+    "Gabriel (ARS) · pick 4",
+    "Virgil (LIV) · pick 21",
+    "Calafiori (ARS) · pick 33",
+    "Lacroix (CHE) · pick 52",
+    "Shaw (MUN) · pick 64"
+   ],
+   "MID": [
+    "Mbeumo (MUN) · pick 9",
+    "Gibbs-White (NFO) · pick 16",
+    "Groß (BHA) · pick 40",
+    "Foden (MCI) · pick 45",
+    "Ndiaye (EVE) · pick 57"
+   ],
+   "FWD": [
+    "Igor Jesus (NFO) · pick 28",
+    "Georginio (BHA) · pick 69",
+    "Strand Larsen (CRY) · pick 81"
+   ]
+  },
+  "Dominik": {
+   "GKP": [
+    "Pickford (EVE) · pick 68",
+    "Roefs (SUN) · pick 89"
+   ],
+   "DEF": [
+    "Gvardiol (MCI) · pick 41",
+    "Tarkowski (EVE) · pick 44",
+    "Frimpong (LIV) · pick 53",
+    "Mosquera (ARS) · pick 56",
+    "Canvot (CRY) · pick 80"
+   ],
+   "MID": [
+    "Palmer (CHE) · pick 5",
+    "Rogers (CHE) · pick 17",
+    "Sarr (CRY) · pick 32",
+    "Gakpo (LIV) · pick 65",
+    "E.Le Fée (SUN) · pick 77"
+   ],
+   "FWD": [
+    "Thiago (BRE) · pick 8",
+    "Havertz (ARS) · pick 20",
+    "Wissa (NEW) · pick 29"
+   ]
+  },
+  "Norbert": {
+   "GKP": [
+    "Sánchez (CHE) · pick 67",
+    "Henderson (CRY) · pick 90"
+   ],
+   "DEF": [
+    "O'Reilly (MCI) · pick 19",
+    "Guéhi (MCI) · pick 31",
+    "James (CHE) · pick 43",
+    "Hincapie (ARS) · pick 54",
+    "Kerkez (LIV) · pick 55"
+   ],
+   "MID": [
+    "Doku (MCI) · pick 18",
+    "Ødegaard (ARS) · pick 30",
+    "Maddison (TOT) · pick 42",
+    "Mac Allister (LIV) · pick 66",
+    "Barnes (NEW) · pick 79"
+   ],
+   "FWD": [
+    "Isak (LIV) · pick 6",
+    "João Pedro (CHE) · pick 7",
+    "Madjo (AVL) · pick 78"
+   ]
+  }
+ }
+}

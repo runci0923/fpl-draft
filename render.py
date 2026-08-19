@@ -1,47 +1,20 @@
 #!/usr/bin/env python3
 """data.json -> index.html  (Vikingo Design System tokenek, kliens-oldali pontozás)"""
-import argparse, json, pathlib
+import argparse, json, pathlib, sys
+sys.path.insert(0, str(pathlib.Path(__file__).parent))
+import theme
 
 HERE = pathlib.Path(__file__).parent
 ap = argparse.ArgumentParser()
 ap.add_argument("--data", default=str(HERE / "data.json"))
 ap.add_argument("--out", default=str(HERE / "index.html"))
 ap.add_argument("--title", default="Vadkelet Draft Scorecard")
+ap.add_argument("--gw-href", default="gw.html")
 A = ap.parse_args()
 DATA = pathlib.Path(A.data).read_text(encoding="utf-8")
 
 TPL = r"""<title>__TITLE__</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Mono:wght@400;500&display=swap">
-<style>
-:root{
-  --coral:#FF544D; --coral-d:#E83D36;
-  --ink:#3E2E45; --paper:#F3EEEB; --sand:#DCD0C3; --mauve:#7A687F;
-  --bg:var(--paper); --fg:var(--ink); --dim:var(--mauve);
-  --surface:#FFFFFF; --surface-2:#F6EFE8; --rule:var(--sand); --raised:#EFE7E1;
-  --r-sm:8px; --r-md:12px; --r-lg:16px;
-  --sh-sm:0 1px 2px rgba(42,32,54,.08); --sh-md:0 4px 16px rgba(42,32,54,.10);
-  --gutter:clamp(20px,5.5vw,80px);
-  --display:"Clash Display","Bricolage Grotesque",system-ui,sans-serif;
-  --mono:"DM Mono",ui-monospace,monospace;
-}
-@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#25273E; --fg:#F3EEEB; --dim:#A99BAE;
-  --surface:#2E3049; --surface-2:#343657; --rule:#454869; --raised:#3B3D5C;
-  --sh-sm:0 1px 2px rgba(0,0,0,.30); --sh-md:0 4px 16px rgba(0,0,0,.34);
-}}
-:root[data-theme="dark"]{
-  --bg:#25273E; --fg:#F3EEEB; --dim:#A99BAE;
-  --surface:#2E3049; --surface-2:#343657; --rule:#454869; --raised:#3B3D5C;
-  --sh-sm:0 1px 2px rgba(0,0,0,.30); --sh-md:0 4px 16px rgba(0,0,0,.34);
-}
-*{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--display);
-  font-optical-sizing:auto;-webkit-font-smoothing:antialiased;line-height:1.45}
-.mono{font-family:var(--mono)}
-.num,.score,b,td,th{font-variant-numeric:tabular-nums}
-.wrap{max-width:1360px;margin:0 auto;padding:clamp(30px,5.5vw,64px) var(--gutter) 96px}
+__HEAD__.wrap{max-width:1360px;margin:0 auto;padding:clamp(30px,5.5vw,64px) var(--gutter) 96px}
 h1{font-weight:600;font-size:clamp(32px,5.8vw,58px);line-height:1.02;letter-spacing:-.022em;margin:0 0 14px;text-wrap:balance}
 h2{font-size:clamp(19px,2.3vw,25px);font-weight:600;letter-spacing:-.01em;margin:0}
 .kicker{font-family:var(--mono);font-size:11.5px;letter-spacing:.15em;text-transform:uppercase;color:var(--coral);margin:0 0 13px}
@@ -52,7 +25,12 @@ h2{font-size:clamp(19px,2.3vw,25px);font-weight:600;letter-spacing:-.01em;margin
 .sec-h p{margin:0;font-family:var(--mono);font-size:11.5px;color:var(--dim)}
 
 /* ---------- forrásválasztó ---------- */
-.picker{margin-top:30px;padding:18px 20px;background:var(--surface);border:1px solid var(--rule);
+.nav{display:flex;gap:4px;margin:26px 0 0;border-bottom:1px solid var(--rule)}
+.nav a{padding:10px 17px;color:var(--dim);text-decoration:none;font-size:15px;font-weight:500;
+  border-bottom:2px solid transparent;margin-bottom:-1px}
+.nav a:hover{color:var(--fg)}
+.nav a[aria-current="page"]{color:var(--fg);border-bottom-color:var(--coral)}
+.picker{margin-top:22px;padding:18px 20px;background:var(--surface);border:1px solid var(--rule);
   border-radius:var(--r-lg);box-shadow:var(--sh-sm)}
 .picker > h2{font-size:12px;font-weight:500;letter-spacing:.11em;text-transform:uppercase;color:var(--dim);margin-bottom:12px}
 .pills{display:flex;flex-wrap:wrap;gap:8px}
@@ -295,6 +273,11 @@ td.nm{font-size:14.5px;font-weight:500}
   <p class="lede">Minden játékos annyi pontot ér, ahányadik a választott rangsoron. A 15 keret-tag
   pontja összeadva a csapat pontszáma — <b>minél kevesebb, annál jobb</b>. Öt független rangsor van
   betöltve; <b>váltogasd őket</b>, és látszik, mennyire bírja a végeredmény a forrásváltást.</p>
+
+  <nav class="nav">
+    <a href="#" aria-current="page">Draft</a>
+    <a href="__GW_HREF__">A forduló</a>
+  </nav>
 
   <div class="picker">
     <h2 id="pickh">Rangsor-forrás</h2>
@@ -938,5 +921,7 @@ refresh();
 
 out = pathlib.Path(A.out)
 out.parent.mkdir(parents=True, exist_ok=True)
-out.write_text(TPL.replace("__TITLE__", A.title).replace("__DATA__", DATA), encoding="utf-8")
+out.write_text(TPL.replace("__TITLE__", A.title).replace("__HEAD__", theme.HEAD)
+                  .replace("__GW_HREF__", A.gw_href)
+                  .replace("__DATA__", DATA), encoding="utf-8")
 print(f"{out}: {len(TPL) + len(DATA)} bájt")

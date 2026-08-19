@@ -5,7 +5,8 @@ name: Frissítés
 # futás lesz a kanonikus becslés.
 on:
   schedule:
-    - cron: '17 */6 * * *'        # 6 óránként
+    - cron: '17 */2 * * *'        # 2 óránként — így a deadline előtti utolsó
+                                  # snapshot legfeljebb 2 órás késésű
   workflow_dispatch:
 
 permissions:
@@ -23,9 +24,11 @@ jobs:
         run: |
           python build_idmap.py
           python fetch_rankings.py
-          python fetch_league.py
+          python fetch_league.py       # az élő birtoklás: waiver/csere magától átjön
           python build.py
+          python build_rosters.py      # diffelhető keret-napló a git-történethez
           python fetch_projections.py
+          python fetch_actuals.py      # deadline után: tényleges felállás + pontok
           python build_h2h.py
           python publish_pages.py
 

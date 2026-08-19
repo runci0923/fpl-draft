@@ -27,15 +27,27 @@ for m in d["managers"]:
     m["team"] = ""              # csapatnév nem kerül nyílt webre
 d["league"] = {**d["league"], "name": "Draft-liga"}
 
+h2h = json.loads((HERE / "h2h.json").read_text(encoding="utf-8"))
+h2h["league"] = {**h2h["league"], "name": "Draft-liga"}
+(SITE / "h2h.public.json").write_text(json.dumps(h2h, ensure_ascii=False, separators=(",", ":")),
+                                      encoding="utf-8")
+
 pub = SITE / "data.public.json"
 pub.write_text(json.dumps(d, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+# a landing a FORDULÓ-oldal (azt nézi hetente), a draft-elemzés a draft.html
 subprocess.run([sys.executable, str(HERE / "render.py"),
-                "--data", str(pub), "--out", str(SITE / "index.html"),
-                "--title", "FPL Draft Scorecard"], check=True)
+                "--data", str(pub), "--out", str(SITE / "draft.html"),
+                "--title", "FPL Draft Scorecard", "--gw-href", "index.html"], check=True)
+subprocess.run([sys.executable, str(HERE / "render_gw.py"),
+                "--data", str(pub), "--h2h", str(SITE / "h2h.public.json"),
+                "--out", str(SITE / "index.html"),
+                "--title", "FPL Draft — a forduló", "--draft-href", "draft.html"], check=True)
 (SITE / ".nojekyll").write_text("", encoding="utf-8")
 
-html = (SITE / "index.html").read_text(encoding="utf-8")
-leak = sorted(x for x in forbidden if x in html)
-if leak:
-    sys.exit(f"HIBA: azonosító adat maradt a publikus buildben ({len(leak)} db)")
-print(f"docs/index.html kész ({len(html)} bájt) — {len(forbidden)} tiltott kifejezés ellenőrizve, egy sem szivárgott")
+for page in ("index.html", "draft.html"):
+    html = (SITE / page).read_text(encoding="utf-8")
+    leak = sorted(x for x in forbidden if x in html)
+    if leak:
+        sys.exit(f"HIBA: azonosító adat maradt a(z) docs/{page}-ben ({len(leak)} db)")
+    print(f"docs/{page} kész ({len(html)} bájt) — tiszta")
+print(f"{len(forbidden)} tiltott kifejezés ellenőrizve mindkét lapon")
