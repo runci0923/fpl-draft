@@ -32,8 +32,20 @@ de bármikor újragenerálhatók a nyílt API-ból.
 [OneFPL](https://onefpl.com/blog/fpl-draft-rankings-top-100-2026-27) ·
 [RotoWire](https://www.rotowire.com/soccer/article/fantasy-premier-league-fpl-rankings-top-400-for-2026-27-season-124261)
 
-**Projekciók** — [FPL Form](https://fplform.com/fpl-predicted-points) (fordulónkénti, ingyenes) ·
-FPL hivatalos `ep_next` (baseline)
+**Projekciók** — [FPL Form](https://fplform.com/fpl-predicted-points) (fordulónkénti, ingyenes,
+automatizált) · [Fantasy Football Hub](https://www.fantasyfootballhub.co.uk/predictions) PRO
+(fordulónkénti pont + várható perc + gól/gólpassz; **fizetős**, kézi lépés, nyílt webre nem kerül)
+
+### Projekciós források — mi jött be és mi nem
+
+| Forrás | Állapot | Miért |
+|---|---|---|
+| FPL Form | ✅ automatizált | POST-export CSV-t ad, kulcs nélkül |
+| FPL Hub PRO | ✅ kézi lépés | `public-api…/league/players`, `after` kurzor, bearer a `/auth/access-token`-ből. Bejelentkezés kell -> nem CI-zhető |
+| FPL hivatalos `ep_next` | ❌ kivéve | szezon előtt lapos placeholder (Haaland = Raya = 4,0) |
+| [Solio](https://fpl.solioanalytics.com/) | ⛔ elakadt | a rács **canvasra** rajzol, árnyék-DOM-ban; a 21 soros akadálymentességi tükör teljes pontossággal olvasható, de görgetésre nem frissül. Projekciós végpont nem került elő (`/api/initial-fpl-plan-data/{a}/{b}` csak terv-metaadat) |
+| [fplestimator](https://www.fplestimator.com/best-picks) | ⛔ elakadt | az xPts **kliens oldalon** számolódik. Supabase-ben a `players`/`fixtures`/`events` anon-olvasható, de a `player_gameweek_stats` és `player_xpts_snapshot` RLS-zárt; a `get_xpts_snapshots_range(start_gw,end_gw)` RPC üres (befagyasztott visszamérés, szezon előtt nincs). A DOM-ból 558 sor kinyerhető (5 fordulós **összeg**, nem per-forduló), de a lap CSP-je blokkolja a localhost-átadást |
+| [daniel-mehta/FPL-Expected-Points](https://github.com/daniel-mehta/FPL-Expected-Points) | ❌ kiesik | nem publikált becslés, hanem futtatható modell; a CSV-k 2024 novemberiek |
 
 **Liga** — a nyílt `draft.premierleague.com/api` (auth nélkül)
 
