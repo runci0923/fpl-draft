@@ -1,0 +1,38 @@
+name: Frissítés
+
+# A rangsorok naponta, a projekciók fordulónként változnak. A snapshot-elv miatt
+# sűrűbben futunk, mint amilyen sűrűn az adat változik: a deadline előtti utolsó
+# futás lesz a kanonikus becslés.
+on:
+  schedule:
+    - cron: '17 */6 * * *'        # 6 óránként
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: '3.12' }
+
+      - name: Adatok újrahúzása
+        run: |
+          python build_idmap.py
+          python fetch_rankings.py
+          python fetch_league.py
+          python build.py
+          python fetch_projections.py
+          python build_h2h.py
+          python publish_pages.py
+
+      - name: Commit, ha változott
+        run: |
+          git config user.name "fpl-draft-bot"
+          git config user.email "actions@github.com"
+          git add -A
+          git diff --quiet --cached || git commit -m "Frissítés: rangsorok, keretek, projekciók"
+          git push

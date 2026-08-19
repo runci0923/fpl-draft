@@ -1,0 +1,10 @@
+# Valódi nevekkel: nem megy nyílt webre
+league.json
+data.json
+
+# Munkakönyvtár
+__pycache__/
+.DS_Store
+
+# A privát, teljes nevekkel rendelt lap (az artifacthoz) — a publikus a docs/-ban van
+index.html

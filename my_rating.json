@@ -1,0 +1,17 @@
+{
+  "_doc": [
+    "Attila saját vonal-értékelése, 1-5. A lap ezt tölti be alapértékként;",
+    "ha a böngészőben van mentett érték (localStorage 'vk-draft-rating'), az felülírja.",
+    "Kiolvasva a böngészőből 2026-08-19-én a lap mentés-kódjából:",
+    "KB DT AN DD DV NP | KAP 534232 · VÉD 332533 · KÖZ 444442 · TÁM 533235"
+  ],
+  "date": "2026-08-19",
+  "by": "Attila Nagy",
+  "order": ["KB", "DT", "AN", "DD", "DV", "NP"],
+  "ratings": {
+    "GKP": {"106158": 5, "106156": 3, "106153": 4, "106155": 2, "106154": 3, "106157": 2},
+    "DEF": {"106158": 3, "106156": 3, "106153": 2, "106155": 5, "106154": 3, "106157": 3},
+    "MID": {"106158": 4, "106156": 4, "106153": 4, "106155": 4, "106154": 4, "106157": 2},
+    "FWD": {"106158": 5, "106156": 3, "106153": 3, "106155": 2, "106154": 3, "106157": 5}
+  }
+}
