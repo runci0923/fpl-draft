@@ -7,6 +7,7 @@ Valós pontszám = a liga `matches` végpontjából, ha a forduló lezárult.
 
 Kimenet: h2h.json — fordulónként, forrásonként: projektált eredmény + valós + szerencse-mérleg.
 """
+import datetime as dt
 import json, pathlib, subprocess, sys
 from itertools import combinations
 
@@ -37,9 +38,16 @@ def best_xi(squad, pts):
         if tot > bestsum: best, bestsum = [gk] + pick, tot
     return (best or []), round(bestsum if best else 0.0, 2)
 
-snaps = sorted((HERE / "proj").glob("*.json"))
-if not snaps: sys.exit("Nincs projekció-snapshot — futtasd a fetch_projections.py-t")
-snap = json.loads(snaps[-1].read_text(encoding="utf-8"))       # a legfrissebb
+# A legfrissebb snapshot a TARTALOM taken_at-je szerint, nem fájlnév szerint:
+# a fájlnév-rendezés vegyes időzónánál (helyi gép vs. UTC runner) hibázik.
+cands = list((HERE / "proj").glob("*.json"))
+if not cands: sys.exit("Nincs projekció-snapshot — futtasd a fetch_projections.py-t")
+def when(p):
+    ts = json.loads(p.read_text(encoding="utf-8"))["taken_at"].replace("Z", "+00:00")
+    d = dt.datetime.fromisoformat(ts)
+    return d if d.tzinfo else d.replace(tzinfo=dt.timezone.utc)
+snaps = sorted(cands, key=when)
+snap = json.loads(snaps[-1].read_text(encoding="utf-8"))
 print(f"Snapshot: {snaps[-1].name}  (készült {snap['taken_at']}, GW{snap['gw_from']}–{snap['gw_to']})\n")
 
 data = json.loads((HERE / "data.json").read_text(encoding="utf-8"))

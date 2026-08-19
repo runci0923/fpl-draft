@@ -32,7 +32,10 @@ MAIN2DRAFT = {int(k): v for k, v in idmap["main_to_draft"].items()}
 game = json.loads(curl(["https://draft.premierleague.com/api/game"]))
 gw = a.gw or game["next_event"] or 1
 last = min(38, gw + a.horizon - 1)
-stamp = dt.datetime.now().replace(microsecond=0).isoformat().replace(":", "-")
+# UTC MINDENHOL: a gép CEST, a CI-runner UTC — naiv időbélyeggel a fájlnév-rendezés
+# a régebbi snapshotot hinné frissebbnek.
+now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
+stamp = now.strftime("%Y-%m-%dT%H-%M-%SZ")
 
 sources, notes = {}, {}
 
@@ -76,7 +79,7 @@ notes["official"] = {"label": "FPL hivatalos (ep_next)",
                      "note": "csak a KÖVETKEZŐ fordulóra ad értéket; szezon előtt lapos "
                              f"(a leggyakoribb értékek: {', '.join(f'{v}={n}x' for v, n in top)})"}
 
-payload = {"taken_at": dt.datetime.now().replace(microsecond=0).isoformat(),
+payload = {"taken_at": now.isoformat().replace("+00:00", "Z"),
            "gw_from": gw, "gw_to": last, "deadline_gw": game["next_event"],
            "sources": notes, "data": sources}
 f = OUT / f"{stamp}_gw{gw}.json"

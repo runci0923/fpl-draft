@@ -45,4 +45,8 @@ FPL hivatalos `ep_next` (baseline)
   (11 fő, 1 GK, DEF 3–5, MID 2–5, FWD 1–3). Deadline előtt a valós XI nem kérhető le.
 - **Snapshot, nem felülírás:** minden projekció-futás külön fájl időbélyeggel. A deadline
   előtti utolsó a kanonikus — az az információ, amiből dönteni lehetett.
+- **Az időbélyeg MINDIG UTC, `Z` utótaggal.** A fejlesztőgép CEST, a CI-runner UTC; naiv
+  időbélyeggel a fájlnév lexikai rendezése a RÉGEBBI snapshotot hiszi frissebbnek
+  (18:03 UTC vs. 19:55 CEST). A `build_h2h.py` ezen felül a fájl `taken_at` mezője szerint
+  rendez, nem fájlnév szerint — ez a második védelmi vonal.
 - A **forrás dönti el, ki nyer.** A rangsorok Spearman-egyezése 0,48–0,79.
