@@ -15,6 +15,8 @@ ap.add_argument("--fpl-entry", type=int, default=117238, help="a saját (nem dra
 A = ap.parse_args()
 
 hub = json.loads((HERE / "ffhub" / "ffhub_raw.json").read_text(encoding="utf-8"))
+cmp_path = HERE / "compare.json"
+CMP = json.loads(cmp_path.read_text(encoding="utf-8")) if cmp_path.exists() else None
 idmap = json.loads((HERE / "idmap.json").read_text(encoding="utf-8"))
 M2D = {int(k): v for k, v in idmap["main_to_draft"].items()}
 data = json.loads((HERE / "data.json").read_text(encoding="utf-8"))
@@ -61,7 +63,7 @@ for p in hub["players"]:
     })
 gws = sorted({int(k) for p in players for k in p["gw"]})
 
-PAY = json.dumps({"taken_at": hub["taken_at"], "gws": gws, "players": players,
+PAY = json.dumps({"taken_at": hub["taken_at"], "gws": gws, "players": players, "cmp": CMP,
                   "fpl_note": fpl_note, "fpl_squad_size": len(fpl_squad),
                   "managers": [{"first": m["first"], "ini": m["initials"],
                                 "me": m["entry"] == ME_DRAFT} for m in data["managers"]]},
@@ -120,6 +122,22 @@ ol.list li.free .nm{font-weight:600}
   border-radius:999px;background:var(--dim);color:var(--bg);margin-left:5px}
 .ow.free{background:transparent;border:1px dashed var(--coral);color:var(--coral)}
 .ow.me{background:var(--coral);color:#fff}
+[hidden]{display:none !important}
+.tw{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r-md);background:var(--surface);
+  box-shadow:var(--sh-sm);margin-top:16px}
+table{width:100%;border-collapse:collapse}
+thead th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);font-weight:400;text-align:right;padding:11px 10px;border-bottom:1px solid var(--rule);white-space:nowrap}
+tbody td{padding:9px 10px;border-bottom:1px solid var(--rule);font-size:13px;text-align:right;
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+tbody tr:last-child td{border-bottom:0}
+th.l,td.l{text-align:left}
+td.nm2{font-weight:500;font-size:14px}
+tr.hi{background:var(--surface-2)}
+.dimc{color:var(--dim)}
+.hot{color:var(--coral);font-weight:500}
+.sechd{margin:26px 0 0;font-size:16px;font-weight:600}
+.sechd + p{margin:3px 0 0;font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.6}
 .note{margin-top:clamp(32px,5vw,54px);padding-top:18px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--dim);max-width:84ch}
 .note b{color:var(--fg);font-weight:500}
@@ -146,6 +164,7 @@ ol.list li.free .nm{font-weight:600}
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="t-draft" aria-selected="true">Draft-nézet</button>
     <button class="tab" role="tab" id="t-fpl" aria-selected="false">Fantasy-nézet</button>
+    <button class="tab" role="tab" id="t-cmp" aria-selected="false">Becslés-különbségek</button>
   </div>
 
   <div class="ctl">
@@ -156,6 +175,7 @@ ol.list li.free .nm{font-weight:600}
 
   <p class="warn" id="fplnote" hidden></p>
   <div class="cols" id="cols"></div>
+  <div id="cmpview" hidden></div>
   <p class="note" id="foot"></p>
 </div>
 
@@ -227,15 +247,64 @@ function render() {
      játékosok listája versenyelőny a ligában — ezért nincs a publikus oldalon.`;
 }
 
+function renderCmp() {
+  const C = D.cmp, box = document.getElementById('cmpview');
+  if (!C) { box.innerHTML = '<p class="note">Nincs összevetés-adat (futtasd a compare_sources.py-t).</p>'; return; }
+  const K = Object.keys(C.labels);
+  const L = k => esc(C.labels[k]);
+  const rhoTbl = (obj, cap) => `<div class="tw"><table>
+    <thead><tr><th class="l">${cap}</th>${K.map(k=>`<th>${L(k)}</th>`).join('')}</tr></thead><tbody>` +
+    K.map(a=>`<tr><td class="l nm2">${L(a)}</td>` + K.map(b=>{
+      if (a===b) return '<td class="dimc">·</td>';
+      const v = obj[a+'|'+b] || obj[b+'|'+a];
+      return `<td class="${v && v.rho>=0.7?'hot':'dimc'}">${v&&v.rho!=null?v.rho.toFixed(2):'–'}</td>`;
+    }).join('') + '</tr>').join('') + '</tbody></table></div>';
+
+  const rot = C.rows.filter(r=>r.kind==='rotation');
+  const val = C.rows.filter(r=>r.kind==='value');
+  const list = (arr, n) => `<div class="tw"><table>
+    <thead><tr><th class="l">Játékos</th><th>Poz</th>${K.map(k=>`<th>${L(k)}</th>`).join('')}
+      <th>Szórás</th><th>FPL Hub perc</th><th class="l">Kinél van</th></tr></thead><tbody>` +
+    arr.slice(0,n).map(r=>`<tr><td class="l nm2">${esc(r.n)} <span class="dimc" style="font-family:var(--mono);font-size:9px">${esc(r.club)}</span></td>
+      <td class="dimc">${r.pos}</td>` +
+      K.map(k=>`<td>${r.vals[k].toFixed(1)}</td>`).join('') +
+      `<td class="hot">${r.spread.toFixed(1)}</td>
+       <td class="dimc">${r.ffhub_mins!=null?r.ffhub_mins+"'":'–'}</td>
+       <td class="l">${r.owner?esc(r.owner):'<span class="ow free">szabad</span>'}</td></tr>`).join('') +
+    '</tbody></table></div>';
+
+  box.innerHTML = `
+    <h3 class="sechd">Mennyire értenek egyet</h3>
+    <p>Spearman-rho a GW${C.gw_from}–${C.gw_from+C.horizon-1} összegen. 1,0 = azonos sorrend.</p>
+    ${rhoTbl(C.agreement, 'mindenkin')}
+    <p style="margin-top:9px">Csak azokon, akit <b style="color:var(--fg)">mind a három kezdőnek tart</b> —
+    ez mutatja a valódi érték-egyezést, a kezdő-kérdés nélkül.</p>
+    ${rhoTbl(C.agreement_starters, 'csak kezdőkön')}
+
+    <h3 class="sechd">1. Kezdő-vita — valaki szerint nem is játszik</h3>
+    <p>${rot.length} ilyen eset. Az FPL Hub várható perce megmutatja, miért ad nullát.</p>
+    ${list(rot, 14)}
+
+    <h3 class="sechd">2. Érték-vita — mind kezdőnek tartja, mégis eltérnek</h3>
+    <p>${val.length} ilyen eset. Itt a modellek a játékos szintjéről vitáznak, nem a szerepéről.</p>
+    ${list(val, 16)}`;
+}
+
 document.addEventListener('click', ev => {
   const b = ev.target.closest('.b');
   if (b) { if (b.dataset.g !== undefined) gw = b.dataset.g;
            if (b.dataset.f) filt = b.dataset.f;
            if (b.dataset.s) sortBy = b.dataset.s; render(); return; }
   const t = ev.target.closest('[role="tab"]');
-  if (t) { view = t.id === 't-fpl' ? 'fpl' : 'draft';
-           document.querySelectorAll('[role="tab"]').forEach(x =>
-             x.setAttribute('aria-selected', x === t)); render(); }
+  if (t) {
+    view = t.id === 't-fpl' ? 'fpl' : t.id === 't-cmp' ? 'cmp' : 'draft';
+    document.querySelectorAll('[role="tab"]').forEach(x => x.setAttribute('aria-selected', x === t));
+    const isCmp = view === 'cmp';
+    document.getElementById('cmpview').hidden = !isCmp;
+    document.getElementById('cols').hidden = isCmp;
+    document.querySelector('.ctl').hidden = isCmp;
+    if (isCmp) renderCmp(); else render();
+  }
 });
 render();
 </script>
