@@ -148,7 +148,8 @@ const NAME = Object.fromEntries(M.map(m => [m.entry, m]));
 const GW = String(H.next_event || H.current_event || Object.keys(H.rounds)[0]);
 const SRCS = Object.entries(H.sources).map(([slug, s]) => ({slug, ...s}))
   .filter(s => (H.rounds[GW] || {})[s.slug]);
-let active = SRCS.some(s => s.slug === 'fplform') ? 'fplform' : (SRCS[0] || {}).slug;
+// alapértelmezés: FPL Hub (a tulaj választása), különben az első elérhető
+let active = ['ffhub','fplform'].find(k => SRCS.some(s => s.slug === k)) || (SRCS[0] || {}).slug;
 
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 const ROWS = [['GKP','Kapus'],['DEF','Védelem'],['MID','Középpálya'],['FWD','Támadók']];

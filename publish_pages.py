@@ -29,8 +29,11 @@ d["league"] = {**d["league"], "name": "Draft-liga"}
 
 h2h = json.loads((HERE / "h2h.json").read_text(encoding="utf-8"))
 h2h["league"] = {**h2h["league"], "name": "Draft-liga"}
-# FIZETŐS forrás (FPL Hub) NEM kerül nyílt webre — se a becslés, se a neve
-private = {k for k, v in h2h.get("sources", {}).items() if v.get("private")}
+# Melyik forrás mehet a NYÍLT webre. A tulaj döntése (2026-08-19): az FPL Hub igen.
+# Fizetős termék adata -> az ő előfizetői szerződése a felelősség; egy sor átírásával
+# visszavehető. A Solio marad privát.
+PUBLIC_SOURCES = {"fplform", "ffhub"}
+private = {k for k in h2h.get("sources", {}) if k not in PUBLIC_SOURCES}
 for k in private:
     h2h["sources"].pop(k, None)
     for r in h2h.get("rounds", {}).values(): r.pop(k, None)

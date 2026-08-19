@@ -85,12 +85,33 @@ if ffh.exists():
         if per: hub[str(d)] = per
     sources["ffhub"] = hub
     notes["ffhub"] = {"label": "Fantasy Football Hub", "url": "https://www.fantasyfootballhub.co.uk/predictions",
-                      "players": len(hub), "skipped": skip, "private": True,
+                      "players": len(hub), "skipped": skip, "private": False,
                       "snapshot": raw["taken_at"],
                       "note": "PRO-előfizetés saját modellje; fordulónkénti pont, várható perc, "
-                              "gól- és gólpassz-becslés. Fizetős adat: nyílt webre nem kerül"}
+                              "gól- és gólpassz-becslés. Fizetős adat — a tulaj döntése alapján "
+                              "MEHET a nyílt oldalra (2026-08-19)"}
 else:
     print("  (ffhub/ffhub_raw.json nincs meg — FPL Hub forrás kihagyva)")
+
+# ----------------------------------------------------------------- Solio
+# Bejelentkezés-köteles, canvas-rácsból olvasva -> kézi pillanatkép a solio/ mappában.
+sol = HERE / "solio" / "solio.json"
+if sol.exists():
+    raw = json.loads(sol.read_text(encoding="utf-8"))
+    tbl = {}
+    for p in raw["players"]:
+        per = {}
+        for i, v in enumerate(p["gw"]):
+            g = raw["gw_from"] + i
+            if v is not None and gw <= g <= last: per[str(g)] = {"pts": round(v, 3)}
+        if per: tbl[str(p["draft_id"])] = per
+    sources["solio"] = tbl
+    notes["solio"] = {"label": "Solio", "url": "https://fpl.solioanalytics.com/",
+                      "players": len(tbl), "private": True,
+                      "note": "fordulónkénti becslés; bejelentkezés-köteles, "
+                              "canvas-rácsból olvasva -> kézi pillanatkép. " + raw["coverage_note"]}
+else:
+    print("  (solio/solio.json nincs meg — Solio forrás kihagyva)")
 
 def write(path, srcs):
     payload = {"taken_at": now.isoformat().replace("+00:00", "Z"),
@@ -98,7 +119,9 @@ def write(path, srcs):
                "sources": {k: notes[k] for k in srcs}, "data": {k: sources[k] for k in srcs}}
     path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
-# FIZETŐS forrás SOSEM kerül a verziókövetett proj/-ba. A teljes kép a proj_private/-ban él.
+# private=True forrás nem kerül a verziókövetett proj/-ba (most: csak a Solio).
+# Az FPL Hub a tulaj döntése szerint publikus -> hogy a CI-újraépítés se veszítse el,
+# a committolt snapshotban is benne kell lennie.
 pubsrc = [k for k in sources if not notes[k].get("private")]
 privsrc = list(sources)
 f = OUT / f"{stamp}_gw{gw}.json"

@@ -14,7 +14,12 @@ ap.add_argument("--out", default=str(HERE / "secret.html"))
 ap.add_argument("--fpl-entry", type=int, default=117238, help="a saját (nem draft) FPL csapat")
 A = ap.parse_args()
 
+snaps = sorted((HERE / "proj_private").glob("*.json")) or sorted((HERE / "proj").glob("*.json"))
+if not snaps: raise SystemExit("nincs projekció-snapshot")
+SNAP = json.loads(snaps[-1].read_text(encoding="utf-8"))
 hub = json.loads((HERE / "ffhub" / "ffhub_raw.json").read_text(encoding="utf-8"))
+est_path = HERE / "estimator" / "estimator.json"
+EST = json.loads(est_path.read_text(encoding="utf-8")) if est_path.exists() else None
 cmp_path = HERE / "compare.json"
 CMP = json.loads(cmp_path.read_text(encoding="utf-8")) if cmp_path.exists() else None
 idmap = json.loads((HERE / "idmap.json").read_text(encoding="utf-8"))
@@ -45,6 +50,19 @@ if not fpl_squad:
     fpl_note = ("A sima FPL keret a deadline előtt nem kérhető le (a picks-végpont 404-et ad), "
                 "ezért a fantasy-nézetben most nincs kijelölve a te csapatod. GW1 után magától megjelenik.")
 
+# forrásonkénti per-fordulós becslés a snapshotból
+SRC = {}
+for slug, note in SNAP["sources"].items():
+    SRC[slug] = {"label": note["label"], "note": note.get("note", ""),
+                 "url": note.get("url"), "per_gw": True,
+                 "players": note.get("players"), "data": SNAP["data"][slug]}
+if EST:
+    SRC["estimator"] = {"label": "fplestimator", "note": EST["note"],
+                        "url": "https://www.fplestimator.com/best-picks", "per_gw": False,
+                        "players": len(EST["players"]),
+                        "data": {str(p["draft_id"]): {"sum5": p["xpts5"]} for p in EST["players"]}}
+ORDER = [k for k in ("ffhub", "solio", "fplform", "estimator") if k in SRC]
+
 players = []
 for p in hub["players"]:
     d = M2D.get(p["fpl"])
@@ -63,7 +81,9 @@ for p in hub["players"]:
     })
 gws = sorted({int(k) for p in players for k in p["gw"]})
 
-PAY = json.dumps({"taken_at": hub["taken_at"], "gws": gws, "players": players, "cmp": CMP,
+PAY = json.dumps({"taken_at": SNAP["taken_at"], "gws": gws, "players": players, "cmp": CMP,
+                  "src": {k: {kk: vv for kk, vv in SRC[k].items() if kk != "data"} for k in ORDER},
+                  "srcdata": {k: SRC[k]["data"] for k in ORDER}, "order": ORDER,
                   "fpl_note": fpl_note, "fpl_squad_size": len(fpl_squad),
                   "managers": [{"first": m["first"], "ini": m["initials"],
                                 "me": m["entry"] == ME_DRAFT} for m in data["managers"]]},
@@ -168,6 +188,7 @@ tr.hi{background:var(--surface-2)}
   </div>
 
   <div class="ctl">
+    <span class="lbl">becslés</span><span class="grp" id="srcs"></span>
     <span class="lbl">forduló</span><span class="grp" id="gws"></span>
     <span class="lbl">mutasd</span><span class="grp" id="filt"></span>
     <span class="lbl">rendezés</span><span class="grp" id="sort"></span>
@@ -185,19 +206,33 @@ const D = JSON.parse(document.getElementById('p').textContent);
 const POS = [['GKP','Kapus'],['DEF','Védelem'],['MID','Középpálya'],['FWD','Támadók']];
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let view = 'draft', gw = String(D.gws[0]), filt = 'all', sortBy = 'pts';
+let src = D.order[0];
 const SUM = 'sum';
+const S = () => D.src[src];
+const row = p => (D.srcdata[src] || {})[String(p.draft ?? p.id ?? '')] || null;
 
 const val = p => {
-  if (gw === SUM) return Object.values(p.gw).reduce((a, v) => a + v.pts, 0);
-  return p.gw[gw] ? p.gw[gw].pts : null;
+  const r = D.srcdata[src] ? D.srcdata[src][String(p.draft)] : null;
+  if (!r) return null;
+  if (!S().per_gw) return r.sum5 ?? null;                 // csak 5 fordulós összeg
+  if (gw === SUM) {
+    const v = Object.values(r).map(x => x.pts).filter(x => x != null);
+    return v.length ? v.reduce((a, b) => a + b, 0) : null;
+  }
+  return r[gw] ? r[gw].pts : null;
 };
+// a várható perc és a fixtúra az FPL Hub adatából jön (csak ő ad ilyet)
 const mins = p => (gw !== SUM && p.gw[gw]) ? p.gw[gw].min : null;
 const fx = p => (gw !== SUM && p.gw[gw]) ? `${p.gw[gw].opp}${p.gw[gw].h ? '(H)' : '(A)'}` : null;
 
 function render() {
-  document.getElementById('gws').innerHTML =
-    D.gws.map(g => `<button class="b" data-g="${g}" aria-pressed="${String(g) === gw}">${g}.</button>`).join('')
-    + `<button class="b" data-g="${SUM}" aria-pressed="${gw === SUM}">${D.gws.length} forduló</button>`;
+  document.getElementById('srcs').innerHTML = D.order.map(k =>
+    `<button class="b" data-src="${k}" aria-pressed="${k === src}">${esc(D.src[k].label)}</button>`).join('');
+  const perGw = S().per_gw;
+  document.getElementById('gws').innerHTML = perGw ?
+    (D.gws.map(g => `<button class="b" data-g="${g}" aria-pressed="${String(g) === gw}">${g}.</button>`).join('')
+     + `<button class="b" data-g="${SUM}" aria-pressed="${gw === SUM}">összeg</button>`)
+    : `<span class="none">5 fordulós összeg (ez a forrás nem ad fordulónkénti bontást)</span>`;
   document.getElementById('filt').innerHTML =
     [['all','mind'],['free','csak szabad'],['mine','csak az enyém']].map(([k, l]) =>
       `<button class="b" data-f="${k}" aria-pressed="${filt === k}">${l}</button>`).join('');
@@ -238,8 +273,10 @@ function render() {
   }).join('');
 
   document.getElementById('foot').innerHTML =
-    `<b>Forrás.</b> Fantasy Football Hub PRO-modell, lehúzva ${esc(D.taken_at.replace('T',' ').replace('Z',' UTC'))}.
-     Fordulónkénti pont és várható játékperc; a gyűjtés bejelentkezést kér, ezért kézi lépés.<br>
+    `<b>Aktív becslés.</b> ${esc(S().label)} — ${esc(S().note)}
+     (${S().players} játékos). Snapshot: ${esc(D.taken_at.replace('T',' ').replace('Z',' UTC'))}.<br>
+     <b>Perc és fixtúra.</b> A kártyák alatti perc és az ellenfél az FPL Hub adatából jön —
+     a többi forrás nem ad várható játékpercet.<br>
      <b>Draft-nézet.</b> A monogram a birtokos, a szaggatott „szabad" azt jelenti, hogy senki
      keretében sincs — ezek a waiver-célpontok. A sajátjaid coral csíkkal.<br>
      <b>Fantasy-nézet.</b> Ár és a mezőny tulajdonlási aránya, a sima FPL csapatodhoz.<br>
@@ -292,7 +329,8 @@ function renderCmp() {
 
 document.addEventListener('click', ev => {
   const b = ev.target.closest('.b');
-  if (b) { if (b.dataset.g !== undefined) gw = b.dataset.g;
+  if (b) { if (b.dataset.src) src = b.dataset.src;
+           if (b.dataset.g !== undefined) gw = b.dataset.g;
            if (b.dataset.f) filt = b.dataset.f;
            if (b.dataset.s) sortBy = b.dataset.s; render(); return; }
   const t = ev.target.closest('[role="tab"]');

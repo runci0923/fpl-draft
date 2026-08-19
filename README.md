@@ -32,9 +32,18 @@ de bármikor újragenerálhatók a nyílt API-ból.
 [OneFPL](https://onefpl.com/blog/fpl-draft-rankings-top-100-2026-27) ·
 [RotoWire](https://www.rotowire.com/soccer/article/fantasy-premier-league-fpl-rankings-top-400-for-2026-27-season-124261)
 
-**Projekciók** — [FPL Form](https://fplform.com/fpl-predicted-points) (fordulónkénti, ingyenes,
-automatizált) · [Fantasy Football Hub](https://www.fantasyfootballhub.co.uk/predictions) PRO
-(fordulónkénti pont + várható perc + gól/gólpassz; **fizetős**, kézi lépés, nyílt webre nem kerül)
+**Projekciók** — négy forrás, kettő fordulónkénti bontással:
+
+| | bontás | gyűjtés | publikus? |
+|---|---|---|---|
+| [FPL Form](https://fplform.com/fpl-predicted-points) | fordulónkénti | automatizált | igen |
+| [Fantasy Football Hub](https://www.fantasyfootballhub.co.uk/predictions) PRO | fordulónkénti + várható perc + gól/gólpassz | kézi (bejelentkezés) | **igen** — a tulaj döntése |
+| [Solio](https://fpl.solioanalytics.com/) | fordulónkénti | kézi (bejelentkezés) | nem |
+| [fplestimator](https://www.fplestimator.com/best-picks) | csak 5 fordulós összeg | kézi | igen |
+
+Az FPL Hub fizetős termék adata. A tulaj 2026-08-19-én úgy döntött, hogy kimehet a nyílt
+oldalra; a `publish_pages.py`-ban egy `PUBLIC_SOURCES` halmaz szabályozza, tehát egy sor
+átírásával visszavehető. A Solio marad privát.
 
 ### Projekciós források — mi jött be és mi nem
 
@@ -43,7 +52,7 @@ automatizált) · [Fantasy Football Hub](https://www.fantasyfootballhub.co.uk/pr
 | FPL Form | ✅ automatizált | POST-export CSV-t ad, kulcs nélkül |
 | FPL Hub PRO | ✅ kézi lépés | `public-api…/league/players`, `after` kurzor, bearer a `/auth/access-token`-ből. Bejelentkezés kell -> nem CI-zhető |
 | FPL hivatalos `ep_next` | ❌ kivéve | szezon előtt lapos placeholder (Haaland = Raya = 4,0) |
-| [Solio](https://fpl.solioanalytics.com/) | ⛔ engedély kell | a rács **canvasra** rajzol, árnyék-DOM-ban; a 21 soros akadálymentességi tükör teljes pontossággal olvasható, de görgetésre nem frissül. Projekciós végpont NINCS: a Solio **Rocicorp Zero / Replicache**-t használ, az egész adathalmaz helyi **IndexedDB**-ben ül (`rep:zero-…`). Kiolvasható lenne, de a böngésző-tároló olvasását a biztonsági szűrő letiltotta — ehhez a te engedélyed kell |
+| [Solio](https://fpl.solioanalytics.com/) | ✅ kézi, per-forduló | a rács **canvasra** rajzol, árnyék-DOM-ban; a 21 soros akadálymentességi tükör teljes pontossággal olvasható, de görgetésre nem frissül. Projekciós végpont NINCS: a Solio **Rocicorp Zero / Replicache**-t használ, az adat helyi IndexedDB-ben ül. A tárolót NEM olvassuk; a rács **akadálymentességi tükör-tábláját** olvassuk ki (`solio/raw.txt` -> `parse_solio.py`). Két feltétel: a tükör csak akkor jön létre, ha az **akadálymentességi fa aktív**, és csak **valódi görgetésre** frissül (programozott `scrollTop` és szintetikus `wheel` nem hat rá) |
 | [fplestimator](https://www.fplestimator.com/best-picks) | ✅ részben, kézi | az xPts **kliens oldalon** számolódik. Supabase-ben a `players`/`fixtures`/`events` anon-olvasható, de a `player_gameweek_stats` és `player_xpts_snapshot` RLS-zárt; a `get_xpts_snapshots_range(start_gw,end_gw)` RPC üres (befagyasztott visszamérés, szezon előtt nincs). A DOM-ból 558 sor kinyerhető (5 fordulós **összeg**, nem per-forduló), de a lap CSP-je blokkolja a localhost-átadást |
 | [daniel-mehta/FPL-Expected-Points](https://github.com/daniel-mehta/FPL-Expected-Points) | ❌ kiesik | nem publikált becslés, hanem futtatható modell; a CSV-k 2024 novemberiek |
 
