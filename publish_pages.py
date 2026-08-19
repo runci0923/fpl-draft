@@ -29,6 +29,12 @@ d["league"] = {**d["league"], "name": "Draft-liga"}
 
 h2h = json.loads((HERE / "h2h.json").read_text(encoding="utf-8"))
 h2h["league"] = {**h2h["league"], "name": "Draft-liga"}
+# FIZETŐS forrás (FPL Hub) NEM kerül nyílt webre — se a becslés, se a neve
+private = {k for k, v in h2h.get("sources", {}).items() if v.get("private")}
+for k in private:
+    h2h["sources"].pop(k, None)
+    for r in h2h.get("rounds", {}).values(): r.pop(k, None)
+if private: print(f"  privát forrás kizárva a publikus buildből: {', '.join(sorted(private))}")
 (SITE / "h2h.public.json").write_text(json.dumps(h2h, ensure_ascii=False, separators=(",", ":")),
                                       encoding="utf-8")
 

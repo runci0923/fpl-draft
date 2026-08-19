@@ -13,7 +13,8 @@ Használat:  fetch_projections.py [--gw N] [--horizon 5]
 import argparse, csv, io, json, pathlib, subprocess, sys, datetime as dt
 
 HERE = pathlib.Path(__file__).parent
-OUT = HERE / "proj"; OUT.mkdir(exist_ok=True)
+OUT = HERE / "proj"; OUT.mkdir(exist_ok=True)              # publikus források (verziókövetve)
+PRIV = HERE / "proj_private"; PRIV.mkdir(exist_ok=True)    # fizetős források is (git-ignorálva)
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/128 Safari/537.36"
 
 def curl(args):
@@ -62,41 +63,62 @@ notes["fplform"] = {"label": "FPL Form", "url": "https://fplform.com/fpl-predict
                     "players": len(ff), "skipped": ff_skip,
                     "note": "xFPL kezdés-valószínűséggel súlyozva; `raw` a súlyozás nélküli"}
 
-# ---------------------------------------------------------------- FPL official ep_next
-mn = json.loads(curl(["https://fantasy.premierleague.com/api/bootstrap-static/"]))
-off, flat = {}, {}
-for e in mn["elements"]:
-    d = MAIN2DRAFT.get(e["id"])
-    if d is None or e.get("ep_next") in (None, ""): continue
-    v = float(e["ep_next"])
-    off[str(d)] = {str(gw): {"pts": v}}
-    flat[v] = flat.get(v, 0) + 1
-top = sorted(flat.items(), key=lambda kv: -kv[1])[:3]
-sources["official"] = off
-notes["official"] = {"label": "FPL hivatalos (ep_next)",
-                     "url": "https://fantasy.premierleague.com/api/bootstrap-static/",
-                     "players": len(off), "only_gw": gw,
-                     "note": "csak a KÖVETKEZŐ fordulóra ad értéket; szezon előtt lapos "
-                             f"(a leggyakoribb értékek: {', '.join(f'{v}={n}x' for v, n in top)})"}
+# ------------------------------------------------------- Fantasy Football Hub (PRO)
+# FIZETŐS ADAT: a tulaj PRO-előfizetéséből, Chrome-mal lehúzva (public-api…/league/players,
+# `after` kurzoros lapozás, bearer a /auth/access-token-ből). A gyűjtés NEM automatizálható,
+# mert bejelentkezés kell hozzá -> a repóban egy pillanatkép él a ffhub/ mappában.
+# `private: True` -> a publikus build KIHAGYJA. Nem adjuk tovább, amit ő fizet.
+ffh = HERE / "ffhub" / "ffhub_raw.json"
+if ffh.exists():
+    raw = json.loads(ffh.read_text(encoding="utf-8"))
+    hub, skip = {}, 0
+    for p in raw["players"]:
+        d = MAIN2DRAFT.get(p["fpl"])
+        if d is None: skip += 1; continue
+        per = {}
+        for g in p["gw"]:
+            if g["pts"] is None or not (gw <= g["g"] <= last): continue
+            per[str(g["g"])] = {"pts": round(g["pts"], 3),
+                                "mins": g["min"], "likelihood": g["lk"],
+                                "goals": round(g["gls"] or 0, 3),
+                                "assists": round(g["ast"] or 0, 3)}
+        if per: hub[str(d)] = per
+    sources["ffhub"] = hub
+    notes["ffhub"] = {"label": "Fantasy Football Hub", "url": "https://www.fantasyfootballhub.co.uk/predictions",
+                      "players": len(hub), "skipped": skip, "private": True,
+                      "snapshot": raw["taken_at"],
+                      "note": "PRO-előfizetés saját modellje; fordulónkénti pont, várható perc, "
+                              "gól- és gólpassz-becslés. Fizetős adat: nyílt webre nem kerül"}
+else:
+    print("  (ffhub/ffhub_raw.json nincs meg — FPL Hub forrás kihagyva)")
 
-payload = {"taken_at": now.isoformat().replace("+00:00", "Z"),
-           "gw_from": gw, "gw_to": last, "deadline_gw": game["next_event"],
-           "sources": notes, "data": sources}
+def write(path, srcs):
+    payload = {"taken_at": now.isoformat().replace("+00:00", "Z"),
+               "gw_from": gw, "gw_to": last, "deadline_gw": game["next_event"],
+               "sources": {k: notes[k] for k in srcs}, "data": {k: sources[k] for k in srcs}}
+    path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+
+# FIZETŐS forrás SOSEM kerül a verziókövetett proj/-ba. A teljes kép a proj_private/-ban él.
+pubsrc = [k for k in sources if not notes[k].get("private")]
+privsrc = list(sources)
 f = OUT / f"{stamp}_gw{gw}.json"
-f.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+write(f, pubsrc)
+if len(privsrc) > len(pubsrc):
+    write(PRIV / f"{stamp}_gw{gw}.json", privsrc)
 
 # --- nyesés: fordulónként a 3 legfrissebb marad a munkakönyvtárban.
 # Nem veszik el semmi: a git-történet a törölt snapshotokat is megőrzi
 # (`git log --diff-filter=D --name-only -- proj/`). A deadline előtti utolsó
 # mindig benne van, mert a forduló váltásakor új gw-csoport indul.
 KEEP = 3
-groups = {}
-for p in OUT.glob("*_gw*.json"):
-    groups.setdefault(p.name.split("_gw")[-1], []).append(p)
 pruned = 0
-for _, ps in groups.items():
-    for p in sorted(ps)[:-KEEP]:
-        p.unlink(); pruned += 1
+for d in (OUT, PRIV):
+    groups = {}
+    for p in d.glob("*_gw*.json"):
+        groups.setdefault(p.name.split("_gw")[-1], []).append(p)
+    for _, ps in groups.items():
+        for p in sorted(ps)[:-KEEP]:
+            p.unlink(); pruned += 1
 
 print(f"Snapshot: {f.name}   GW{gw}–{last}" + (f"   (nyesve {pruned} régi)" if pruned else ""))
 for k, n in notes.items():

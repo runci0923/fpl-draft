@@ -38,7 +38,8 @@ def best_xi(squad, pts):
 
 # --- legfrissebb snapshot a TARTALOM taken_at-je szerint (a fájlnév-rendezés vegyes
 #     időzónánál hibázik: 18:03 UTC későbbi, mint 19:55 CEST)
-cands = list((HERE / "proj").glob("*.json"))
+# a proj_private/ tartalmazza a fizetős forrásokat is; ha van, azt használjuk
+cands = list((HERE / "proj_private").glob("*.json")) or list((HERE / "proj").glob("*.json"))
 if not cands: sys.exit("Nincs projekció-snapshot — futtasd a fetch_projections.py-t")
 def when(p):
     ts = json.loads(p.read_text(encoding="utf-8"))["taken_at"].replace("Z", "+00:00")

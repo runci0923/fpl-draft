@@ -28,7 +28,9 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
 .lede b{color:var(--fg);font-weight:500}
 
 /* --- oldalnavigáció --- */
-.nav{display:flex;gap:4px;margin:24px 0 0;border-bottom:1px solid var(--rule)}
+.nav{display:flex;gap:4px;margin:24px 0 0;border-bottom:1px solid var(--rule);
+  justify-content:flex-end}
+.nav .spacer{flex:1 1 auto}
 .nav a{padding:10px 17px;color:var(--dim);text-decoration:none;font-size:15px;font-weight:500;
   border-bottom:2px solid transparent;margin-bottom:-1px}
 .nav a:hover{color:var(--fg)}
@@ -96,7 +98,11 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
   color:var(--dim);text-align:center;margin-bottom:-6px}
 .bench{margin-top:12px;padding-top:11px;border-top:1px dashed var(--rule)}
 .bench .plabel{text-align:left;margin-bottom:7px}
-.bench .row{justify-content:flex-start}
+.bench .row{justify-content:flex-start;align-items:flex-start}
+.bgrp{display:flex;gap:7px}
+.bgrp.gk{padding-right:13px;margin-right:6px;border-right:1px solid var(--rule);position:relative}
+.bgrp.gk::after{content:"kapus";position:absolute;right:13px;bottom:-15px;font-family:var(--mono);
+  font-size:7.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--dim)}
 .tot{display:flex;justify-content:space-between;align-items:baseline;margin-top:11px;
   font-family:var(--mono);font-size:11px;color:var(--dim)}
 .tot b{font-family:var(--display);font-size:21px;font-weight:600;color:var(--fg);
@@ -116,8 +122,9 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
   csapata, és hogy ebből ki nyerne. Deadline után a lap a <b>tényleges</b> felállásra vált.</p>
 
   <nav class="nav">
-    <a href="__DRAFT_HREF__">Draft</a>
+    <span class="spacer"></span>
     <a href="#" aria-current="page">A forduló</a>
+    <a href="__DRAFT_HREF__">Draft</a>
   </nav>
 
   <div class="bar">
@@ -168,8 +175,13 @@ function pitch(ent, t, realMode) {
     return `<div class="row">${g.map(p => playerCard(p,
       {top: p.proj === best, inXi: true, realXi: realMode ? t.real_xi : null})).join('')}</div>`;
   }).join('');
-  const bench = t.bench.map(p => playerCard(p,
-    {inXi: false, realXi: realMode ? t.real_xi : null})).join('');
+  // a kispadon a kapus MINDIG első és külön csoportban áll
+  const bGk = t.bench.filter(p => p.p === 'GKP');
+  const bOut = t.bench.filter(p => p.p !== 'GKP')
+    .sort((a, b) => b.proj - a.proj);
+  const opt = {inXi: false, realXi: realMode ? t.real_xi : null};
+  const bench = `<span class="bgrp gk">${bGk.map(p => playerCard(p, opt)).join('')}</span>` +
+                `<span class="bgrp">${bOut.map(p => playerCard(p, opt)).join('')}</span>`;
   const shown = realMode && t.real_total !== null && t.real_total !== undefined;
   return `<div class="pitch">
     <div class="turf">${rows}</div>
@@ -183,8 +195,8 @@ function render() {
   const r = (H.rounds[GW] || {})[active];
   document.getElementById('kick').textContent =
     `${H.league.name} · ${H.league.size} csapat · FPL Draft ${'2026/27'}`;
-  document.getElementById('h1').textContent = `GW${GW} — a forduló`;
-  document.getElementById('bgw').innerHTML = `<b>GW${GW}</b>`;
+  document.getElementById('h1').textContent = `${GW}. forduló`;
+  document.getElementById('bgw').innerHTML = `<b>${GW}.</b>`;
   document.getElementById('bsnap').innerHTML = `<b>${esc(H.taken_at.replace('T',' ').replace('Z',' UTC'))}</b>`;
   const anyReal = r && Object.values(r.teams).some(t => t.real_xi);
   document.getElementById('bstate').innerHTML = anyReal
