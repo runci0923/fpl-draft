@@ -29,10 +29,10 @@ d["league"] = {**d["league"], "name": "Draft-liga"}
 
 h2h = json.loads((HERE / "h2h.json").read_text(encoding="utf-8"))
 h2h["league"] = {**h2h["league"], "name": "Draft-liga"}
-# Melyik forrás mehet a NYÍLT webre. A tulaj döntése (2026-08-19): az FPL Hub igen.
-# Fizetős termék adata -> az ő előfizetői szerződése a felelősség; egy sor átírásával
-# visszavehető. A Solio marad privát.
-PUBLIC_SOURCES = {"ffhub"}
+# Melyik forrás mehet a NYÍLT webre. A tulaj döntése (2026-08-19): mindkettő.
+# Mindkettő előfizetéses termék adata -> az ő előfizetői szerződései a felelősség;
+# egy név kivételével visszavehető.
+PUBLIC_SOURCES = {"ffhub", "solio"}
 private = {k for k in h2h.get("sources", {}) if k not in PUBLIC_SOURCES}
 for k in private:
     h2h["sources"].pop(k, None)

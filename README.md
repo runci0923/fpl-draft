@@ -37,7 +37,7 @@ de bármikor újragenerálhatók a nyílt API-ból.
 | | bontás | gyűjtés | publikus? |
 |---|---|---|---|
 | [Fantasy Football Hub](https://www.fantasyfootballhub.co.uk/predictions) PRO | fordulónkénti + várható perc + gól/gólpassz | kézi (bejelentkezés) | **igen** — a tulaj döntése |
-| [Solio](https://fpl.solioanalytics.com/) | fordulónkénti | kézi (bejelentkezés) | nem |
+| [Solio](https://fpl.solioanalytics.com/) | fordulónkénti | kézi (bejelentkezés) | **igen** — a tulaj döntése |
 
 Az FPL Form és az fplestimator **kivéve** (2026-08-19, tulaj döntése): az FPL Form
 szisztematikusan 25-30%-kal alacsonyabb szinten becsült, az fplestimator pedig csak

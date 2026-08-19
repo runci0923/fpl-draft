@@ -86,7 +86,7 @@ if sol.exists():
         if per: tbl[str(p["draft_id"])] = per
     sources["solio"] = tbl
     notes["solio"] = {"label": "Solio", "url": "https://fpl.solioanalytics.com/",
-                      "players": len(tbl), "private": True,
+                      "players": len(tbl), "private": False,
                       "note": "fordulónkénti becslés; bejelentkezés-köteles, "
                               "canvas-rácsból olvasva -> kézi pillanatkép. " + raw["coverage_note"]}
 else:
@@ -98,9 +98,9 @@ def write(path, srcs):
                "sources": {k: notes[k] for k in srcs}, "data": {k: sources[k] for k in srcs}}
     path.write_text(json.dumps(payload, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
 
-# private=True forrás nem kerül a verziókövetett proj/-ba (most: csak a Solio).
-# Az FPL Hub a tulaj döntése szerint publikus -> hogy a CI-újraépítés se veszítse el,
-# a committolt snapshotban is benne kell lennie.
+# private=True forrás nem kerül a verziókövetett proj/-ba. A tulaj döntése szerint
+# (2026-08-19) MINDKÉT forrás publikus — mindkettő előfizetéses termék adata, tehát
+# ez az ő előfizetői szerződéseinek kérdése. Egy `private: True`-val visszavehető.
 if not sources:
     sys.exit("Nincs egyetlen forrás-pillanatkép sem (ffhub/, solio/) — snapshot NEM íródott, "
              "a korábbi megmarad.")
