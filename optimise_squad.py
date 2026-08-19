@@ -120,6 +120,17 @@ for d, m in D2M.items():
 HAA, BRU = NAMES["Haaland"], NAMES["B.Fernandes"]
 if not HAA or not BRU: sys.exit(f"nem találom: {NAMES}")
 
+# a „mag" változathoz: Haaland + Bruno + João Pedro + Calvert-Lewin
+CORE_NAMES = ["Haaland", "B.Fernandes", "João Pedro", "Calvert-Lewin"]
+CORE = []
+for w in CORE_NAMES:
+    hit = [d for d, m in D2M.items() if MAIN.get(m, {}).get("web") == w]
+    if len(hit) != 1: sys.exit(f"nem egyértelmű: {w} -> {len(hit)}")
+    CORE.append(hit[0])
+print("Mag-négyes: " + ", ".join(
+    f'{MAIN[D2M[i]]["web"]} ({MAIN[D2M[i]]["pos"]} £{MAIN[D2M[i]]["cost"]/10:.1f}m)' for i in CORE)
+    + f'  = £{sum(MAIN[D2M[i]]["cost"] for i in CORE)/10:.1f}m')
+
 # --- „csak zöld": a cheat sheet Great Option minősítése
 cs = HERE / "cheatsheet" / "gw1_fran.json"
 GREEN = set()
@@ -142,22 +153,24 @@ if cs.exists():
     print(f"Zöld (Great Option) lista: {len(GREEN)}/{len(rows)} párosítva"
           + (f", kimaradt: {', '.join(miss)}" if miss else ""))
 
-VARIANTS = [("free", "Szabad", (), ()),
-            ("both", "Haaland + Bruno", (HAA, BRU), ()),
-            ("haaland", "Csak Haaland", (HAA,), (BRU,)),
-            ("bruno", "Csak Bruno", (BRU,), (HAA,)),
-            ("green", "Csak zöldek", (), ())]
+VARIANTS = [("free", "Szabad", (), (), False),
+            ("both", "Haaland + Bruno", (HAA, BRU), (), False),
+            ("haaland", "Csak Haaland", (HAA,), (BRU,), False),
+            ("bruno", "Csak Bruno", (BRU,), (HAA,), False),
+            ("green", "Csak zöldek", (), (), True),
+            ("green_core", "Zöldek + a mag-négyes", tuple(CORE), (), True)]
 
 out = {"gw_from": gw0, "gws": GWS, "budget": BUDGET / 10, "taken_at": S["taken_at"],
        "bboost_gw": gw0 + BBOOST_GW,
-       "sources": {}, "variants": [{"key": k, "label": l} for k, l, _, _ in VARIANTS]}
+       "sources": {}, "variants": [{"key": k, "label": l, "green": gr}
+                                   for k, l, _, _, gr in VARIANTS]}
 for src in S["data"]:
     pool = load(src)
     res = {}
     print(f"\n=== {S['sources'][src]['label']}  ({len(pool)} választható játékos)")
-    for key, label, force, ban in VARIANTS:
+    for key, label, force, ban, green_only in VARIANTS:
         sub = pool
-        if key == "green":
+        if green_only:
             if not GREEN:
                 res[key] = None; print(f"  {label:<18} nincs zöld-lista"); continue
             # a kapus szabad (nincs kapus-tábla), a többi pozíció csak zöld
@@ -166,7 +179,7 @@ for src in S["data"]:
         r = solve(sub, force, ban, label)
         res[key] = r
         if not r: print(f"  {label:<18} nincs megoldás"); continue
-        extra = f"   (készlet {len(sub)})" if key == "green" else ""
+        extra = f"   (készlet {len(sub)})" if green_only else ""
         print(f"  {label:<18} {r['total']:>6.1f} pt   £{r['cost']:>5.1f}m{extra}")
     out["sources"][src] = {"label": S["sources"][src]["label"], "pool": len(pool), "variants": res}
 

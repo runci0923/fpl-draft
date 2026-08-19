@@ -83,6 +83,10 @@ A workflow így is frissíti a rangsorokat, a kereteket és a deadline utáni va
   optimuma **kidobja Haalandot**: a £15,5m jobban megtérül 15 játékosra szétosztva
   (204,5 pt Haaland nélkül vs. 204,0 vele). A Solio ezzel szemben megtartja.
 - **Brunót drágább kihagyni, mint Haalandot** — mindkét becslésen, bboosttal is.
+- **A mag-négyes (Haaland + Bruno + João Pedro + Calvert-Lewin) £41,0m**, vagyis a büdzsé
+  41%-a négy emberre. Zöld-megkötéssel együtt ez az FPL Hubon −2,9 pontot kóstál
+  (201,2 vs 204,1), a Solion viszont alig érzékelhető (−0,3), mert a Solio zöld-készlete
+  amúgy is szűk.
 - **A „csak zöldek" változat alig kerül valamibe**: FPL Hubon 204,1 a szabad 204,5 ellen,
   vagyis a cheat sheet Great Option-listája gyakorlatilag lefedi az optimumot. A Solion
   nagyobb az ár (194,9 vs 198,9), mert a zöld-lista és a Solio 265-es készlete együtt
