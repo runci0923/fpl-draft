@@ -25,6 +25,8 @@ if not snaps: raise SystemExit("nincs projekció-snapshot")
 SNAP = json.loads(snaps[-1].read_text(encoding="utf-8"))
 hub = json.loads((HERE / "ffhub" / "ffhub_raw.json").read_text(encoding="utf-8"))
 
+sq_path = HERE / "squads_test.json"
+SQ = json.loads(sq_path.read_text(encoding="utf-8")) if sq_path.exists() else None
 cmp_path = HERE / "compare.json"
 CMP = json.loads(cmp_path.read_text(encoding="utf-8")) if cmp_path.exists() else None
 idmap = json.loads((HERE / "idmap.json").read_text(encoding="utf-8"))
@@ -108,6 +110,7 @@ if MYSQ.exists() and not fpl_squad:
                 f'mind a 15 játékos pontja számít, ezért a kispadosok is meg vannak jelölve.')
 
 PAY = json.dumps({"taken_at": SNAP["taken_at"], "gws": gws, "players": players, "cmp": CMP,
+                  "sq": SQ,
                   "src": {k: {kk: vv for kk, vv in SRC[k].items() if kk != "data"} for k in ORDER},
                   "srcdata": {k: SRC[k]["data"] for k in ORDER}, "order": ORDER,
                   "fpl_note": fpl_note, "fpl_squad_size": len(fpl_squad),
@@ -185,6 +188,19 @@ tr.hi{background:var(--surface-2)}
 .hot{color:var(--coral);font-weight:500}
 .sechd{margin:26px 0 0;font-size:16px;font-weight:600}
 .sechd + p{margin:3px 0 0;font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.6}
+.sqbar{display:flex;flex-wrap:wrap;gap:9px 14px;align-items:center;margin:18px 0 0;padding:12px 15px;
+  background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);box-shadow:var(--sh-sm)}
+.sqgrid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px}
+@media (max-width:1000px){.sqgrid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:600px){.sqgrid{grid-template-columns:1fr}}
+.sqhead{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:baseline;margin-top:20px}
+.sqhead .big{font-size:30px;font-weight:600;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.sqhead .lbl2{font-family:var(--mono);font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--dim)}
+.rnd{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.rnd span{font-family:var(--mono);font-size:11px;padding:4px 10px;border-radius:999px;
+  border:1px solid var(--rule);color:var(--dim)}
+.rnd span b{color:var(--fg);font-weight:500}
+.bench2{opacity:.55}
 .note{margin-top:clamp(32px,5vw,54px);padding-top:18px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--dim);max-width:84ch}
 .note b{color:var(--fg);font-weight:500}
@@ -211,6 +227,7 @@ tr.hi{background:var(--surface-2)}
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="t-draft" aria-selected="true">Draft-nézet</button>
     <button class="tab" role="tab" id="t-fpl" aria-selected="false">Fantasy-nézet</button>
+    <button class="tab" role="tab" id="t-sq" aria-selected="false">Csapat-teszt</button>
     <button class="tab" role="tab" id="t-cmp" aria-selected="false">Becslés-különbségek</button>
   </div>
 
@@ -223,6 +240,7 @@ tr.hi{background:var(--surface-2)}
 
   <p class="warn" id="fplnote" hidden></p>
   <div class="cols" id="cols"></div>
+  <div id="sqview" hidden></div>
   <div id="cmpview" hidden></div>
   <p class="note" id="foot"></p>
 </div>
@@ -311,6 +329,69 @@ function render() {
      játékosok listája versenyelőny a ligában — ezért nincs a publikus oldalon.`;
 }
 
+let sqSrc = null, sqVar = 'free';
+function renderSq() {
+  const Q = D.sq, box = document.getElementById('sqview');
+  if (!Q) { box.innerHTML = '<p class="note">Nincs csapat-teszt adat (optimise_squad.py).</p>'; return; }
+  const keys = Object.keys(Q.sources);
+  if (!sqSrc || !keys.includes(sqSrc)) sqSrc = keys[0];
+  const S0 = Q.sources[sqSrc], R = S0.variants[sqVar];
+  const gwLabels = Array.from({length: Q.gws}, (_, i) => Q.gw_from + i);
+
+  // összehasonlító tábla: minden forrás x minden változat
+  const cmpTbl = `<div class="tw"><table>
+    <thead><tr><th class="l">Változat</th>${keys.map(k =>
+      `<th>${esc(Q.sources[k].label)}</th>`).join('')}<th>Különbség</th></tr></thead><tbody>` +
+    Q.variants.map(v => {
+      const vals = keys.map(k => Q.sources[k].variants[v.key]);
+      const best = Math.max(...keys.map(k => Q.sources[k].variants.free?.total || 0));
+      return `<tr class="${v.key === sqVar ? 'hi' : ''}">
+        <td class="l nm2">${esc(v.label)}</td>` +
+        vals.map(r2 => `<td>${r2 ? r2.total.toFixed(1) : '–'}</td>`).join('') +
+        `<td class="dimc">${vals.every(Boolean)
+          ? (vals[0].total - vals[1].total >= 0 ? '+' : '') + (vals[0].total - vals[1].total).toFixed(1)
+          : '–'}</td></tr>`;
+    }).join('') + '</tbody></table></div>';
+
+  const cols = [['GKP','Kapus'],['DEF','Védelem'],['MID','Középpálya'],['FWD','Támadók']]
+    .map(([p, label]) => {
+      const g = R.squad.filter(x => x.pos === p).sort((a, b) =>
+        (b.pts.reduce((s2,v)=>s2+v,0)) - (a.pts.reduce((s2,v)=>s2+v,0)));
+      const startsAll = new Set(R.rounds.flatMap(rd => rd.xi));
+      return `<div class="col"><h3>${label}<span>${g.length}</span></h3><ol class="list">` +
+        g.map((x, i) => `<li class="${startsAll.has(x.id) ? '' : 'bench2'}">
+          <span class="ix">${i + 1}</span>
+          <span class="nm">${esc(x.web)}<em>${esc(x.club)} · £${x.cost.toFixed(1)}m</em></span>
+          <span class="rt"><span class="p">${x.pts.reduce((s2,v)=>s2+v,0).toFixed(1)}</span>
+            <span class="x">${x.pts.map(v => v.toFixed(1)).join(' / ')}</span></span></li>`).join('') +
+        '</ol></div>';
+    }).join('');
+
+  const capName = id => (R.squad.find(x => x.id === id) || {}).web || '?';
+  box.innerHTML = `
+    <div class="sqbar">
+      <span class="lbl">becslés</span><span class="grp">${keys.map(k =>
+        `<button class="b" data-sqsrc="${k}" aria-pressed="${k === sqSrc}">${esc(Q.sources[k].label)}</button>`).join('')}</span>
+      <span class="lbl">változat</span><span class="grp">${Q.variants.map(v =>
+        `<button class="b" data-sqvar="${v.key}" aria-pressed="${v.key === sqVar}">${esc(v.label)}</button>`).join('')}</span>
+    </div>
+    <p class="note" style="margin-top:12px;border:0;padding:0">
+      Exakt MILP: 15 fő · 2-5-5-3 · max 3 játékos klubonként · £${Q.budget.toFixed(1)}m.
+      A cél a <b>kezdő XI</b> összpontja GW${gwLabels[0]}–${gwLabels[gwLabels.length-1]}-ra
+      (az FPL is csak a kezdőt számolja), kapitánnyal duplázva, fordulónként szabadon.
+      Halványan a keretben lévő, de egyszer sem kezdő játékos. Választható készlet: ${S0.pool} fő.</p>
+    <div class="sqhead">
+      <span><span class="lbl2">összes projektált pont</span><br><span class="big">${R.total.toFixed(1)}</span></span>
+      <span><span class="lbl2">keret értéke</span><br><span class="big">£${R.cost.toFixed(1)}m</span></span>
+    </div>
+    <div class="rnd">${R.rounds.map(rd =>
+      `<span>GW${rd.gw}: <b>${rd.pts.toFixed(1)}</b> · C: <b>${esc(capName(rd.captain))}</b></span>`).join('')}</div>
+    <div class="sqgrid">${cols}</div>
+    <h3 class="sechd">Minden változat, mindkét becsléssel</h3>
+    <p>a „Különbség" a két forrás közti eltérés ugyanarra a változatra</p>
+    ${cmpTbl}`;
+}
+
 function renderCmp() {
   const C = D.cmp, box = document.getElementById('cmpview');
   if (!C) { box.innerHTML = '<p class="note">Nincs összevetés-adat (futtasd a compare_sources.py-t).</p>'; return; }
@@ -356,19 +437,25 @@ function renderCmp() {
 
 document.addEventListener('click', ev => {
   const b = ev.target.closest('.b');
+  if (b && (b.dataset.sqsrc || b.dataset.sqvar)) {
+    if (b.dataset.sqsrc) sqSrc = b.dataset.sqsrc;
+    if (b.dataset.sqvar) sqVar = b.dataset.sqvar;
+    renderSq(); return;
+  }
   if (b) { if (b.dataset.src) src = b.dataset.src;
            if (b.dataset.g !== undefined) gw = b.dataset.g;
            if (b.dataset.f) filt = b.dataset.f;
            if (b.dataset.s) sortBy = b.dataset.s; render(); return; }
   const t = ev.target.closest('[role="tab"]');
   if (t) {
-    view = t.id === 't-fpl' ? 'fpl' : t.id === 't-cmp' ? 'cmp' : 'draft';
+    view = t.id === 't-fpl' ? 'fpl' : t.id === 't-cmp' ? 'cmp' : t.id === 't-sq' ? 'sq' : 'draft';
     document.querySelectorAll('[role="tab"]').forEach(x => x.setAttribute('aria-selected', x === t));
-    const isCmp = view === 'cmp';
+    const isCmp = view === 'cmp', isSq = view === 'sq';
     document.getElementById('cmpview').hidden = !isCmp;
-    document.getElementById('cols').hidden = isCmp;
-    document.querySelector('.ctl').hidden = isCmp;
-    if (isCmp) renderCmp(); else render();
+    document.getElementById('sqview').hidden = !isSq;
+    document.getElementById('cols').hidden = isCmp || isSq;
+    document.querySelector('.ctl').hidden = isCmp || isSq;
+    if (isCmp) renderCmp(); else if (isSq) renderSq(); else render();
   }
 });
 render();

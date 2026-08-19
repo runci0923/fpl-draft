@@ -74,6 +74,12 @@ A workflow így is frissíti a rangsorokat, a kereteket és a deadline utáni va
   időbélyeggel a fájlnév lexikai rendezése a RÉGEBBI snapshotot hiszi frissebbnek
   (18:03 UTC vs. 19:55 CEST). A `build_h2h.py` ezen felül a fájl `taken_at` mezője szerint
   rendez, nem fájlnév szerint — ez a második védelmi vonal.
+- **A keret-optimalizálás a KEZDŐ XI-re megy, nem a 15-re.** Az FPL is csak a kezdőt
+  számolja, ezért a MILP-ben fordulónkénti felállás-változók vannak (`y[p][g]`), plusz
+  kapitány (`c[p][g]`, duplázás). Ha a 15 összegét maximalizálnánk, drága kispadot vennénk.
+  Így a £4.0-s kitöltők automatikusan a padra kerülnek — a lapon halványan látszanak.
+- **A GW1-3 optimum eleve tartalmazza Haalandot ÉS Brunót**, mindkét becslésen. A
+  „Haaland + Bruno" változat azonos a szabad optimummal; kihagyni bármelyiket ront.
 - A **forrás dönti el, ki nyer.** A rangsorok Spearman-egyezése 0,48–0,79.
 - **Az igazolásokat nem kell külön követni.** Publikus tranzakció-végpont nincs (404), de az
   `element-status` mindig az aktuális birtoklást adja, és minden futás ebből épít. A változás
