@@ -25,6 +25,8 @@ if not snaps: raise SystemExit("nincs projekció-snapshot")
 SNAP = json.loads(snaps[-1].read_text(encoding="utf-8"))
 hub = json.loads((HERE / "ffhub" / "ffhub_raw.json").read_text(encoding="utf-8"))
 
+cs_path = HERE / "cheatsheet" / "gw1_fran.json"
+CS = json.loads(cs_path.read_text(encoding="utf-8")) if cs_path.exists() else None
 sq_path = HERE / "squads_test.json"
 SQ = json.loads(sq_path.read_text(encoding="utf-8")) if sq_path.exists() else None
 cmp_path = HERE / "compare.json"
@@ -110,7 +112,7 @@ if MYSQ.exists() and not fpl_squad:
                 f'mind a 15 játékos pontja számít, ezért a kispadosok is meg vannak jelölve.')
 
 PAY = json.dumps({"taken_at": SNAP["taken_at"], "gws": gws, "players": players, "cmp": CMP,
-                  "sq": SQ,
+                  "sq": SQ, "cs": CS,
                   "src": {k: {kk: vv for kk, vv in SRC[k].items() if kk != "data"} for k in ORDER},
                   "srcdata": {k: SRC[k]["data"] for k in ORDER}, "order": ORDER,
                   "fpl_note": fpl_note, "fpl_squad_size": len(fpl_squad),
@@ -188,6 +190,16 @@ tr.hi{background:var(--surface-2)}
 .hot{color:var(--coral);font-weight:500}
 .sechd{margin:26px 0 0;font-size:16px;font-weight:600}
 .sechd + p{margin:3px 0 0;font-family:var(--mono);font-size:11px;color:var(--dim);line-height:1.6}
+.cstbl td.rt2{text-align:right}
+.rate{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:7px;vertical-align:middle}
+.rate.green{background:#22c55e}.rate.yellow{background:#facc15}
+.rate.orange{background:#f97316}.rate.red{background:#ef4444}
+.fxc{display:inline-block;min-width:42px;text-align:center;font-family:var(--mono);font-size:10px;
+  padding:1px 5px;border-radius:3px;margin-right:3px}
+.fxc.home{background:color-mix(in oklab,var(--fg) 14%,transparent);font-weight:600}
+.fxc.away{color:var(--dim)}
+.cslegend{display:flex;flex-wrap:wrap;gap:8px 16px;margin:14px 0 0;font-family:var(--mono);
+  font-size:11px;color:var(--dim);align-items:center}
 .sqbar{display:flex;flex-wrap:wrap;gap:9px 14px;align-items:center;margin:18px 0 0;padding:12px 15px;
   background:var(--surface);border:1px solid var(--rule);border-radius:var(--r-md);box-shadow:var(--sh-sm)}
 .sqgrid{display:grid;gap:16px;grid-template-columns:repeat(4,minmax(0,1fr));margin-top:18px}
@@ -227,6 +239,7 @@ tr.hi{background:var(--surface-2)}
   <div class="tabs" role="tablist">
     <button class="tab" role="tab" id="t-draft" aria-selected="true">Draft-nézet</button>
     <button class="tab" role="tab" id="t-fpl" aria-selected="false">Fantasy-nézet</button>
+    <button class="tab" role="tab" id="t-cs" aria-selected="false">GW1 cheat sheet</button>
     <button class="tab" role="tab" id="t-sq" aria-selected="false">Csapat-teszt</button>
     <button class="tab" role="tab" id="t-cmp" aria-selected="false">Becslés-különbségek</button>
   </div>
@@ -240,6 +253,7 @@ tr.hi{background:var(--surface-2)}
 
   <p class="warn" id="fplnote" hidden></p>
   <div class="cols" id="cols"></div>
+  <div id="csview" hidden></div>
   <div id="sqview" hidden></div>
   <div id="cmpview" hidden></div>
   <p class="note" id="foot"></p>
@@ -329,6 +343,53 @@ function render() {
      játékosok listája versenyelőny a ligában — ezért nincs a publikus oldalon.`;
 }
 
+let csPos = 'ALL', csOnlyGreen = false;
+function renderCs() {
+  const C = D.cs, box = document.getElementById('csview');
+  if (!C) { box.innerHTML = '<p class="note">Nincs cheat sheet adat.</p>'; return; }
+  const RATE = {green: 'Great Option', yellow: 'Good Option',
+                orange: 'Differential', red: 'Avoid'};
+  let rows = C.players.filter(p => (csPos === 'ALL' || p.pos === csPos)
+                                && (!csOnlyGreen || p.rate === 'green'));
+  rows.sort((a, b) => a.pos.localeCompare(b.pos) || a.price - b.price
+                      || ['green','yellow','orange','red'].indexOf(a.rate)
+                       - ['green','yellow','orange','red'].indexOf(b.rate));
+  const fx = p => (p.fx || []).map(f =>
+    `<span class="fxc ${f === f.toUpperCase() ? 'home' : 'away'}">${esc(f)}</span>`).join('');
+  const num = v => v === undefined || v === null ? '–' : v.toFixed(2);
+  box.innerHTML = `
+    <div class="sqbar">
+      <span class="lbl">pozíció</span><span class="grp">${
+        [['ALL','mind'],['DEF','védő'],['MID','közép'],['FWD','csatár']].map(([k,l]) =>
+        `<button class="b" data-cspos="${k}" aria-pressed="${csPos===k}">${l}</button>`).join('')}</span>
+      <span class="lbl">szűrés</span><span class="grp">
+        <button class="b" data-csgreen="1" aria-pressed="${csOnlyGreen}">csak zöldek</button></span>
+    </div>
+    <p class="note" style="margin-top:12px;border:0;padding:0">
+      <b>${esc(C.source)}</b>, rögzítve ${esc(C.date)}. A statisztikák a 25/26-os szezon
+      per 90 perces értékei. A fixtúra vastagon = hazai. ${esc(C.missing[0])}.</p>
+    <div class="cslegend">${Object.entries(RATE).map(([k, v]) =>
+      `<span><span class="rate ${k}"></span>${esc(v)}</span>`).join('')}
+      <span>▲▼ = a forrás trend-jelzése · „new" = új a listán</span></div>
+    <div class="tw cstbl"><table>
+      <thead><tr><th class="l">Játékos</th><th>Poz</th><th>Ár</th><th class="l">GW1–3</th>
+        <th>npxG</th><th>xA / G+A</th><th>CBIT</th></tr></thead><tbody>` +
+    rows.map(p => `<tr>
+      <td class="l nm2"><span class="rate ${p.rate}" title="${esc(RATE[p.rate])}"></span>${esc(p.n)}
+        <span class="dimc" style="font-family:var(--mono);font-size:9px">${esc(p.club)}</span>
+        ${p.trend ? `<span class="dimc">${p.trend === 'up' ? '▲' : '▼'}</span>` : ''}
+        ${p.tag ? `<span class="ow">${esc(p.tag)}</span>` : ''}</td>
+      <td class="dimc">${p.pos}</td><td>£${p.price.toFixed(1)}</td>
+      <td class="l">${fx(p)}</td>
+      <td>${num(p.npxg !== undefined ? p.npxg : p.npxg_xag)}</td>
+      <td>${p.xa !== undefined ? num(p.xa) + ' / ' : ''}${num(p.ga)}</td>
+      <td class="dimc">${num(p.cbit)}</td></tr>`).join('') +
+    `</tbody></table></div>
+    <p class="note" style="margin-top:10px;border:0;padding:0">${rows.length} sor.
+     A „Csapat-teszt" fülön a <b>Csak zöldek</b> változat pontosan ezekre a zöldekre szorít —
+     a kapus kivételével, mert a kapus-tábláról nincs kép.</p>`;
+}
+
 let sqSrc = null, sqVar = 'free';
 function renderSq() {
   const Q = D.sq, box = document.getElementById('sqview');
@@ -377,15 +438,17 @@ function renderSq() {
     </div>
     <p class="note" style="margin-top:12px;border:0;padding:0">
       Exakt MILP: 15 fő · 2-5-5-3 · max 3 játékos klubonként · £${Q.budget.toFixed(1)}m.
-      A cél a <b>kezdő XI</b> összpontja GW${gwLabels[0]}–${gwLabels[gwLabels.length-1]}-ra
-      (az FPL is csak a kezdőt számolja), kapitánnyal duplázva, fordulónként szabadon.
+      A cél a <b>kezdő XI</b> összpontja GW${gwLabels[0]}–${gwLabels[gwLabels.length-1]}-ra,
+      DE GW${Q.bboost_gw}-ben <b style="color:var(--coral)">bench boost</b> van, ott
+      <b>mind a 15</b> pontja számít. Kapitány minden fordulóban duplázik.
       Halványan a keretben lévő, de egyszer sem kezdő játékos. Választható készlet: ${S0.pool} fő.</p>
     <div class="sqhead">
       <span><span class="lbl2">összes projektált pont</span><br><span class="big">${R.total.toFixed(1)}</span></span>
       <span><span class="lbl2">keret értéke</span><br><span class="big">£${R.cost.toFixed(1)}m</span></span>
     </div>
     <div class="rnd">${R.rounds.map(rd =>
-      `<span>GW${rd.gw}: <b>${rd.pts.toFixed(1)}</b> · C: <b>${esc(capName(rd.captain))}</b></span>`).join('')}</div>
+      `<span>GW${rd.gw}: <b>${rd.pts.toFixed(1)}</b> · C: <b>${esc(capName(rd.captain))}</b>${
+        rd.bboost ? ' · <b style="color:var(--coral)">bench boost</b>' : ''}</span>`).join('')}</div>
     <div class="sqgrid">${cols}</div>
     <h3 class="sechd">Minden változat, mindkét becsléssel</h3>
     <p>a „Különbség" a két forrás közti eltérés ugyanarra a változatra</p>
@@ -437,6 +500,11 @@ function renderCmp() {
 
 document.addEventListener('click', ev => {
   const b = ev.target.closest('.b');
+  if (b && (b.dataset.cspos || b.dataset.csgreen)) {
+    if (b.dataset.cspos) csPos = b.dataset.cspos;
+    if (b.dataset.csgreen) csOnlyGreen = !csOnlyGreen;
+    renderCs(); return;
+  }
   if (b && (b.dataset.sqsrc || b.dataset.sqvar)) {
     if (b.dataset.sqsrc) sqSrc = b.dataset.sqsrc;
     if (b.dataset.sqvar) sqVar = b.dataset.sqvar;
@@ -448,14 +516,17 @@ document.addEventListener('click', ev => {
            if (b.dataset.s) sortBy = b.dataset.s; render(); return; }
   const t = ev.target.closest('[role="tab"]');
   if (t) {
-    view = t.id === 't-fpl' ? 'fpl' : t.id === 't-cmp' ? 'cmp' : t.id === 't-sq' ? 'sq' : 'draft';
+    view = t.id === 't-fpl' ? 'fpl' : t.id === 't-cmp' ? 'cmp'
+         : t.id === 't-sq' ? 'sq' : t.id === 't-cs' ? 'cs' : 'draft';
     document.querySelectorAll('[role="tab"]').forEach(x => x.setAttribute('aria-selected', x === t));
-    const isCmp = view === 'cmp', isSq = view === 'sq';
+    const isCmp = view === 'cmp', isSq = view === 'sq', isCs = view === 'cs';
     document.getElementById('cmpview').hidden = !isCmp;
     document.getElementById('sqview').hidden = !isSq;
-    document.getElementById('cols').hidden = isCmp || isSq;
-    document.querySelector('.ctl').hidden = isCmp || isSq;
-    if (isCmp) renderCmp(); else if (isSq) renderSq(); else render();
+    document.getElementById('csview').hidden = !isCs;
+    document.getElementById('cols').hidden = isCmp || isSq || isCs;
+    document.querySelector('.ctl').hidden = isCmp || isSq || isCs;
+    if (isCmp) renderCmp(); else if (isSq) renderSq();
+    else if (isCs) renderCs(); else render();
   }
 });
 render();

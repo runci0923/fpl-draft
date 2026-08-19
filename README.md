@@ -78,8 +78,15 @@ A workflow így is frissíti a rangsorokat, a kereteket és a deadline utáni va
   számolja, ezért a MILP-ben fordulónkénti felállás-változók vannak (`y[p][g]`), plusz
   kapitány (`c[p][g]`, duplázás). Ha a 15 összegét maximalizálnánk, drága kispadot vennénk.
   Így a £4.0-s kitöltők automatikusan a padra kerülnek — a lapon halványan látszanak.
-- **A GW1-3 optimum eleve tartalmazza Haalandot ÉS Brunót**, mindkét becslésen. A
-  „Haaland + Bruno" változat azonos a szabad optimummal; kihagyni bármelyiket ront.
+- **BENCH BOOST GW1-ben mindent átrendez.** A GW1-es fordulóban mind a 15 játékos pontja
+  számít (`x`, nem `y` a MILP-ben), a többiben csak a kezdő XI. Ettől az FPL Hub szabad
+  optimuma **kidobja Haalandot**: a £15,5m jobban megtérül 15 játékosra szétosztva
+  (204,5 pt Haaland nélkül vs. 204,0 vele). A Solio ezzel szemben megtartja.
+- **Brunót drágább kihagyni, mint Haalandot** — mindkét becslésen, bboosttal is.
+- **A „csak zöldek" változat alig kerül valamibe**: FPL Hubon 204,1 a szabad 204,5 ellen,
+  vagyis a cheat sheet Great Option-listája gyakorlatilag lefedi az optimumot. A Solion
+  nagyobb az ár (194,9 vs 198,9), mert a zöld-lista és a Solio 265-es készlete együtt
+  szűkíti a választékot.
 - A **forrás dönti el, ki nyer.** A rangsorok Spearman-egyezése 0,48–0,79.
 - **Az igazolásokat nem kell külön követni.** Publikus tranzakció-végpont nincs (404), de az
   `element-status` mindig az aktuális birtoklást adja, és minden futás ebből épít. A változás

@@ -1,8 +1,11 @@
 #!/usr/bin/env python3
 """SIMA (nem draft) FPL keret-optimalizálás GW1-3-ra, forrásonként. -> squads_test.json
 
-Exakt MILP (pulp + CBC). Fontos: a cél a KEZDŐ XI összpontja fordulónként, nem a 15-é —
-az FPL is csak a kezdőt számolja. Kapitány is benne van (duplázás), fordulónként szabadon.
+Exakt MILP (pulp + CBC). A cél a KEZDŐ XI összpontja fordulónként — DE GW1-ben
+BENCH BOOST van, ott mind a 15 játékos pontja számít. Kapitány minden fordulóban duplázik.
+
+A „csak zöld" változat a cheatsheet/gw1_fran.json „green" (Great Option) minősítésű
+játékosaira szorít — kivéve a kapust, mert a kapus-táblát nem ismerjük (a tulaj engedélyével).
 
 Megkötések: 15 fő · 2 GK / 5 DEF / 5 MID / 3 FWD · max 3 játékos klubonként · <= 100.0m
 Felállás fordulónként: 11 fő, pontosan 1 GK, DEF 3-5, MID 2-5, FWD 1-3.
@@ -14,6 +17,7 @@ import pulp
 
 HERE = pathlib.Path(__file__).parent
 BUDGET = 1000          # tized-millióban (100.0m)
+BBOOST_GW = 0          # 0-alapú index: az ELSŐ vizsgált fordulóban van a bench boost
 GWS = 3
 NEED = {"GKP": 2, "DEF": 5, "MID": 5, "FWD": 3}
 XI_MIN = {"GKP": 1, "DEF": 3, "MID": 2, "FWD": 1}
@@ -56,7 +60,11 @@ def solve(pool, force=(), ban=(), label=""):
     y = {(i, g): pulp.LpVariable(f"y{i}_{g}", cat="Binary") for i in ids for g in range(GWS)}
     c = {(i, g): pulp.LpVariable(f"c{i}_{g}", cat="Binary") for i in ids for g in range(GWS)}
 
-    prob += pulp.lpSum(pool[i]["pts"][g] * (y[(i, g)] + c[(i, g)]) for i in ids for g in range(GWS))
+    # GW1 (bench boost): a KERET minden tagja pontot hoz -> x, nem y.
+    # A többi fordulóban csak a kezdő XI (y). A kapitány mindig duplázik (c).
+    prob += pulp.lpSum(
+        pool[i]["pts"][g] * ((x[i] if g == BBOOST_GW else y[(i, g)]) + c[(i, g)])
+        for i in ids for g in range(GWS))
 
     prob += pulp.lpSum(x[i] for i in ids) == 15
     for p, n in NEED.items():
@@ -91,8 +99,10 @@ def solve(pool, force=(), ban=(), label=""):
     for g in range(GWS):
         xi = [i for i in squad if y[(i, g)].value() > .5]
         cap = next((i for i in squad if c[(i, g)].value() > .5), None)
+        scoring = squad if g == BBOOST_GW else xi
         per_gw.append({"gw": gw0 + g, "xi": xi, "captain": cap,
-                       "pts": round(sum(pool[i]["pts"][g] for i in xi)
+                       "bboost": g == BBOOST_GW,
+                       "pts": round(sum(pool[i]["pts"][g] for i in scoring)
                                     + (pool[cap]["pts"][g] if cap else 0), 2)})
     return {"label": label,
             "cost": round(sum(pool[i]["cost"] for i in squad) / 10, 1),
@@ -110,22 +120,54 @@ for d, m in D2M.items():
 HAA, BRU = NAMES["Haaland"], NAMES["B.Fernandes"]
 if not HAA or not BRU: sys.exit(f"nem találom: {NAMES}")
 
+# --- „csak zöld": a cheat sheet Great Option minősítése
+cs = HERE / "cheatsheet" / "gw1_fran.json"
+GREEN = set()
+if cs.exists():
+    import unicodedata
+    def nz(t):
+        t = (t or "").lower()
+        for a, b in [("ø","o"),("æ","ae"),("đ","d"),("ł","l"),("ß","ss"),("ı","i")]: t = t.replace(a, b)
+        t = "".join(ch for ch in unicodedata.normalize("NFKD", t) if not unicodedata.combining(ch))
+        return "".join(ch for ch in t if ch.isalnum())
+    rows = [r for r in json.loads(cs.read_text(encoding="utf-8"))["players"] if r["rate"] == "green"]
+    by = {}
+    for m, info in MAIN.items():
+        by.setdefault((nz(info["web"]), info["club"], info["pos"]), []).append(m)
+    miss = []
+    for r in rows:
+        hit = by.get((nz(r["n"]), r["club"], r["pos"]))
+        if hit and len(hit) == 1: GREEN.add(hit[0])
+        else: miss.append(f'{r["n"]} ({r["club"]}/{r["pos"]})')
+    print(f"Zöld (Great Option) lista: {len(GREEN)}/{len(rows)} párosítva"
+          + (f", kimaradt: {', '.join(miss)}" if miss else ""))
+
 VARIANTS = [("free", "Szabad", (), ()),
             ("both", "Haaland + Bruno", (HAA, BRU), ()),
             ("haaland", "Csak Haaland", (HAA,), (BRU,)),
-            ("bruno", "Csak Bruno", (BRU,), (HAA,))]
+            ("bruno", "Csak Bruno", (BRU,), (HAA,)),
+            ("green", "Csak zöldek", (), ())]
 
 out = {"gw_from": gw0, "gws": GWS, "budget": BUDGET / 10, "taken_at": S["taken_at"],
+       "bboost_gw": gw0 + BBOOST_GW,
        "sources": {}, "variants": [{"key": k, "label": l} for k, l, _, _ in VARIANTS]}
 for src in S["data"]:
     pool = load(src)
     res = {}
     print(f"\n=== {S['sources'][src]['label']}  ({len(pool)} választható játékos)")
     for key, label, force, ban in VARIANTS:
-        r = solve(pool, force, ban, label)
+        sub = pool
+        if key == "green":
+            if not GREEN:
+                res[key] = None; print(f"  {label:<18} nincs zöld-lista"); continue
+            # a kapus szabad (nincs kapus-tábla), a többi pozíció csak zöld
+            sub = {i: v for i, v in pool.items()
+                   if v["pos"] == "GKP" or D2M[i] in GREEN}
+        r = solve(sub, force, ban, label)
         res[key] = r
         if not r: print(f"  {label:<18} nincs megoldás"); continue
-        print(f"  {label:<18} {r['total']:>6.1f} pt   £{r['cost']:>5.1f}m")
+        extra = f"   (készlet {len(sub)})" if key == "green" else ""
+        print(f"  {label:<18} {r['total']:>6.1f} pt   £{r['cost']:>5.1f}m{extra}")
     out["sources"][src] = {"label": S["sources"][src]["label"], "pool": len(pool), "variants": res}
 
 (HERE / "squads_test.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")),
