@@ -1,0 +1,34 @@
+{
+  "_doc": [
+    "Attila SIMA (nem draft) FPL kerete, entry 117238. A picks-végpont a deadline előtt",
+    "404-et ad, ezért képernyőképről rögzítve 2026-08-19-én. GW1 után a fetch_actuals",
+    "logikájával az API-ból is jönne, de a deadline előtt ez az egyetlen forrás.",
+    "chip: bench boost GW1-re tervezve -> mind a 15 játékos pontja számít"
+  ],
+  "entry": 117238,
+  "date": "2026-08-19",
+  "gw": 1,
+  "chip": "bboost",
+  "formation": "3-4-3",
+  "captain": "Haaland",
+  "vice": "B.Fernandes",
+  "xi": [
+    {"n": "Kinsky",        "club": "TOT", "pos": "GKP"},
+    {"n": "Calafiori",     "club": "ARS", "pos": "DEF"},
+    {"n": "Ajer",          "club": "BRE", "pos": "DEF"},
+    {"n": "Maguire",       "club": "MUN", "pos": "DEF"},
+    {"n": "B.Fernandes",   "club": "MUN", "pos": "MID"},
+    {"n": "Tzolis",        "club": "ARS", "pos": "MID"},
+    {"n": "Szoboszlai",    "club": "LIV", "pos": "MID"},
+    {"n": "Mbeumo",        "club": "MUN", "pos": "MID"},
+    {"n": "Calvert-Lewin", "club": "LEE", "pos": "FWD"},
+    {"n": "Haaland",       "club": "MCI", "pos": "FWD"},
+    {"n": "João Pedro",    "club": "CHE", "pos": "FWD"}
+  ],
+  "bench": [
+    {"n": "Verbruggen", "club": "BHA", "pos": "GKP"},
+    {"n": "Gomez",      "club": "BHA", "pos": "MID"},
+    {"n": "Rodon",      "club": "LEE", "pos": "DEF"},
+    {"n": "Diop",       "club": "IPS", "pos": "DEF"}
+  ]
+}

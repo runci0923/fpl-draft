@@ -28,10 +28,13 @@ def summed(src):
         if len(vals) == H: out[int(did)] = round(sum(vals), 2)
     return out
 
-srcs = {"fplform": summed("fplform"), "ffhub": summed("ffhub")}
-est = json.loads((HERE / "estimator" / "estimator.json").read_text(encoding="utf-8"))
-srcs["estimator"] = {p["draft_id"]: p["xpts5"] for p in est["players"]}
-LABEL = {"fplform": "FPL Form", "ffhub": "FPL Hub", "estimator": "fplestimator"}
+srcs = {k: summed(k) for k in S["data"]}
+LABEL = {k: S["sources"][k]["label"] for k in S["data"]}
+
+# per-FORDULÓ összevetés is lehetséges, mert mindkét forrás fordulónkénti
+def per_gw(src, g):
+    return {int(d): per[str(g)]["pts"] for d, per in S["data"].get(src, {}).items()
+            if per.get(str(g))}
 
 common = set.intersection(*(set(v) for v in srcs.values()))
 def spearman(xs, ys):
@@ -96,25 +99,48 @@ for i,a in enumerate(keys):
     for b in keys[i+1:]:
         agree_starters[f"{a}|{b}"] = {"rho": rho_on(a,b,starters), "n": len(starters)}
 
+# fordulónkénti egyezés: itt derül ki, hogy a különbség a szinten vagy a sorrenden van
+by_gw = {}
+for g in range(gw0, gw0 + H):
+    tabs = {k: per_gw(k, g) for k in keys}
+    ent = {}
+    for i, a in enumerate(keys):
+        for b in keys[i+1:]:
+            ids = sorted(set(tabs[a]) & set(tabs[b]))
+            if len(ids) < 3: continue
+            xs = [tabs[a][i2] for i2 in ids]; ys = [tabs[b][i2] for i2 in ids]
+            ent[f"{a}|{b}"] = {"rho": spearman(xs, ys), "n": len(ids),
+                               "mean_a": round(statistics.fmean(xs), 2),
+                               "mean_b": round(statistics.fmean(ys), 2)}
+    by_gw[str(g)] = ent
+
 out = {"horizon": H, "gw_from": gw0, "labels": LABEL, "agreement": agree,
-       "agreement_starters": agree_starters,
-       "taken_at": S["taken_at"], "estimator_note": est["note"], "rows": rows}
+       "agreement_starters": agree_starters, "by_gw": by_gw,
+       "estimator_note": None,
+       "taken_at": S["taken_at"], "rows": rows}
 (HERE / "compare.json").write_text(json.dumps(out, ensure_ascii=False, separators=(",", ":")),
                                    encoding="utf-8")
 
-print(f"Közös játékos mind a 3 forráson: {len(common)}   (GW{gw0}–{gw0+H-1} összeg)\n")
+print(f"Közös játékos mind a {len(keys)} forráson: {len(common)}   (GW{gw0}–{gw0+H-1} összeg)\n")
 print("Átlagos becsült pont 5 fordulóra:")
 for k in keys:
     v = [srcs[k][i] for i in common]
     print(f"  {LABEL[k]:<14} átlag {statistics.fmean(v):>5.2f}   "
           f"medián {statistics.median(v):>5.2f}   max {max(v):>5.1f}")
-print("\nEgyezés (Spearman-rho a közös játékosokon):")
+print("\nFordulónkénti egyezés (Spearman-rho):")
+for g, ent in by_gw.items():
+    for k, v in ent.items():
+        a, b = k.split("|")
+        print(f"  GW{g}: {LABEL[a]} vs {LABEL[b]}  rho {v['rho']:>6}  n={v['n']}   "
+              f"átlag {v['mean_a']} vs {v['mean_b']}")
+
+print("\nEgyezés az 5 fordulós összegen:")
 for k,v in sorted(agree.items(), key=lambda kv: -(kv[1]['rho'] or 0)):
     a,b = k.split("|")
     print(f"  {LABEL[a]:<14} vs {LABEL[b]:<14} rho {v['rho']:>6}   n={v['n']}")
 rot = [r for r in rows if r["kind"] == "rotation"]
 print(f"\nAz eltérések természete: {len(rot)} kezdő-vita, {len(starters)} érték-vita")
-print("\nEgyezés CSAK azokon, akit mind a 3 kezdőnek tart:")
+print(f"\nEgyezés CSAK azokon, akit mind a {len(keys)} forrás kezdőnek tart:")
 for k,v in sorted(agree_starters.items(), key=lambda kv: -(kv[1]['rho'] or 0)):
     a,b = k.split("|")
     print(f"  {LABEL[a]:<14} vs {LABEL[b]:<14} rho {v['rho']:>6}   n={v['n']}")

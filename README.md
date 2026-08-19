@@ -32,18 +32,21 @@ de bármikor újragenerálhatók a nyílt API-ból.
 [OneFPL](https://onefpl.com/blog/fpl-draft-rankings-top-100-2026-27) ·
 [RotoWire](https://www.rotowire.com/soccer/article/fantasy-premier-league-fpl-rankings-top-400-for-2026-27-season-124261)
 
-**Projekciók** — négy forrás, kettő fordulónkénti bontással:
+**Projekciók** — két forrás, mindkettő fordulónkénti bontással:
 
 | | bontás | gyűjtés | publikus? |
 |---|---|---|---|
-| [FPL Form](https://fplform.com/fpl-predicted-points) | fordulónkénti | automatizált | igen |
 | [Fantasy Football Hub](https://www.fantasyfootballhub.co.uk/predictions) PRO | fordulónkénti + várható perc + gól/gólpassz | kézi (bejelentkezés) | **igen** — a tulaj döntése |
 | [Solio](https://fpl.solioanalytics.com/) | fordulónkénti | kézi (bejelentkezés) | nem |
-| [fplestimator](https://www.fplestimator.com/best-picks) | csak 5 fordulós összeg | kézi | igen |
 
-Az FPL Hub fizetős termék adata. A tulaj 2026-08-19-én úgy döntött, hogy kimehet a nyílt
-oldalra; a `publish_pages.py`-ban egy `PUBLIC_SOURCES` halmaz szabályozza, tehát egy sor
-átírásával visszavehető. A Solio marad privát.
+Az FPL Form és az fplestimator **kivéve** (2026-08-19, tulaj döntése): az FPL Form
+szisztematikusan 25-30%-kal alacsonyabb szinten becsült, az fplestimator pedig csak
+5 fordulós összeget adott, per-fordulós bontás nélkül.
+
+**Következmény, amit tudni kell:** az FPL Form volt az EGYETLEN automatizálható forrás.
+Mindkét megmaradt forrás bejelentkezést kér, ezért a CI **nem** futtatja a
+`fetch_projections.py`-t — a committolt `proj/` snapshot a kanonikus, és kézzel frissül.
+A workflow így is frissíti a rangsorokat, a kereteket és a deadline utáni valós pontokat.
 
 ### Projekciós források — mi jött be és mi nem
 

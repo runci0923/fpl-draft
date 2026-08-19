@@ -1,12 +1,14 @@
 #!/usr/bin/env python3
-"""Fordulónkénti projekciós pontok több forrásból, DRAFT element_id-ra kötve.
+"""Fordulónkénti projekciós pontok, DRAFT element_id-ra kötve.
 
 Snapshot-elvű: minden futás külön fájlba megy időbélyeggel (proj/YYYY-MM-DDTHH-MM_<gw>.json).
 A deadline előtti utolsó snapshot lesz a kanonikus — ez az, amit egy manager látott dönteni.
 
-Források:
-  fplform   — fplform.com POST-export. Fordulónkénti xFPL + kezdés-valószínűség. Ingyenes.
-  official  — a fő FPL API `ep_next` mezője. Ingyenes, de szezon előtt lapos placeholder.
+Források (mindkettő KÉZI pillanatkép — bejelentkezést kérnek, ezért nem CI-zhetők):
+  ffhub  — Fantasy Football Hub PRO: pont + várható perc + gól/gólpassz. ffhub/ffhub_raw.json
+  solio  — Solio: fordulónkénti pont. solio/solio.json
+
+Ha egyik pillanatkép sincs meg, a szkript NEM ír snapshotot (nem tapossa le a jót).
 
 Használat:  fetch_projections.py [--gw N] [--horizon 5]
 """
@@ -39,29 +41,6 @@ now = dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
 stamp = now.strftime("%Y-%m-%dT%H-%M-%SZ")
 
 sources, notes = {}, {}
-
-# ---------------------------------------------------------------- FPL Form
-raw = curl(["-X", "POST", "-d", f"firstgw={gw}&lastgw={last}&all=1",
-            "https://fplform.com/export-fpl-form-data"]).decode("utf-8", "replace")
-rows = list(csv.DictReader(io.StringIO(raw)))
-if not rows or "ID" not in rows[0]:
-    sys.exit("fplform: váratlan válasz — megváltozhatott az űrlap")
-ff, ff_skip = {}, 0
-for r in rows:
-    d = MAIN2DRAFT.get(int(r["ID"]))
-    if d is None: ff_skip += 1; continue
-    per = {}
-    for g in range(gw, last + 1):
-        n = g - gw + 1
-        if f"{n}_with_prob" in r and r[f"{n}_with_prob"]:
-            per[str(g)] = {"pts": round(float(r[f"{n}_with_prob"]), 3),
-                           "raw": round(float(r[f"{n}_pts_no_prob"]), 3),
-                           "start_prob": round(float(r[f"{n}_prob"]), 3)}
-    ff[str(d)] = per
-sources["fplform"] = ff
-notes["fplform"] = {"label": "FPL Form", "url": "https://fplform.com/fpl-predicted-points",
-                    "players": len(ff), "skipped": ff_skip,
-                    "note": "xFPL kezdés-valószínűséggel súlyozva; `raw` a súlyozás nélküli"}
 
 # ------------------------------------------------------- Fantasy Football Hub (PRO)
 # FIZETŐS ADAT: a tulaj PRO-előfizetéséből, Chrome-mal lehúzva (public-api…/league/players,
@@ -122,6 +101,9 @@ def write(path, srcs):
 # private=True forrás nem kerül a verziókövetett proj/-ba (most: csak a Solio).
 # Az FPL Hub a tulaj döntése szerint publikus -> hogy a CI-újraépítés se veszítse el,
 # a committolt snapshotban is benne kell lennie.
+if not sources:
+    sys.exit("Nincs egyetlen forrás-pillanatkép sem (ffhub/, solio/) — snapshot NEM íródott, "
+             "a korábbi megmarad.")
 pubsrc = [k for k in sources if not notes[k].get("private")]
 privsrc = list(sources)
 f = OUT / f"{stamp}_gw{gw}.json"
@@ -149,8 +131,11 @@ for k, n in notes.items():
           (f", {n['skipped']} kihagyva" if n.get("skipped") else "") + f"   — {n['note']}")
 draft_bs = json.loads(curl(["https://draft.premierleague.com/api/bootstrap-static"]))
 NAME = {x["id"]: x["web_name"] for x in draft_bs["elements"]}
-print(f"\nGW{gw} legmagasabb projekció (FPL Form):")
-best = sorted(ff.items(), key=lambda kv: -(kv[1].get(str(gw), {}).get("pts") or 0))[:8]
+main = pubsrc[0] if pubsrc else privsrc[0]
+tbl = sources[main]
+print(f"\nGW{gw} legmagasabb projekció ({notes[main]['label']}):")
+best = sorted(tbl.items(), key=lambda kv: -(kv[1].get(str(gw), {}).get("pts") or 0))[:8]
 for did, per in best:
     p = per[str(gw)]
-    print(f"   {NAME[int(did)]:<16} {p['pts']:>5}  (nyers {p['raw']}, kezdés {int(p['start_prob']*100)}%)")
+    extra = f"  (perc {p['mins']})" if p.get("mins") is not None else ""
+    print(f"   {NAME[int(did)]:<16} {p['pts']:>5}{extra}")

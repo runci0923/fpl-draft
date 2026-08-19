@@ -4,11 +4,17 @@
 NEM megy nyílt webre: az FPL Hub fizetős adatára épül, és a draft-nézet
 szándékosan megmutatja, kinél van kicsi és ki a szabad (ez versenyelőny).
 """
-import argparse, json, pathlib, subprocess, sys
+import argparse, json, pathlib, subprocess, sys, unicodedata
 sys.path.insert(0, str(pathlib.Path(__file__).parent))
 import theme
 
 HERE = pathlib.Path(__file__).parent
+
+def norm(x):
+    x = (x or "").lower()
+    for a, b in [("ø","o"),("æ","ae"),("đ","d"),("ł","l"),("ß","ss"),("ı","i")]: x = x.replace(a, b)
+    x = "".join(c for c in unicodedata.normalize("NFKD", x) if not unicodedata.combining(c))
+    return "".join(c for c in x if c.isalnum())
 ap = argparse.ArgumentParser()
 ap.add_argument("--out", default=str(HERE / "secret.html"))
 ap.add_argument("--fpl-entry", type=int, default=117238, help="a saját (nem draft) FPL csapat")
@@ -18,8 +24,7 @@ snaps = sorted((HERE / "proj_private").glob("*.json")) or sorted((HERE / "proj")
 if not snaps: raise SystemExit("nincs projekció-snapshot")
 SNAP = json.loads(snaps[-1].read_text(encoding="utf-8"))
 hub = json.loads((HERE / "ffhub" / "ffhub_raw.json").read_text(encoding="utf-8"))
-est_path = HERE / "estimator" / "estimator.json"
-EST = json.loads(est_path.read_text(encoding="utf-8")) if est_path.exists() else None
+
 cmp_path = HERE / "compare.json"
 CMP = json.loads(cmp_path.read_text(encoding="utf-8")) if cmp_path.exists() else None
 idmap = json.loads((HERE / "idmap.json").read_text(encoding="utf-8"))
@@ -33,7 +38,7 @@ for m in data["managers"]:
         owner[s["id"]] = {"first": m["first"], "ini": m["initials"], "me": m["entry"] == ME_DRAFT}
         if m["entry"] == ME_DRAFT: mine_draft.add(s["id"])
 
-# a sima FPL keret deadline előtt 404 — ha megjön, kiemeljük
+# a sima FPL keret deadline előtt 404 — ha megjön az API-ból, kiemeljük
 UA = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/128 Safari/537.36"
 fpl_squad, fpl_note = [], ""
 for gw in range(1, 39):
@@ -56,12 +61,7 @@ for slug, note in SNAP["sources"].items():
     SRC[slug] = {"label": note["label"], "note": note.get("note", ""),
                  "url": note.get("url"), "per_gw": True,
                  "players": note.get("players"), "data": SNAP["data"][slug]}
-if EST:
-    SRC["estimator"] = {"label": "fplestimator", "note": EST["note"],
-                        "url": "https://www.fplestimator.com/best-picks", "per_gw": False,
-                        "players": len(EST["players"]),
-                        "data": {str(p["draft_id"]): {"sum5": p["xpts5"]} for p in EST["players"]}}
-ORDER = [k for k in ("ffhub", "solio", "fplform", "estimator") if k in SRC]
+ORDER = [k for k in ("ffhub", "solio") if k in SRC] + [k for k in SRC if k not in ("ffhub", "solio")]
 
 players = []
 for p in hub["players"]:
@@ -81,10 +81,37 @@ for p in hub["players"]:
     })
 gws = sorted({int(k) for p in players for k in p["gw"]})
 
+# --- a sima FPL keret képernyőképről (a picks-végpont a deadline előtt 404)
+MYSQ = HERE / "my_fpl_squad.json"
+manual_meta = None
+if MYSQ.exists() and not fpl_squad:
+    mj = json.loads(MYSQ.read_text(encoding="utf-8"))
+    manual_meta = {"gw": mj["gw"], "chip": mj.get("chip"), "date": mj["date"],
+                   "captain": mj.get("captain"), "formation": mj.get("formation"),
+                   "xi": [], "bench": []}
+    unresolved = []
+    for grp in ("xi", "bench"):
+        for e in mj[grp]:
+            n = norm(e["n"])
+            hit = [p for p in players if p["club"] == e["club"] and p["pos"] == e["pos"]
+                   and (norm(p["n"]) == n or norm(p["n"]).endswith(n) or n.endswith(norm(p["n"])))]
+            if len(hit) == 1:
+                hit[0]["mine_fpl"] = True
+                hit[0]["fpl_bench"] = (grp == "bench")
+                manual_meta[grp].append(hit[0]["draft"])
+            else:
+                unresolved.append(f'{e["n"]} ({e["club"]}/{e["pos"]}) -> {len(hit)}')
+    if unresolved:
+        raise SystemExit("my_fpl_squad.json feloldatlan: " + "; ".join(unresolved))
+    fpl_note = (f'A sima FPL kereted képernyőképről ({mj["date"]}), mert a picks-végpont a '
+                f'deadline előtt 404-et ad. Chip: {mj.get("chip","-")} — bench boostnál '
+                f'mind a 15 játékos pontja számít, ezért a kispadosok is meg vannak jelölve.')
+
 PAY = json.dumps({"taken_at": SNAP["taken_at"], "gws": gws, "players": players, "cmp": CMP,
                   "src": {k: {kk: vv for kk, vv in SRC[k].items() if kk != "data"} for k in ORDER},
                   "srcdata": {k: SRC[k]["data"] for k in ORDER}, "order": ORDER,
                   "fpl_note": fpl_note, "fpl_squad_size": len(fpl_squad),
+                  "fpl_manual": manual_meta,
                   "managers": [{"first": m["first"], "ini": m["initials"],
                                 "me": m["entry"] == ME_DRAFT} for m in data["managers"]]},
                  ensure_ascii=False, separators=(",", ":"))
@@ -314,7 +341,7 @@ function renderCmp() {
     <h3 class="sechd">Mennyire értenek egyet</h3>
     <p>Spearman-rho a GW${C.gw_from}–${C.gw_from+C.horizon-1} összegen. 1,0 = azonos sorrend.</p>
     ${rhoTbl(C.agreement, 'mindenkin')}
-    <p style="margin-top:9px">Csak azokon, akit <b style="color:var(--fg)">mind a három kezdőnek tart</b> —
+    <p style="margin-top:9px">Csak azokon, akit <b style="color:var(--fg)">mindegyik forrás kezdőnek tart</b> —
     ez mutatja a valódi érték-egyezést, a kezdő-kérdés nélkül.</p>
     ${rhoTbl(C.agreement_starters, 'csak kezdőkön')}
 
