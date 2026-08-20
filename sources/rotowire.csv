@@ -151,6 +151,7 @@ element_id,rank,web_name,club,pos
 142,150,James,CHE,DEF
 334,151,Muharemović,LEE,DEF
 79,152,Evanilson,BOU,FWD
+597,153,Suzuki,AVL,GKP
 70,154,Kluivert,BOU,MID
 97,155,Jensen,BRE,MID
 211,156,Yeremy,CRY,MID
@@ -272,6 +273,7 @@ element_id,rank,web_name,club,pos
 176,273,Dasilva,COV,DEF
 75,274,Christie,BOU,MID
 484,275,Hutchinson,NFO,MID
+596,276,Ruggeri,AVL,DEF
 186,277,Mason-Clark,COV,MID
 405,278,N.Gonzalez,MCI,MID
 309,279,Núñez,IPS,MID
@@ -317,6 +319,7 @@ element_id,rank,web_name,club,pos
 516,319,Bentancur,TOT,MID
 245,320,Dibling,EVE,MID
 553,321,Isidor,SUN,FWD
+599,322,Elvedi,LEE,DEF
 52,323,Alysson,AVL,MID
 35,324,Bogarde,AVL,MID
 193,325,Wright,COV,FWD
@@ -330,6 +333,7 @@ element_id,rank,web_name,club,pos
 33,333,Mings,AVL,DEF
 347,334,Nmecha,LEE,FWD
 194,335,Thomas-Asante,COV,FWD
+598,336,Cherif,COV,FWD
 395,337,Lewis,MCI,DEF
 462,338,Steur,NEW,MID
 188,339,Torp,COV,MID

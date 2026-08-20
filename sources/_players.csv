@@ -27,17 +27,17 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 26,Havertz,Kai,Havertz,ARS,FWD,22
 27,G.Jesus,Gabriel,Fernando de Jesus,ARS,FWD,105
 28,Martinez,Emiliano,Martínez Romero,AVL,GKP,235
-29,M.Bizot,Marco,Bizot,AVL,GKP,449
-30,Digne,Lucas,Digne,AVL,DEF,408
-31,Konsa,Ezri,Konsa Ngoyo,AVL,DEF,406
-32,Cash,Matty,Cash,AVL,DEF,400
-33,Mings,Tyrone,Mings,AVL,DEF,430
-34,Pau,Pau,Torres,AVL,DEF,423
+29,M.Bizot,Marco,Bizot,AVL,GKP,451
+30,Digne,Lucas,Digne,AVL,DEF,410
+31,Konsa,Ezri,Konsa Ngoyo,AVL,DEF,408
+32,Cash,Matty,Cash,AVL,DEF,402
+33,Mings,Tyrone,Mings,AVL,DEF,432
+34,Pau,Pau,Torres,AVL,DEF,425
 35,Bogarde,Lamare,Bogarde,AVL,MID,293
-36,Maatsen,Ian,Maatsen,AVL,DEF,427
-37,Lindelöf,Victor,Lindelöf,AVL,DEF,441
-38,A.García,Andrés,García,AVL,DEF,531
-39,Nedeljkovic,Kosta,Nedeljkovic,AVL,DEF,540
+36,Maatsen,Ian,Maatsen,AVL,DEF,429
+37,Lindelöf,Victor,Lindelöf,AVL,DEF,443
+38,A.García,Andrés,García,AVL,DEF,535
+39,Nedeljkovic,Kosta,Nedeljkovic,AVL,DEF,544
 40,Rogers,Morgan,Rogers,CHE,MID,15
 41,Buendía,Emiliano,Buendía Stati,AVL,MID,81
 42,Guessand,Evann,Guessand,CRY,MID,174
@@ -48,23 +48,23 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 47,Kamara,Boubacar,Kamara,AVL,MID,274
 48,Onana,Amadou,Onana,AVL,MID,260
 49,Iling Jr,Samuel,Iling-Junior,AVL,MID,337
-50,Burrowes,Bradley,Burrowes,AVL,MID,472
-51,George Hemmings,George,Hemmings,AVL,MID,465
+50,Burrowes,Bradley,Burrowes,AVL,MID,474
+51,George Hemmings,George,Hemmings,AVL,MID,467
 52,Alysson,Alysson Edward Franco,da Rocha dos Santos,AVL,MID,328
 53,Manzambi,Johan,Manzambi,AVL,MID,106
 54,Gomes,Joao,Gomes,AVL,MID,144
 55,Watkins,Ollie,Watkins,AVL,FWD,10
 56,Abraham,Tammy,Abraham,AVL,FWD,187
-57,Petrović,Đorđe,Petrović,BOU,GKP,397
-58,Forster,Fraser,Forster,BOU,GKP,541
-59,Dennis,Will,Dennis,BOU,GKP,542
+57,Petrović,Đorđe,Petrović,BOU,GKP,399
+58,Forster,Fraser,Forster,BOU,GKP,545
+59,Dennis,Will,Dennis,BOU,GKP,546
 60,Hill,James,Hill,BOU,DEF,130
 61,Truffert,Adrien,Truffert,BOU,DEF,112
 62,Diakité,Bafodé,Diakité,BOU,DEF,289
 63,Milosavljević,Veljko,Milosavljevic,BOU,DEF,307
-64,Smith,Adam,Smith,BOU,DEF,425
-65,J.Araujo,Julián,Araujo Zúñiga,BOU,DEF,481
-66,Soler,Julio,Soler Barreto,BOU,DEF,532
+64,Smith,Adam,Smith,BOU,DEF,427
+65,J.Araujo,Julián,Araujo Zúñiga,BOU,DEF,483
+66,Soler,Julio,Soler Barreto,BOU,DEF,536
 67,Rayan,Rayan Vitor,Simplício Rocha,BOU,MID,47
 68,Tavernier,Marcus,Tavernier,BOU,MID,67
 69,Scott,Alex,Scott,BOU,MID,69
@@ -81,17 +81,17 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 80,Enes Ünal,Enes,Ünal,BOU,FWD,185
 81,Rodríguez,Álvaro,Rodríguez,BOU,FWD,107
 82,Kelleher,Caoimhín,Kelleher,BRE,GKP,226
-83,Valdimarsson,Hákon Rafn,Valdimarsson,BRE,GKP,473
+83,Valdimarsson,Hákon Rafn,Valdimarsson,BRE,GKP,475
 84,Collins,Nathan,Collins,BRE,DEF,120
 85,Van den Berg,Sepp,van den Berg,BRE,DEF,239
 86,Lewis-Potter,Keane,Lewis-Potter,BRE,MID,125
-87,Ajer,Kristoffer,Ajer,BRE,DEF,417
-88,Kayode,Michael,Kayode,BRE,DEF,401
-89,Henry,Rico,Henry,BRE,DEF,429
-90,Hickey,Aaron,Hickey,BRE,DEF,438
-91,Pinnock,Ethan,Pinnock,BRE,DEF,452
-92,Ji-soo,Kim,Ji-soo,BRE,DEF,482
-93,Schuster,Jannik,Schuster,BRE,DEF,483
+87,Ajer,Kristoffer,Ajer,BRE,DEF,419
+88,Kayode,Michael,Kayode,BRE,DEF,403
+89,Henry,Rico,Henry,BRE,DEF,431
+90,Hickey,Aaron,Hickey,BRE,DEF,440
+91,Pinnock,Ethan,Pinnock,BRE,DEF,454
+92,Ji-soo,Kim,Ji-soo,BRE,DEF,484
+93,Schuster,Jannik,Schuster,BRE,DEF,485
 94,Schade,Kevin,Schade,BRE,MID,73
 95,O.Dango,Dango,Ouattara,BRE,MID,37
 96,Damsgaard,Mikkel,Damsgaard,BRE,MID,127
@@ -105,19 +105,19 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 104,Onyeka,Frank,Onyeka,COV,MID,316
 105,Anthony,Jaidon,Anthony,BRE,MID,108
 106,Thiago,Igor Thiago,Nascimento Rodrigues,BRE,FWD,9
-107,Furo,Kaye,Furo,BRE,FWD,474
+107,Furo,Kaye,Furo,BRE,FWD,476
 108,Wilson,Callum,Wilson,BRE,FWD,202
-109,Verbruggen,Bart,Verbruggen,BHA,GKP,396
-110,Rushworth,Carl,Rushworth,COV,GKP,484
-111,Steele,Jason,Steele,BHA,GKP,543
+109,Verbruggen,Bart,Verbruggen,BHA,GKP,398
+110,Rushworth,Carl,Rushworth,COV,GKP,486
+111,Steele,Jason,Steele,BHA,GKP,547
 112,Van Hecke,Jan Paul,van Hecke,TOT,DEF,225
-113,F.Kadıoğlu,Ferdi,Kadıoğlu,BHA,DEF,399
-114,Boscagli,Olivier,Boscagli,BHA,DEF,434
-115,De Cuyper,Maxim,De Cuyper,BHA,DEF,414
-116,Dunk,Lewis,Dunk,BHA,DEF,407
-117,Coppola,Diego,Coppola,BHA,DEF,457
-118,Igor,Igor Julio,dos Santos de Paulo,BHA,DEF,460
-119,Costinha,João Pedro,Loureiro da Costa,BHA,DEF,485
+113,F.Kadıoğlu,Ferdi,Kadıoğlu,BHA,DEF,401
+114,Boscagli,Olivier,Boscagli,BHA,DEF,436
+115,De Cuyper,Maxim,De Cuyper,BHA,DEF,416
+116,Dunk,Lewis,Dunk,BHA,DEF,409
+117,Coppola,Diego,Coppola,BHA,DEF,459
+118,Igor,Igor Julio,dos Santos de Paulo,BHA,DEF,462
+119,Costinha,João Pedro,Loureiro da Costa,BHA,DEF,487
 120,Svoboda,Michael,Svoboda,BHA,DEF,338
 121,Mitoma,Mitoma,Kaoru,BHA,MID,96
 122,Minteh,Yankuba,Minteh,BHA,MID,75
@@ -130,9 +130,9 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 129,Ayari,Yasin,Ayari,BHA,MID,138
 130,Wieffer,Mats,Wieffer,BHA,DEF,250
 131,Baleba,Carlos,Baleba,BHA,MID,279
-132,Howell,Harry,Howell,BHA,MID,463
+132,Howell,Harry,Howell,BHA,MID,465
 133,Watson,Tom,Watson,BHA,MID,325
-134,Oriola,Nehemiah,Oriola,BHA,MID,475
+134,Oriola,Nehemiah,Oriola,BHA,MID,477
 135,Yohanna,Zadok,Yohanna,BHA,MID,339
 136,Welbeck,Danny,Welbeck,CHE,FWD,72
 137,Tzimas,Stefanos,Tzimas,BHA,FWD,194
@@ -144,14 +144,14 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 143,Chalobah,Trevoh,Chalobah,CHE,DEF,114
 144,Gusto,Malo,Gusto,CHE,DEF,248
 145,Fofana,Wesley,Fofana,CHE,DEF,271
-146,B.Badiashile,Benoît,Badiashile Mukinayi,CHE,DEF,458
-147,Tosin,Tosin,Adarabioyo,CHE,DEF,439
-148,Hato,Jorrel,Hato,CHE,DEF,447
+146,B.Badiashile,Benoît,Badiashile Mukinayi,CHE,DEF,460
+147,Tosin,Tosin,Adarabioyo,CHE,DEF,441
+148,Hato,Jorrel,Hato,CHE,DEF,449
 149,Colwill,Levi,Samuels Colwill,CHE,DEF,322
-150,M.Sarr,Mamadou,Sarr,CHE,DEF,464
-151,Acheampong,Josh,Acheampong,CHE,DEF,435
+150,M.Sarr,Mamadou,Sarr,CHE,DEF,466
+151,Acheampong,Josh,Acheampong,CHE,DEF,437
 152,Palestra,Marco,Palestra,CHE,DEF,203
-153,Disasi,Axel,Disasi,CHE,DEF,486
+153,Disasi,Axel,Disasi,CHE,DEF,488
 154,Palmer,Cole,Palmer,CHE,MID,4
 155,Enzo,Enzo,Fernández,CHE,MID,24
 156,Neto,Pedro,Lomba Neto,CHE,MID,38
@@ -161,56 +161,56 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 160,Garnacho,Alejandro,Garnacho Ferreyra,AVL,MID,97
 161,Lavia,Roméo,Lavia,CHE,MID,312
 162,Andrey Santos,Andrey,Nascimento dos Santos,MUN,MID,288
-163,D.Essugo,Dário,Luís Essugo,CHE,MID,476
+163,D.Essugo,Dário,Luís Essugo,CHE,MID,478
 164,Quenda,Geovany,Quenda,CHE,MID,204
 165,João Pedro,João Pedro,Junqueira de Jesus,CHE,FWD,14
 166,N.Jackson,Nicolas,Jackson,CHE,FWD,52
 167,Delap,Liam,Delap,CHE,FWD,173
 168,Marc Guiu,Marc,Guiu Paz,CHE,FWD,313
-169,Mheuka,Shumaira,Mheuka,CHE,FWD,477
+169,Mheuka,Shumaira,Mheuka,CHE,FWD,479
 170,Emegha,Emmanuel,Emegha,CHE,FWD,341
-171,Dovin,Oliver,Dovin,COV,GKP,544
-172,Wilson,Ben,Wilson,COV,GKP,487
-173,Thomas,Bobby,Thomas,COV,DEF,545
-174,Kitching,Liam,Kitching,COV,DEF,546
-175,van Ewijk,Milan,van Ewijk,COV,DEF,547
-176,Dasilva,Jay,Dasilva,COV,DEF,548
-177,Kesler-Hayden,Kaine,Kesler-Hayden,COV,DEF,549
-178,Bidwell,Jake,Bidwell,COV,DEF,550
-179,Latibeaudiere,Joel,Latibeaudiere,COV,DEF,551
-180,Woolfenden,Luke,Woolfenden,COV,DEF,552
-181,Brau,Miguel,Brau,COV,DEF,553
-182,Amenda,Aurèle,Amenda,COV,DEF,554
+171,Dovin,Oliver,Dovin,COV,GKP,548
+172,Wilson,Ben,Wilson,COV,GKP,489
+173,Thomas,Bobby,Thomas,COV,DEF,549
+174,Kitching,Liam,Kitching,COV,DEF,550
+175,van Ewijk,Milan,van Ewijk,COV,DEF,551
+176,Dasilva,Jay,Dasilva,COV,DEF,552
+177,Kesler-Hayden,Kaine,Kesler-Hayden,COV,DEF,553
+178,Bidwell,Jake,Bidwell,COV,DEF,554
+179,Latibeaudiere,Joel,Latibeaudiere,COV,DEF,555
+180,Woolfenden,Luke,Woolfenden,COV,DEF,556
+181,Brau,Miguel,Brau,COV,DEF,557
+182,Amenda,Aurèle,Amenda,COV,DEF,558
 183,Rudoni,Jack,Rudoni,COV,MID,342
 184,Grimes,Matt,Grimes,COV,MID,343
 185,Sakamoto,Tatsuhiro,Sakamoto,COV,MID,344
 186,Mason-Clark,Ephron,Mason-Clark,COV,MID,205
 187,Eccles,Josh,Eccles,COV,MID,345
 188,Torp,Victor,Torp,COV,MID,206
-189,Shepherd,George,Shepherd,COV,MID,488
+189,Shepherd,George,Shepherd,COV,MID,490
 190,Tchaouna,Loum,Tchaouna,COV,MID,207
-191,Borges Rodrigues,Raphael,Borges Rodrigues,COV,MID,489
-192,Andrews,Kaine,Andrews,COV,MID,490
+191,Borges Rodrigues,Raphael,Borges Rodrigues,COV,MID,491
+192,Andrews,Kaine,Andrews,COV,MID,492
 193,Wright,Haji,Wright,COV,FWD,208
 194,Thomas-Asante,Brandon,Thomas-Asante,COV,FWD,346
 195,Simms,Ellis,Simms,COV,FWD,347
 196,Markelo,Jahnoah,Markelo,COV,FWD,348
-197,Bassette,Norman,Bassette,COV,FWD,491
+197,Bassette,Norman,Bassette,COV,FWD,493
 198,Henderson,Dean,Henderson,CRY,GKP,228
-199,Benitez,Walter,Benítez,CRY,GKP,459
+199,Benitez,Walter,Benítez,CRY,GKP,461
 200,Lacroix,Maxence,Lacroix,CHE,DEF,61
 201,Muñoz,Daniel,Muñoz Mejía,CRY,DEF,115
 202,Richards,Chris,Richards,CRY,DEF,230
 203,Canvot,Jaydee,Canvot,CRY,DEF,263
-204,Mitchell,Tyrick,Mitchell,CRY,DEF,395
-205,Sosa,Borna,Sosa,CRY,DEF,461
-206,Chadi Riad,Chadi,Riad Dnanou,CRY,DEF,445
-207,Mingueza,Oscar,Mingueza,CRY,DEF,492
+204,Mitchell,Tyrick,Mitchell,CRY,DEF,397
+205,Sosa,Borna,Sosa,CRY,DEF,463
+206,Chadi Riad,Chadi,Riad Dnanou,CRY,DEF,447
+207,Mingueza,Oscar,Mingueza,CRY,DEF,494
 208,Sarr,Ismaïla,Sarr,CRY,MID,39
 209,Johnson,Brennan,Johnson,EVE,MID,95
 210,Wharton,Adam,Wharton,CRY,MID,129
 211,Yeremy,Yéremy,Pino Santos,CRY,MID,154
-212,Hughes,Will,Hughes,CRY,MID,431
+212,Hughes,Will,Hughes,CRY,MID,433
 213,Lerma,Jefferson,Lerma Solís,CRY,MID,265
 214,Kamada,Daichi,Kamada,CRY,MID,268
 215,Devenny,Justin,Devenny,CRY,MID,297
@@ -218,22 +218,22 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 217,M.França,Matheus,França de Oliveira,CRY,MID,349
 218,Doucouré,Cheick,Doucouré,CRY,MID,350
 219,J.Rak-Sakyi,Jesurun,Rak-Sakyi,CRY,MID,351
-220,Cardines,Rio,Cardines,CRY,DEF,466
-221,Drakes-Thomas,Joél,Drakes-Thomas,CRY,MID,467
+220,Cardines,Rio,Cardines,CRY,DEF,468
+221,Drakes-Thomas,Joél,Drakes-Thomas,CRY,MID,469
 222,Strand Larsen,Jørgen,Strand Larsen,CRY,FWD,92
 223,Mateta,Jean-Philippe,Mateta,CRY,FWD,40
 224,Nketiah,Eddie,Nketiah,CRY,FWD,188
 225,Uche,Christantus,Uche,CRY,FWD,308
 226,Pickford,Jordan,Pickford,EVE,GKP,116
 227,Travers,Mark,Travers,EVE,GKP,352
-228,King,Tom,King,EVE,GKP,493
+228,King,Tom,King,EVE,GKP,495
 229,Tarkowski,James,Tarkowski,EVE,DEF,58
 230,Branthwaite,Jarrad,Branthwaite,EVE,DEF,183
 231,Keane,Michael,Keane,EVE,DEF,229
 232,O'Brien,Jake,O'Brien,EVE,DEF,236
-233,Mykolenko,Vitalii,Mykolenko,EVE,DEF,410
-234,Patterson,Nathan,Patterson,EVE,DEF,444
-235,Aznou,Adam,Aznou,EVE,DEF,555
+233,Mykolenko,Vitalii,Mykolenko,EVE,DEF,412
+234,Patterson,Nathan,Patterson,EVE,DEF,446
+235,Aznou,Adam,Aznou,EVE,DEF,559
 236,Dewsbury-Hall,Kiernan,Dewsbury-Hall,EVE,MID,35
 237,Ndiaye,Iliman,Ndiaye,EVE,MID,71
 238,Grealish,Jack,Grealish,MCI,MID,42
@@ -248,16 +248,16 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 247,Hackney,Hayden,Hackney,EVE,MID,209
 248,Beto,Norberto Bercique,Gomes Betuncal,EVE,FWD,134
 249,Barry,Thierno,Barry,EVE,FWD,139
-250,Leno,Bernd,Leno,FUL,GKP,398
-251,Lecomte,Benjamin,Lecomte,FUL,GKP,556
-252,McNally,Alfie,McNally,FUL,GKP,557
+250,Leno,Bernd,Leno,FUL,GKP,400
+251,Lecomte,Benjamin,Lecomte,FUL,GKP,560
+252,McNally,Alfie,McNally,FUL,GKP,561
 253,Andersen,Joachim,Andersen,FUL,DEF,234
-254,Robinson,Antonee,Robinson,FUL,DEF,422
-255,J.Cuenca,Jorge,Cuenca Barreno,FUL,DEF,436
-256,Tete,Kenny,Tete,FUL,DEF,415
-257,Bassey,Calvin,Bassey,FUL,DEF,405
-258,Castagne,Timothy,Castagne,FUL,DEF,424
-259,Diop,Issa,Diop,IPS,DEF,527
+254,Robinson,Antonee,Robinson,FUL,DEF,424
+255,J.Cuenca,Jorge,Cuenca Barreno,FUL,DEF,438
+256,Tete,Kenny,Tete,FUL,DEF,417
+257,Bassey,Calvin,Bassey,FUL,DEF,407
+258,Castagne,Timothy,Castagne,FUL,DEF,426
+259,Diop,Issa,Diop,IPS,DEF,531
 260,Wilson,Harry,Wilson,LEE,MID,33
 261,Iwobi,Alex,Iwobi,FUL,MID,136
 262,Smith Rowe,Emile,Smith Rowe,FUL,MID,151
@@ -267,50 +267,50 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 266,Cairney,Tom,Cairney,FUL,MID,292
 267,Lukić,Saša,Lukić,IPS,MID,269
 268,King,Josh,King,FUL,MID,162
-269,Sessegnon,Ryan,Sessegnon,FUL,DEF,411
-270,Reed,Harrison,Reed,FUL,MID,451
+269,Sessegnon,Ryan,Sessegnon,FUL,DEF,413
+270,Reed,Harrison,Reed,FUL,MID,453
 271,Muniz,Rodrigo,Muniz Carvalho,FUL,FWD,181
-272,Kusi-Asare,Jonah,Kusi-Asare,FUL,FWD,462
-273,Phillips,Dillon,Phillips,HUL,GKP,558
-274,Butland,Jack,Butland,HUL,GKP,494
-275,Cartwright,Harvey,Cartwright,HUL,GKP,559
-276,Lo-Tutala,Thimothée,Lo-Tutala,HUL,GKP,560
-277,Egan,John,Egan,HUL,DEF,561
-278,Hughes,Charlie,Hughes,HUL,DEF,562
-279,Ajayi,Semi,Ajayi,HUL,DEF,563
-280,Coyle,Lewie,Coyle,HUL,DEF,564
-281,Drameh,Cody,Drameh,HUL,DEF,565
-282,Giles,Ryan,Giles,HUL,DEF,566
-283,Jacob,Matty,Jacob,HUL,DEF,567
-284,McCarthy,Cathal,McCarthy,HUL,DEF,568
-285,McNair,Paddy,McNair,HUL,DEF,569
+272,Kusi-Asare,Jonah,Kusi-Asare,FUL,FWD,464
+273,Phillips,Dillon,Phillips,HUL,GKP,562
+274,Butland,Jack,Butland,HUL,GKP,496
+275,Cartwright,Harvey,Cartwright,HUL,GKP,563
+276,Lo-Tutala,Thimothée,Lo-Tutala,HUL,GKP,564
+277,Egan,John,Egan,HUL,DEF,565
+278,Hughes,Charlie,Hughes,HUL,DEF,566
+279,Ajayi,Semi,Ajayi,HUL,DEF,567
+280,Coyle,Lewie,Coyle,HUL,DEF,568
+281,Drameh,Cody,Drameh,HUL,DEF,569
+282,Giles,Ryan,Giles,HUL,DEF,570
+283,Jacob,Matty,Jacob,HUL,DEF,571
+284,McCarthy,Cathal,McCarthy,HUL,DEF,572
+285,McNair,Paddy,McNair,HUL,DEF,573
 286,Belloumi,Mohamed,Belloumi,HUL,MID,353
 287,Millar,Liam,Millar,HUL,MID,354
-288,Dowell,Kieran,Dowell,HUL,MID,495
-289,Crooks,Matt,Crooks,HUL,MID,496
-290,Slater,Regan,Slater,HUL,MID,497
-291,Matazo,Eliot,Matazo,HUL,MID,498
+288,Dowell,Kieran,Dowell,HUL,MID,497
+289,Crooks,Matt,Crooks,HUL,MID,498
+290,Slater,Regan,Slater,HUL,MID,499
+291,Matazo,Eliot,Matazo,HUL,MID,500
 292,Ömür,Abdülkadir,Ömür,HUL,MID,355
 293,Kamara,Abu,Kamara,HUL,MID,356
-294,Zambrano,Óscar,Zambrano,HUL,MID,499
+294,Zambrano,Óscar,Zambrano,HUL,MID,501
 295,McBurnie,Oli,McBurnie,HUL,FWD,210
 296,Akintola,David,Akintola,HUL,MID,357
-297,Gyabi,Darko,Gyabi,HUL,MID,500
-298,Destan,Enis,Destan,HUL,FWD,501
-299,Burstow,Mason,Burstow,HUL,FWD,502
-300,Walton,Christian,Walton,IPS,GKP,503
-301,Palmer,Alex,Palmer,IPS,GKP,570
-302,Button,David,Button,IPS,GKP,571
-303,Kipré,Cédric,Kipré,IPS,DEF,572
-304,O'Shea,Dara,O'Shea,IPS,DEF,573
-305,Davis,Leif,Davis,IPS,DEF,574
-306,Greaves,Jacob,Greaves,IPS,DEF,575
-307,Johnson,Ben,Johnson,IPS,DEF,576
-308,Furlong,Darnell,Furlong,IPS,DEF,577
+297,Gyabi,Darko,Gyabi,HUL,MID,502
+298,Destan,Enis,Destan,HUL,FWD,503
+299,Burstow,Mason,Burstow,HUL,FWD,504
+300,Walton,Christian,Walton,IPS,GKP,505
+301,Palmer,Alex,Palmer,IPS,GKP,574
+302,Button,David,Button,IPS,GKP,575
+303,Kipré,Cédric,Kipré,IPS,DEF,576
+304,O'Shea,Dara,O'Shea,IPS,DEF,577
+305,Davis,Leif,Davis,IPS,DEF,578
+306,Greaves,Jacob,Greaves,IPS,DEF,579
+307,Johnson,Ben,Johnson,IPS,DEF,580
+308,Furlong,Darnell,Furlong,IPS,DEF,581
 309,Núñez,Marcelino,Núñez,IPS,MID,358
 310,Matusiwa,Azor,Matusiwa,IPS,MID,359
 311,Burns,Wes,Burns,IPS,MID,360
-312,Taylor,Jack,Taylor,IPS,MID,504
+312,Taylor,Jack,Taylor,IPS,MID,506
 313,Clarke,Jack,Clarke,IPS,MID,211
 314,Ogbene,Chiedozie,Ogbene,IPS,MID,361
 315,Fatawu,Abdul,Fatawu,IPS,MID,212
@@ -319,19 +319,19 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 318,Philogene,Jaden,Philogene,IPS,MID,217
 319,Szmodics,Sam,Szmodics,IPS,MID,363
 320,Akpom,Chuba,Akpom,IPS,FWD,364
-321,Walle Egeli,Sindre,Walle Egeli,IPS,FWD,505
+321,Walle Egeli,Sindre,Walle Egeli,IPS,FWD,507
 322,Al-Hamadi,Ali,Al-Hamadi,IPS,FWD,365
-323,McAteer,Kasey,McAteer,IPS,MID,506
+323,McAteer,Kasey,McAteer,IPS,MID,508
 324,Mehmeti,Anis,Mehmeti,IPS,MID,366
-325,Darlow,Karl,Darlow,MUN,GKP,419
-326,Perri,Lucas Estella,Perri,LEE,GKP,432
+325,Darlow,Karl,Darlow,MUN,GKP,421
+326,Perri,Lucas Estella,Perri,LEE,GKP,434
 327,Bijol,Jaka,Bijol,LEE,DEF,246
 328,Struijk,Pascal,Struijk,BHA,DEF,243
-329,Rodon,Joe,Rodon,LEE,DEF,404
-330,Bogle,Jayden,Bogle,LEE,DEF,409
-331,Gudmundsson,Gabriel,Gudmundsson,LEE,DEF,420
-332,Justin,James,Justin,LEE,DEF,412
-333,Bornauw,Sebastiaan,Bornauw,LEE,DEF,443
+329,Rodon,Joe,Rodon,LEE,DEF,406
+330,Bogle,Jayden,Bogle,LEE,DEF,411
+331,Gudmundsson,Gabriel,Gudmundsson,LEE,DEF,422
+332,Justin,James,Justin,LEE,DEF,414
+333,Bornauw,Sebastiaan,Bornauw,LEE,DEF,445
 334,Muharemović,Tarik,Muharemović,LEE,DEF,367
 335,Stach,Anton,Stach,LEE,MID,68
 336,Okafor,Noah,Okafor,LEE,MID,78
@@ -347,23 +347,23 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 346,Calvert-Lewin,Dominic,Calvert-Lewin,LEE,FWD,65
 347,Nmecha,Lukas,Nmecha,LEE,FWD,156
 348,Piroe,Joël,Piroe,LEE,FWD,309
-349,Mateo Joseph,Mateo,Joseph Fernández-Regatillo,LEE,FWD,507
+349,Mateo Joseph,Mateo,Joseph Fernández-Regatillo,LEE,FWD,509
 350,A.Becker,Alisson,Becker,LIV,GKP,140
 351,Mamardashvili,Giorgi,Mamardashvili,LIV,GKP,300
-352,Woodman,Freddie,Woodman,LIV,GKP,530
-353,Pecsi,Armin,Pecsi,LIV,GKP,578
-354,Jaros,Vitezslav,Jaros,LIV,GKP,579
-355,Davies,Harvey,Davies,LIV,GKP,580
+352,Woodman,Freddie,Woodman,LIV,GKP,534
+353,Pecsi,Armin,Pecsi,LIV,GKP,582
+354,Jaros,Vitezslav,Jaros,LIV,GKP,583
+355,Davies,Harvey,Davies,LIV,GKP,584
 356,Virgil,Virgil,van Dijk,LIV,DEF,32
 357,Frimpong,Jeremie,Frimpong,LIV,DEF,163
 358,Kerkez,Milos,Kerkez,LIV,DEF,145
 359,Gomez,Joe,Gomez,LIV,DEF,302
 360,Bradley,Conor,Bradley,LIV,DEF,291
-361,Lucky,Wellity,Lucky,LIV,DEF,581
+361,Lucky,Wellity,Lucky,LIV,DEF,585
 362,Jacquet,Jeremy,Jacquet,LIV,DEF,369
-363,Leoni,Giovanni,Leoni,LIV,DEF,582
+363,Leoni,Giovanni,Leoni,LIV,DEF,586
 364,Tsimikas,Kostas,Tsimikas,LIV,DEF,370
-365,Ramsay,Calvin,Ramsay,LIV,DEF,583
+365,Ramsay,Calvin,Ramsay,LIV,DEF,587
 366,Wirtz,Florian,Wirtz,LIV,MID,18
 367,Gakpo,Cody,Gakpo,LIV,MID,26
 368,Szoboszlai,Dominik,Szoboszlai,LIV,MID,23
@@ -376,15 +376,15 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 375,Nyoni,Trey,Nyoni,LIV,MID,324
 376,Bajcetic,Stefan,Bajčetić Maquieira,LIV,MID,371
 377,Munoz,Victor,Munoz,LIV,MID,53
-378,McConnell,James,McConnell,LIV,MID,508
+378,McConnell,James,McConnell,LIV,MID,510
 379,Isak,Alexander,Isak,LIV,FWD,5
 380,Ekitiké,Hugo,Ekitiké,LIV,FWD,19
 381,Koumas,Lewis,Koumas,LIV,MID,372
-382,Danns,Jayden,Danns,LIV,FWD,509
+382,Danns,Jayden,Danns,LIV,FWD,511
 383,Elliott,Harvey,Elliott,LIV,MID,200
 384,Donnarumma,Gianluigi,Donnarumma,MCI,GKP,117
 385,Trafford,James,Trafford,LEE,GKP,314
-386,Bettinelli,Marcus,Bettinelli,MCI,GKP,510
+386,Bettinelli,Marcus,Bettinelli,MCI,GKP,512
 387,O'Reilly,Nico,O'Reilly,MCI,DEF,34
 388,Guéhi,Marc,Guéhi,MCI,DEF,56
 389,Matheus N.,Matheus,Nunes,MCI,DEF,62
@@ -393,8 +393,8 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 392,Aït-Nouri,Rayan,Aït-Nouri,MCI,DEF,165
 393,Khusanov,Abdukodir,Khusanov,MCI,DEF,160
 394,Alleyne,Max,Alleyne,MCI,DEF,326
-395,Lewis,Rico,Lewis,MCI,DEF,448
-396,Vitor Reis,Vitor,de Oliveira Nunes dos Reis,MCI,DEF,511
+395,Lewis,Rico,Lewis,MCI,DEF,450
+396,Vitor Reis,Vitor,de Oliveira Nunes dos Reis,MCI,DEF,513
 397,Semenyo,Antoine,Semenyo,MCI,MID,6
 398,Foden,Phil,Foden,MCI,MID,27
 399,Cherki,Rayan,Cherki,MCI,MID,16
@@ -407,23 +407,23 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 406,Kovačić,Mateo,Kovačić,MCI,MID,197
 407,Echeverri,Claudio,Echeverri,MCI,MID,373
 408,Phillips,Kalvin,Phillips,MCI,MID,374
-409,Mukasa,Divine,Mukasa,MCI,MID,468
+409,Mukasa,Divine,Mukasa,MCI,MID,470
 410,Monga,Jeremy,Monga,MCI,MID,375
 411,Haaland,Erling,Haaland,MCI,FWD,1
 412,Lammens,Senne,Lammens,MUN,GKP,242
-413,Bayindir,Altay,Bayındır,MUN,GKP,454
-414,Heaton,Tom,Heaton,MUN,GKP,584
+413,Bayindir,Altay,Bayındır,MUN,GKP,456
+414,Heaton,Tom,Heaton,MUN,GKP,588
 415,Dorgu,Patrick,Dorgu,MUN,MID,82
 416,De Ligt,Matthijs,de Ligt,MUN,DEF,290
 417,Dalot,Diogo,Dalot Teixeira,MUN,DEF,241
 418,Maguire,Harry,Maguire,MUN,DEF,254
 419,Martinez,Lisandro,Martínez,MUN,DEF,284
 420,Yoro,Leny,Yoro,MUN,DEF,282
-421,Heaven,Ayden,Heaven,MUN,DEF,433
-422,Mazraoui,Noussair,Mazraoui,MUN,DEF,428
-423,Shaw,Luke,Shaw,MUN,DEF,402
-424,Amass,Harry,Amass,MUN,DEF,587
-425,Fredricson,Tyler,Fredricson,MUN,DEF,536
+421,Heaven,Ayden,Heaven,MUN,DEF,435
+422,Mazraoui,Noussair,Mazraoui,MUN,DEF,430
+423,Shaw,Luke,Shaw,MUN,DEF,404
+424,Amass,Harry,Amass,MUN,DEF,591
+425,Fredricson,Tyler,Fredricson,MUN,DEF,540
 426,B.Fernandes,Bruno,Borges Fernandes,MUN,MID,2
 427,Mbeumo,Bryan,Mbeumo,MUN,MID,11
 428,Cunha,Matheus,Santos Carneiro da Cunha,MUN,MID,12
@@ -435,21 +435,21 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 434,J.Fletcher,Jack,Fletcher,MUN,MID,330
 435,Lacey,Shea,Lacey,MUN,MID,331
 436,Collyer,Toby,Collyer,MUN,MID,376
-437,Bendito Mantato,Bendito,Mantato,MUN,MID,478
-438,Fletcher,Tyler,Fletcher,MUN,MID,469
+437,Bendito Mantato,Bendito,Mantato,MUN,MID,480
+438,Fletcher,Tyler,Fletcher,MUN,MID,471
 439,Šeško,Benjamin,Sesko,MUN,FWD,28
 440,Zirkzee,Joshua,Zirkzee,MUN,FWD,178
-441,Obi,Chido,Obi,MUN,FWD,513
+441,Obi,Chido,Obi,MUN,FWD,515
 442,Pope,Nick,Pope,NEW,GKP,249
-443,Gillespie,Mark,Gillespie,NEW,GKP,515
-444,Jaouen,Ewen,Jaouen,NEW,GKP,518
+443,Gillespie,Mark,Gillespie,NEW,GKP,517
+444,Jaouen,Ewen,Jaouen,NEW,GKP,520
 445,Thiaw,Malick,Thiaw,NEW,DEF,232
 446,Schär,Fabian,Schär,NEW,DEF,285
 447,Botman,Sven,Botman,NEW,DEF,255
 448,Burn,Dan,Burn,NEW,DEF,251
 449,Hall,Lewis,Hall,NEW,DEF,258
 450,Livramento,Tino,Livramento,NEW,DEF,277
-451,A.Murphy,Alex,Murphy,NEW,DEF,535
+451,A.Murphy,Alex,Murphy,NEW,DEF,539
 452,Bruno G.,Bruno,Guimarães Rodriguez Moura,ARS,MID,25
 453,Barnes,Harvey,Barnes,NEW,MID,80
 454,Elanga,Anthony,Elanga,NEW,MID,98
@@ -464,20 +464,20 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 463,Woltemade,Nick,Woltemade,NEW,FWD,79
 464,Wissa,Yoane,Wissa,NEW,FWD,103
 465,Osula,William,Osula,NEW,FWD,91
-466,Neave,Sean,Neave,NEW,FWD,479
+466,Neave,Sean,Neave,NEW,FWD,481
 467,Sels,Matz,Sels,NFO,GKP,244
-468,John,John Victor,Maciel Furtado,NFO,GKP,455
+468,John,John Victor,Maciel Furtado,NFO,GKP,457
 469,N.Williams,Neco,Williams,NFO,DEF,231
 470,Morato,Felipe,Rodrigues da Silva,NFO,DEF,283
 471,Milenković,Nikola,Milenković,NFO,DEF,123
 472,Murillo,Murillo,Costa dos Santos,NFO,DEF,146
-473,Aina,Ola,Aina,NFO,DEF,421
-474,Jair Cunha,Jair,Paula da Cunha Filho,NFO,DEF,453
-475,Savona,Nicolò,Savona,NFO,DEF,437
-476,O.Richards,Omar,Richards,NFO,DEF,588
-477,Abbott,Zach,Abbott,NFO,DEF,533
-478,Netz,Luca,Netz,NFO,DEF,456
-479,Bindon,Tyler,Bindon,NFO,DEF,589
+473,Aina,Ola,Aina,NFO,DEF,423
+474,Jair Cunha,Jair,Paula da Cunha Filho,NFO,DEF,455
+475,Savona,Nicolò,Savona,NFO,DEF,439
+476,O.Richards,Omar,Richards,NFO,DEF,592
+477,Abbott,Zach,Abbott,NFO,DEF,537
+478,Netz,Luca,Netz,NFO,DEF,458
+479,Bindon,Tyler,Bindon,NFO,DEF,593
 480,Gibbs-White,Morgan,Gibbs-White,NFO,MID,8
 481,Anderson,Elliot,Anderson,MCI,MID,31
 482,Hudson-Odoi,Callum,Hudson-Odoi,NFO,MID,87
@@ -487,29 +487,29 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 486,McAtee,James,McAtee,NFO,MID,191
 487,Dominguez,Nicolás,Domínguez,NFO,MID,286
 488,Sangaré,Ibrahim,Sangaré,NFO,MID,256
-489,Yates,Ryan,Yates,NFO,MID,440
+489,Yates,Ryan,Yates,NFO,MID,442
 490,Wood,Chris,Wood,NFO,FWD,101
 491,Igor Jesus,Igor Jesus,Maciel da Cruz,NFO,FWD,77
 492,Awoniyi,Taiwo,Awoniyi,COV,FWD,176
 493,Kalimuendo,Arnaud,Kalimuendo,NFO,FWD,198
-494,Vicario,Guglielmo,Vicario,TOT,GKP,413
-495,Austin,Brandon,Austin,TOT,GKP,590
-496,Kinsky,Antonín,Kinský,TOT,GKP,446
-497,Dubravka,Martin,Dubravka,TOT,GKP,526
+494,Vicario,Guglielmo,Vicario,TOT,GKP,415
+495,Austin,Brandon,Austin,TOT,GKP,594
+496,Kinsky,Antonín,Kinský,TOT,GKP,448
+497,Dubravka,Martin,Dubravka,TOT,GKP,530
 498,Senesi,Marcos,Senesi Barón,TOT,DEF,57
 499,Pedro Porro,Pedro,Porro Sauceda,TOT,DEF,124
 500,Romero,Cristian,Romero,TOT,DEF,253
 501,Danso,Kevin,Danso,TOT,DEF,272
-502,Robertson,Andrew,Robertson,TOT,DEF,426
+502,Robertson,Andrew,Robertson,TOT,DEF,428
 503,Van de Ven,Micky,van de Ven,TOT,DEF,237
 504,Vuskovic,Luka,Vušković,BHA,DEF,382
-505,Spence,Djed,Spence,TOT,DEF,416
-506,Udogie,Destiny,Udogie,TOT,DEF,442
-507,Phillips,Ashley,Phillips,TOT,DEF,519
-508,Davies,Ben,Davies,TOT,DEF,529
-509,Byfield,Jun'ai,Byfield,TOT,DEF,537
-510,Rowswell,James,Rowswell,TOT,DEF,538
-511,Souza,João Victor,de Souza Menezes,TOT,DEF,534
+505,Spence,Djed,Spence,TOT,DEF,418
+506,Udogie,Destiny,Udogie,TOT,DEF,444
+507,Phillips,Ashley,Phillips,TOT,DEF,521
+508,Davies,Ben,Davies,TOT,DEF,533
+509,Byfield,Jun'ai,Byfield,TOT,DEF,541
+510,Rowswell,James,Rowswell,TOT,DEF,542
+511,Souza,João Victor,de Souza Menezes,TOT,DEF,538
 512,Kudus,Mohammed,Kudus,TOT,MID,43
 513,Xavi,Xavi,Simons,TOT,MID,89
 514,Tel,Mathys,Tel,TOT,MID,90
@@ -522,24 +522,24 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 521,Kulusevski,Dejan,Kulusevski,TOT,MID,54
 522,Gray,Archie,Gray,TOT,MID,275
 523,Moore,Mikey,Moore,TOT,MID,384
-524,Olusesi,Callum,Olusesi,TOT,MID,480
+524,Olusesi,Callum,Olusesi,TOT,MID,482
 525,Fernandes,Mateus,Fernandes,TOT,MID,70
 526,Solanke,Dominic,Solanke-Mitchell,TOT,FWD,102
 527,Richarlison,Richarlison,de Andrade,TOT,FWD,74
-528,Scarlett,Dane,Scarlett,TOT,FWD,470
+528,Scarlett,Dane,Scarlett,TOT,FWD,472
 529,Roefs,Robin,Roefs,SUN,GKP,227
-530,Patterson,Anthony,Patterson,SUN,GKP,591
-531,Ellborg,Melker,Ellborg,SUN,GKP,450
+530,Patterson,Anthony,Patterson,SUN,GKP,595
+531,Ellborg,Melker,Ellborg,SUN,GKP,452
 532,Ballard,Daniel,Ballard,SUN,DEF,238
 533,Mukiele,Nordi,Mukiele,SUN,DEF,113
-534,Hume,Trai,Hume,SUN,DEF,403
+534,Hume,Trai,Hume,SUN,DEF,405
 535,Alderete,Omar,Alderete,SUN,DEF,233
-536,Reinildo,Reinildo,Mandava,SUN,DEF,418
-537,Seelt,Jenson,Seelt,SUN,DEF,471
-538,Hjelde,Leo Fuhr,Hjelde,SUN,DEF,595
-539,O'Nien,Luke,O'Nien,SUN,DEF,528
-540,Masuaku,Arthur,Masuaku,SUN,DEF,539
-541,Meunier,Thomas,Meunier,SUN,DEF,520
+536,Reinildo,Reinildo,Mandava,SUN,DEF,420
+537,Seelt,Jenson,Seelt,SUN,DEF,473
+538,Hjelde,Leo Fuhr,Hjelde,SUN,DEF,599
+539,O'Nien,Luke,O'Nien,SUN,DEF,532
+540,Masuaku,Arthur,Masuaku,SUN,DEF,543
+541,Meunier,Thomas,Meunier,SUN,DEF,522
 542,E.Le Fée,Enzo,Le Fée,SUN,MID,63
 543,Diarra,Habib,Diarra,SUN,MID,161
 544,Xhaka,Granit,Xhaka,SUN,MID,122
@@ -555,25 +555,25 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 554,Tzolis,Christos,Tzolis,ARS,MID,55
 555,Silva,António João,Pereira de Albuquerque Tavares da Silva,BOU,DEF,383
 556,Sangaré,Mamadou,Sangaré,BRE,MID,215
-557,Penders,Mike,Penders,CHE,GKP,517
-558,Anselmino,Aaron,Anselmino,CHE,DEF,516
-559,Matthews,Remi,Matthews,CRY,GKP,586
-560,Targett,Matt,Targett,HUL,DEF,585
+557,Penders,Mike,Penders,CHE,GKP,519
+558,Anselmino,Aaron,Anselmino,CHE,DEF,518
+559,Matthews,Remi,Matthews,CRY,GKP,590
+560,Targett,Matt,Targett,HUL,DEF,589
 561,Morita,Hidemasa,Morita,HUL,MID,381
-562,Van Oevelen,Kayne,van Oevelen,IPS,GKP,514
+562,Van Oevelen,Kayne,van Oevelen,IPS,GKP,516
 563,Maeda,Daizen,Maeda,IPS,MID,214
-564,Scherpen,Kjell,Scherpen,IPS,GKP,512
+564,Scherpen,Kjell,Scherpen,IPS,GKP,514
 565,Bamba,Aladji,Bamba,NEW,MID,379
 566,Horníček,Lukás,Hornícek,NEW,GKP,378
 567,Schlager,Xaver,Schlager,NFO,MID,377
 568,Barco,Valentín,Barco,CHE,MID,218
 569,Gonzalo,Gonzalo,García,FUL,FWD,110
 570,Palacios,César,Palacios,FUL,MID,216
-571,Tzolakis,Konstantinos,Tzolakis,HUL,GKP,521
+571,Tzolakis,Konstantinos,Tzolakis,HUL,GKP,523
 572,Florentino,Florentino Ibrain,Morris Luís,IPS,MID,385
-573,Sanchez,Juanlu,Sánchez,BOU,DEF,525
+573,Sanchez,Juanlu,Sánchez,BOU,DEF,528
 574,Yirenkyi,Caleb,Yirenkyi,COV,MID,390
-575,Tomiyasu,Takehiro,Tomiyasu,CRY,DEF,524
+575,Tomiyasu,Takehiro,Tomiyasu,CRY,DEF,527
 576,Hjertø-Dahl,Jens,Hjertø-Dahl,HUL,MID,387
 577,Stroud,Elliot,Stroud,HUL,MID,386
 578,Mudryk,Mykhailo,Mudryk,CHE,MID,221
@@ -583,14 +583,18 @@ element_id,web_name,first_name,second_name,club,pos,official_draft_rank
 582,Madjo,Brian,Madjo,AVL,FWD,223
 583,Chavarria,Pep,Chavarría,CHE,DEF,389
 584,Hamer,Gustavo,Hamer,COV,MID,222
-585,Herrington,Lucas,Herrington,HUL,DEF,594
-586,Mendy,Nobel,Mendy,HUL,DEF,592
+585,Herrington,Lucas,Herrington,HUL,DEF,598
+586,Mendy,Nobel,Mendy,HUL,DEF,596
 587,Rulli,Gerónimo,Rulli,MCI,GKP,391
 588,Khalaili,Anan,Khalaili,CRY,DEF,394
 589,Gourna-Douath,Lucas,Gourna-Douath,HUL,MID,392
-590,Benda,Steven,Benda,NFO,GKP,522
+590,Benda,Steven,Benda,NFO,GKP,524
 591,Enciso,Julio,Enciso,IPS,MID,224
-592,Ouattara,Abdoul,Ouattara,IPS,DEF,593
+592,Ouattara,Abdoul,Ouattara,IPS,DEF,597
 593,David,Promise,David,BHA,FWD,111
 594,Gozo,Zavier,Gozo,CRY,MID,393
-595,Dedić,Amar,Dedic,NEW,DEF,523
+595,Dedić,Amar,Dedic,NEW,DEF,525
+596,Ruggeri,Matteo,Ruggeri,AVL,DEF,529
+597,Suzuki,Zion,Suzuki,AVL,GKP,396
+598,Cherif,Sidiki,Cherif,COV,FWD,395
+599,Elvedi,Nico,Elvedi,LEE,DEF,526
