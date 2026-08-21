@@ -5,8 +5,10 @@ name: Frissítés
 # futás lesz a kanonikus becslés.
 on:
   schedule:
-    - cron: '17 */2 * * *'        # 2 óránként — így a deadline előtti utolsó
-                                  # snapshot legfeljebb 2 órás késésű
+    # Óránként. A lezárás (lock_gw.py) idempotens: nem cron-pontosságra épül, hanem
+    # arra, hogy „aminek elmúlt a deadline-ja és még nincs lezárva, azt zárd le".
+    # Így egy kihagyott futás sem veszít adatot, csak késik.
+    - cron: '25 * * * *'
   workflow_dispatch:
 
 permissions:
@@ -22,6 +24,7 @@ jobs:
 
       - name: Adatok újrahúzása
         run: |
+          python fetch_deadlines.py    # 38 forduló deadline-ja + waiver/trade időpontok
           python build_idmap.py
           python fetch_rankings.py
           python fetch_league.py       # az élő birtoklás: waiver/csere magától átjön
@@ -31,6 +34,8 @@ jobs:
           # bejelentkezést kér, tehát CI-ben nem gyűjthető. A committolt proj/ snapshot
           # a kanonikus; a fetch_projections.py itt csak letaposná. Kézzel frissül.
           python fetch_actuals.py      # deadline után: tényleges felállás + pontok
+          python lock_gw.py            # tipp+felállás lezárása, majd a valós pontok
+          python build_history.py      # tipp vs valóság + forrás-pontosság
           python build_h2h.py
           python publish_pages.py
 

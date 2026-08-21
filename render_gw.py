@@ -7,6 +7,7 @@ import theme
 HERE = pathlib.Path(__file__).parent
 ap = argparse.ArgumentParser()
 ap.add_argument("--h2h", default=str(HERE / "h2h.json"))
+ap.add_argument("--history", default=str(HERE / "history.json"))
 ap.add_argument("--data", default=str(HERE / "data.json"))
 ap.add_argument("--out", default=str(HERE / "gw.html"))
 ap.add_argument("--title", default="Vadkelet — a forduló")
@@ -14,6 +15,8 @@ ap.add_argument("--draft-href", default="index.html")
 A = ap.parse_args()
 
 H2H = pathlib.Path(A.h2h).read_text(encoding="utf-8")
+_hp = pathlib.Path(A.history)
+HIST = _hp.read_text(encoding="utf-8") if _hp.exists() else "null"
 D = json.loads(pathlib.Path(A.data).read_text(encoding="utf-8"))
 MGRS = json.dumps([{"entry": m["entry"], "first": m["first"], "initials": m["initials"],
                     "team": m.get("team", ""), "slot": m.get("slot", 999)} for m in D["managers"]],
@@ -107,6 +110,26 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
   font-family:var(--mono);font-size:11px;color:var(--dim)}
 .tot b{font-family:var(--display);font-size:21px;font-weight:600;color:var(--fg);
   font-variant-numeric:tabular-nums}
+.dlstrip{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+.dlstrip span{font-family:var(--mono);font-size:11px;padding:5px 11px;border-radius:999px;
+  border:1px solid var(--rule);color:var(--dim)}
+.dlstrip span b{color:var(--fg);font-weight:500}
+.dlstrip span.nx{border-color:var(--coral);color:var(--coral)}
+.dlstrip span.nx b{color:var(--coral)}
+.htbl{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r-md);
+  background:var(--surface);box-shadow:var(--sh-sm);margin-top:16px}
+.htbl table{width:100%;border-collapse:collapse;min-width:640px}
+.htbl th{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);font-weight:400;text-align:right;padding:11px 10px;border-bottom:1px solid var(--rule)}
+.htbl th.l,.htbl td.l{text-align:left}
+.htbl td{padding:10px;border-bottom:1px solid var(--rule);font-size:13.5px;text-align:right;
+  font-variant-numeric:tabular-nums;white-space:nowrap}
+.htbl tr:last-child td{border-bottom:0}
+.htbl td.nm3{font-weight:500;font-size:14.5px}
+.d-pos{color:var(--coral)}
+.empty2{padding:22px;border:1px dashed var(--rule);border-radius:var(--r-md);
+  font-family:var(--mono);font-size:11.5px;line-height:1.75;color:var(--dim)}
+.empty2 b{color:var(--fg);font-weight:500}
 .note{margin-top:clamp(34px,5vw,58px);padding-top:18px;border-top:1px solid var(--rule);
   font-family:var(--mono);font-size:11px;line-height:1.75;color:var(--dim);max-width:84ch}
 .note b{color:var(--fg);font-weight:500}
@@ -134,12 +157,21 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
     <span class="pills" id="pills" role="group" aria-label="Projekciós forrás"></span>
   </div>
 
+  <div class="dlstrip" id="dls"></div>
+
   <div id="ties"></div>
+
+  <div class="sec">
+    <div class="sec-h"><h2>Tipp és valóság</h2>
+      <p>a deadline előtti utolsó becslés a TÉNYLEGES felállásra, majd a valós pontok</p></div>
+    <div id="histview"></div>
+  </div>
 
   <p class="note" id="foot"></p>
 </div>
 
 <script id="h2h" type="application/json">__H2H__</script>
+<script id="histdata" type="application/json">__HIST__</script>
 <script id="mgrs" type="application/json">__MGRS__</script>
 <script>
 const H = JSON.parse(document.getElementById('h2h').textContent);
@@ -250,11 +282,82 @@ function render() {
      olvashatók: <code>git log -p rosters.json</code>.`;
 }
 
+/* ---------- deadline-csík + tipp/valóság ---------- */
+const HI = JSON.parse(document.getElementById('histdata').textContent || 'null');
+
+function renderHist() {
+  const strip = document.getElementById('dls');
+  if (HI && HI.upcoming && HI.upcoming.length) {
+    const fmt = t => t.replace('T', ' ').replace(':00Z', ' UTC');
+    strip.innerHTML = HI.upcoming.slice(0, 5).map((e, i) =>
+      `<span class="${i === 0 ? 'nx' : ''}">GW${e.gw} deadline: <b>${esc(fmt(e.deadline))}</b>${
+        i === 0 ? ` · lezárás +${HI.lock_after_minutes} perc` : ''}</span>`).join('');
+  } else strip.innerHTML = '';
+
+  const box = document.getElementById('histview');
+  if (!HI) { box.innerHTML = ''; return; }
+  const done = (HI.rounds || []).filter(r => r.has_tip || r.has_real);
+  if (!done.length) {
+    box.innerHTML = `<p class="empty2">Még nincs lezárt forduló.
+      A rendszer a deadline után <b>${HI.lock_after_minutes} perccel</b> lezárja a fordulót:
+      lehúzza a <b>tényleges felállásokat</b> (előtte az API nem adja ki), és hozzájuk párosítja
+      a <b>deadline előtti utolsó becslést</b> — így a tipp arra a csapatra szól, amit valóban
+      kiállítottak. Amikor a forduló véget ér, ugyanabba a rekordba bekerülnek a <b>valós
+      pontok</b>, és innentől itt látszik a kettő egymás mellett, forrásonként.</p>`;
+    return;
+  }
+  const SR = Object.keys(HI.sources);
+  const nm = e => (HI.managers[e] || {}).first || e;
+  let html = '';
+
+  if (Object.values(HI.accuracy || {}).some(a => a.mae !== null)) {
+    html += `<h3 style="margin:18px 0 0;font-size:16px">Melyik becslés talál jobban</h3>
+      <div class="htbl"><table><thead><tr><th class="l">Forrás</th>
+      <th>Átlagos eltérés</th><th>Mintaszám</th></tr></thead><tbody>` +
+      Object.entries(HI.accuracy).sort((a, b) => (a[1].mae ?? 99) - (b[1].mae ?? 99))
+        .map(([k, v]) => `<tr><td class="l nm3">${esc(v.label)}</td>
+          <td>${v.mae === null ? '–' : v.mae.toFixed(2)}</td>
+          <td class="dimc">${v.n}</td></tr>`).join('') + '</tbody></table></div>';
+  }
+
+  for (const rd of done.slice().reverse()) {
+    html += `<h3 style="margin:22px 0 0;font-size:16px">GW${rd.gw}${
+      rd.has_real ? '' : ' — még tart'}</h3>
+      <div class="htbl"><table><thead><tr><th class="l">Párosítás</th>` +
+      SR.map(k => `<th>${esc(HI.sources[k])}</th>`).join('') +
+      `<th>Valós</th><th class="l">Eltérés</th></tr></thead><tbody>`;
+    for (const m of rd.matches) {
+      const th = rd.teams[m.home], ta = rd.teams[m.away];
+      const cell = k => {
+        const a = (th.tip || {})[k], b = (ta.tip || {})[k];
+        return a && b ? `${a.xi.toFixed(1)} – ${b.xi.toFixed(1)}` : '–';
+      };
+      const real = th.real && ta.real ? `${th.real.xi} – ${ta.real.xi}` : '–';
+      let diff = '–';
+      if (th.real && ta.real && SR.length) {
+        const k = SR[0], a = (th.tip || {})[k], b = (ta.tip || {})[k];
+        if (a && b) {
+          const dh = th.real.xi - a.xi, da = ta.real.xi - b.xi;
+          diff = `${nm(m.home)} ${dh >= 0 ? '+' : ''}${dh.toFixed(1)} · ` +
+                 `${nm(m.away)} ${da >= 0 ? '+' : ''}${da.toFixed(1)}`;
+        }
+      }
+      html += `<tr><td class="l nm3">${esc(nm(m.home))} – ${esc(nm(m.away))}</td>` +
+        SR.map(k => `<td class="dimc">${cell(k)}</td>`).join('') +
+        `<td class="${th.real ? 'd-pos' : 'dimc'}">${real}</td>
+         <td class="l dimc">${esc(diff)}</td></tr>`;
+    }
+    html += '</tbody></table></div>';
+  }
+  box.innerHTML = html;
+}
+
 document.getElementById('pills').addEventListener('click', ev => {
   const b = ev.target.closest('.pill'); if (!b) return;
   active = b.dataset.s; render();
 });
 render();
+renderHist();
 </script>
 """
 
@@ -262,5 +365,6 @@ out = pathlib.Path(A.out)
 out.parent.mkdir(parents=True, exist_ok=True)
 out.write_text(TPL.replace("__TITLE__", A.title).replace("__HEAD__", theme.HEAD)
                   .replace("__DRAFT_HREF__", A.draft_href)
-                  .replace("__H2H__", H2H).replace("__MGRS__", MGRS), encoding="utf-8")
+                  .replace("__H2H__", H2H).replace("__HIST__", HIST)
+                  .replace("__MGRS__", MGRS), encoding="utf-8")
 print(f"{out}: {out.stat().st_size} bájt")

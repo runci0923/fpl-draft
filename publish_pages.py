@@ -47,8 +47,16 @@ pub.write_text(json.dumps(d, ensure_ascii=False, separators=(",", ":")), encodin
 subprocess.run([sys.executable, str(HERE / "render.py"),
                 "--data", str(pub), "--out", str(SITE / "draft.html"),
                 "--title", "FPL Draft Scorecard", "--gw-href", "index.html"], check=True)
+hist_src = HERE / "history.json"
+hist_arg = []
+if hist_src.exists():
+    hj = json.loads(hist_src.read_text(encoding="utf-8"))
+    (SITE / "history.public.json").write_text(
+        json.dumps(hj, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")
+    hist_arg = ["--history", str(SITE / "history.public.json")]
+
 subprocess.run([sys.executable, str(HERE / "render_gw.py"),
-                "--data", str(pub), "--h2h", str(SITE / "h2h.public.json"),
+                "--data", str(pub), "--h2h", str(SITE / "h2h.public.json"), *hist_arg,
                 "--out", str(SITE / "index.html"),
                 "--title", "FPL Draft — a forduló", "--draft-href", "draft.html"], check=True)
 (SITE / ".nojekyll").write_text("", encoding="utf-8")
