@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-08-21T10:03:19Z",
+ "taken_at": "2026-08-21T18:06:41Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -36,7 +36,7 @@
     "N.Williams (NFO) · pick 35",
     "Pedro Porro (TOT) · pick 47",
     "Van Hecke (TOT) · pick 71",
-    "Konsa (AVL) · pick 74",
+    "Konsa (ARS) · pick 74",
     "Collins (BRE) · pick 83"
    ],
    "MID": [
