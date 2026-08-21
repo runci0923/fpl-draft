@@ -246,7 +246,8 @@ tr.hi{background:var(--surface-2)}
 
   <div class="ctl">
     <span class="lbl">becslés</span><span class="grp" id="srcs"></span>
-    <span class="lbl">forduló</span><span class="grp" id="gws"></span>
+    <span class="lbl">kezdő forduló</span><span class="grp" id="gws"></span>
+    <span class="lbl">hány forduló</span><span class="grp" id="win"></span>
     <span class="lbl">mutasd</span><span class="grp" id="filt"></span>
     <span class="lbl">rendezés</span><span class="grp" id="sort"></span>
   </div>
@@ -266,7 +267,13 @@ const POS = [['GKP','Kapus'],['DEF','Védelem'],['MID','Középpálya'],['FWD','
 const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
 let view = 'draft', gw = String(D.gws[0]), filt = 'all', sortBy = 'pts';
 let src = D.order[0];
+let win = 1;                       // hány fordulót összesítsünk a kezdőtől
 const SUM = 'sum';
+// a kezdő fordulótól `win` darab, de csak addig, ameddig van adat
+const gwWindow = () => {
+  const from = +gw, all = D.gws;
+  return all.filter(g => g >= from && g < from + win);
+};
 const S = () => D.src[src];
 const row = p => (D.srcdata[src] || {})[String(p.draft ?? p.id ?? '')] || null;
 
@@ -278,16 +285,33 @@ const val = p => {
     const v = Object.values(r).map(x => x.pts).filter(x => x != null);
     return v.length ? v.reduce((a, b) => a + b, 0) : null;
   }
-  return r[gw] ? r[gw].pts : null;
+  const gs = gwWindow();
+  const v = gs.map(g => (r[String(g)] || {}).pts).filter(x => x != null);
+  return v.length ? v.reduce((a, b) => a + b, 0) : null;
 };
 // a várható perc és a fixtúra az FPL Hub adatából jön (csak ő ad ilyet)
-const mins = p => (gw !== SUM && p.gw[gw]) ? p.gw[gw].min : null;
-const fx = p => (gw !== SUM && p.gw[gw]) ? `${p.gw[gw].opp}${p.gw[gw].h ? '(H)' : '(A)'}` : null;
+const mins = p => (gw !== SUM && win === 1 && p.gw[gw]) ? p.gw[gw].min : null;
+const fx = p => {
+  if (gw === SUM) return null;
+  const gs = gwWindow();
+  if (win === 1) return p.gw[gw] ? `${p.gw[gw].opp}${p.gw[gw].h ? '(H)' : '(A)'}` : null;
+  // több forduló: a fixtúra-sorozat, hazai nagybetűvel
+  const seq = gs.map(g => { const e = p.gw[String(g)]; return e ? (e.h ? e.opp.toUpperCase() : e.opp.toLowerCase()) : null; })
+                .filter(Boolean);
+  return seq.length ? seq.join(' ') : null;
+};
 
 function render() {
   document.getElementById('srcs').innerHTML = D.order.map(k =>
     `<button class="b" data-src="${k}" aria-pressed="${k === src}">${esc(D.src[k].label)}</button>`).join('');
   const perGw = S().per_gw;
+  const maxWin = perGw ? D.gws.filter(g => g >= +gw).length : 1;
+  document.getElementById('win').innerHTML = perGw
+    ? [1, 2, 3, 5, 8].filter(n => n <= Math.max(1, maxWin)).map(n =>
+        `<button class="b" data-w="${n}" aria-pressed="${win === n}">${n}</button>`).join('')
+      + (gw === SUM ? '' : `<span class="none">&nbsp;${gwWindow().length === 1
+          ? 'GW' + gw : 'GW' + gwWindow()[0] + '–' + gwWindow()[gwWindow().length - 1]} összege</span>`)
+    : `<span class="none">a forrás 5 fordulós összeget ad</span>`;
   document.getElementById('gws').innerHTML = perGw ?
     (D.gws.map(g => `<button class="b" data-g="${g}" aria-pressed="${String(g) === gw}">${g}.</button>`).join('')
      + `<button class="b" data-g="${SUM}" aria-pressed="${gw === SUM}">összeg</button>`)
@@ -334,8 +358,10 @@ function render() {
   document.getElementById('foot').innerHTML =
     `<b>Aktív becslés.</b> ${esc(S().label)} — ${esc(S().note)}
      (${S().players} játékos). Snapshot: ${esc(D.taken_at.replace('T',' ').replace('Z',' UTC'))}.<br>
-     <b>Perc és fixtúra.</b> A kártyák alatti perc és az ellenfél az FPL Hub adatából jön —
-     a többi forrás nem ad várható játékpercet.<br>
+     <b>Ablak.</b> ${gw === SUM ? 'a teljes elérhető horizont összege'
+       : (win === 1 ? `csak GW${gw}` : `GW${gwWindow()[0]}–${gwWindow()[gwWindow().length-1]} összege`)}.
+     Több fordulós ablaknál a kártya alatt a fixtúra-sorozat áll (NAGYBETŰ = hazai), és a
+     várható perc kimarad, mert az fordulónkénti adat.<br>
      <b>Draft-nézet.</b> A monogram a birtokos, a szaggatott „szabad" azt jelenti, hogy senki
      keretében sincs — ezek a waiver-célpontok. A sajátjaid coral csíkkal.<br>
      <b>Fantasy-nézet.</b> Ár és a mezőny tulajdonlási aránya, a sima FPL csapatodhoz.<br>
@@ -511,7 +537,15 @@ document.addEventListener('click', ev => {
     renderSq(); return;
   }
   if (b) { if (b.dataset.src) src = b.dataset.src;
-           if (b.dataset.g !== undefined) gw = b.dataset.g;
+           if (b.dataset.w) win = +b.dataset.w;
+           if (b.dataset.g !== undefined) {
+             gw = b.dataset.g;
+             // ha a kezdő forduló miatt nem fér ki az ablak, szűkítjük
+             if (gw !== SUM) {
+               const left = D.gws.filter(g => g >= +gw).length;
+               if (win > left) win = Math.max(1, left);
+             }
+           }
            if (b.dataset.f) filt = b.dataset.f;
            if (b.dataset.s) sortBy = b.dataset.s; render(); return; }
   const t = ev.target.closest('[role="tab"]');
