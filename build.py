@@ -78,7 +78,9 @@ owned = {int(k): v for k, v in lg["owned"].items()}
 picks = {int(k): v for k, v in lg["picks"].items()}
 ENT = {e["entry_id"]: e for e in lg["entries"]}
 
-# --- GW1 kezdő XI a képernyőképekből (a deadline előtt az API nem adja: "No pick history")
+# --- kezdő XI: ELSŐSORBAN a lezárt fordulóból (valós), másodsorban a képernyőképekből.
+# A képernyőkép csak a deadline ELŐTT volt az egyetlen forrás; ha egy forduló már le van
+# zárva, a valós felállás felülírja. A képernyőkép elavulása NEM lehet halálos hiba.
 def norm(s):
     s = (s or "").lower()
     for a, b in [("ø","o"),("æ","ae"),("đ","d"),("ł","l"),("ß","ss"),("ı","i")]: s = s.replace(a, b)
@@ -100,7 +102,19 @@ for m in shots["managers"]:
             mismatch.append(f"{m['name']}: {pk['n']} ({len(hit)} találat)"); continue
         ids.add(hit[0]["id"]); xi[hit[0]["id"]] = pk["start"]
     shot_ids[ent] = ids
-if mismatch: raise SystemExit("Feloldatlan képernyőkép-név: " + "; ".join(mismatch))
+if mismatch:
+    print("  figyelem: elavult képernyőkép-név (kihagyva): " + "; ".join(mismatch))
+
+# a legfrissebb lezárt forduló valós felállása felülírja a képernyőképet
+locked = sorted((HERE / "locked").glob("gw*.json"))
+if locked:
+    L = json.loads(locked[-1].read_text(encoding="utf-8"))
+    real = 0
+    for ent, lu in (L.get("lineups") or {}).items():
+        for i in lu["xi"]:   xi[i] = True;  real += 1
+        for i in lu["bench"]: xi[i] = False
+    print(f"Kezdő XI a GW{L['gw']} VALÓS felállásából ({real} játékos) — "
+          f"a képernyőkép csak a hiányzókra marad tartalék.\n")
 
 print("Képernyőkép vs. API keret-ellenőrzés:")
 ok = True

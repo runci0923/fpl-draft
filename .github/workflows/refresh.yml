@@ -1,15 +1,23 @@
 name: Frissítés
 
-# A rangsorok naponta, a projekciók fordulónként változnak. A snapshot-elv miatt
-# sűrűbben futunk, mint amilyen sűrűn az adat változik: a deadline előtti utolsó
-# futás lesz a kanonikus becslés.
+# MIKOR FUT
+# ---------
+# A projekció lehúzása KÉZI lépés (az FPL Hub és a Solio bejelentkezést kér), tehát a
+# gépnek csak két dolga lehet: lezárni egy fordulót, aminek elmúlt a deadline-ja, és
+# beírni a valós pontokat, ha a forduló véget ért. Mindkettő ráér.
+#
+# Ezért: NAPI EGY futás, és az is egy kapun megy át (should_run.py). Ha nincs teendő,
+# a job azonnal, munka nélkül, zölden zárul. Kézzel bármikor indítható — a `force`
+# bemenettel a kapu megkerülhető (pl. friss projekció után újraépítéshez).
 on:
   schedule:
-    # Óránként. A lezárás (lock_gw.py) idempotens: nem cron-pontosságra épül, hanem
-    # arra, hogy „aminek elmúlt a deadline-ja és még nincs lezárva, azt zárd le".
-    # Így egy kihagyott futás sem veszít adatot, csak késik.
-    - cron: '25 * * * *'
+    - cron: '0 6 * * *'          # naponta 06:00 UTC
   workflow_dispatch:
+    inputs:
+      force:
+        description: 'Kényszerített futás (friss projekció után is ezt használd)'
+        type: boolean
+        default: true
 
 permissions:
   contents: write
@@ -22,27 +30,35 @@ jobs:
       - uses: actions/setup-python@v5
         with: { python-version: '3.12' }
 
+      - name: Van-e teendő?
+        id: gate
+        env:
+          FORCE: ${{ (github.event_name == 'workflow_dispatch' && inputs.force) && '1' || '0' }}
+        run: python should_run.py
+
       - name: Adatok újrahúzása
+        if: steps.gate.outputs.work == 'true'
         run: |
-          python fetch_deadlines.py    # 38 forduló deadline-ja + waiver/trade időpontok
-          python build_idmap.py
-          python fetch_rankings.py
-          python fetch_league.py       # az élő birtoklás: waiver/csere magától átjön
+          python fetch_deadlines.py    # 38 forduló deadline-ja
+          python build_idmap.py        # draft <-> fő FPL element_id
+          python fetch_rankings.py     # 5 draft-rangsor (forrásonként hibatűrő)
+          python fetch_league.py       # élő birtoklás: waiver/csere magától átjön
           python build.py
-          python build_rosters.py      # diffelhető keret-napló a git-történethez
-          # A projekciót SZÁNDÉKOSAN nem futtatjuk itt: az FPL Hub és a Solio egyaránt
-          # bejelentkezést kér, tehát CI-ben nem gyűjthető. A committolt proj/ snapshot
-          # a kanonikus; a fetch_projections.py itt csak letaposná. Kézzel frissül.
-          python fetch_actuals.py      # deadline után: tényleges felállás + pontok
-          python lock_gw.py            # tipp+felállás lezárása, majd a valós pontok
-          python build_history.py      # tipp vs valóság + forrás-pontosság
+          python build_rosters.py      # diffelhető keret-napló
+          python fetch_actuals.py
+          python lock_gw.py            # lezárás, majd a valós pontok
+          python build_history.py      # tipp vs valóság
           python build_h2h.py
           python publish_pages.py
 
       - name: Commit, ha változott
+        if: steps.gate.outputs.work == 'true'
         run: |
           git config user.name "fpl-draft-bot"
           git config user.email "actions@github.com"
           git add -A
-          git diff --quiet --cached || git commit -m "Frissítés: rangsorok, keretek, projekciók"
+          git diff --quiet --cached || git commit -m "Frissítés: ${{ steps.gate.outputs.reason }}"
           git push
+
+      - name: Összegzés
+        run: echo "${{ steps.gate.outputs.reason }}" >> $GITHUB_STEP_SUMMARY

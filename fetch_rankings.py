@@ -128,6 +128,15 @@ def table_rows(h, pick=0):
         out.append([strip_tags(c) for c in re.findall(r"<t[hd].*?</t[hd]>", r, re.S)])
     return out
 
+def guarded(label, fn):
+    """Egy forrás hibája NE döntse el az egész futást — a többi rangsor akkor is kell."""
+    try:
+        fn()
+    except SystemExit as e:
+        print(f"  {label:<24} KIMARAD: {e}")
+    except Exception as e:
+        print(f"  {label:<24} KIMARAD: {type(e).__name__}: {e}")
+
 print("Rangsorok:")
 
 # 1) Hivatalos FPL draft_rank (mind az 595)
@@ -136,28 +145,40 @@ write("official", "FPL official draft_rank",
        for p in sorted(players, key=lambda p: p["draft_rank"])])
 
 # 2) The Draft Society Top 200 (Google Sheet CSV)
-ds = list(csv.DictReader(get(
-    "https://docs.google.com/spreadsheets/d/1xeZKNo9Z9WdcW1PlJiePTnGKM5ZCTxIRSCDUsHNnPDI/export?format=csv"
-).splitlines()))
-write("draftsociety", "The Draft Society 200",
-      [(int(r["Rank"]), r["Player"], r["Team"], r["Position"]) for r in ds])
+def _ds():
+    ds = list(csv.DictReader(get(
+        "https://docs.google.com/spreadsheets/d/1xeZKNo9Z9WdcW1PlJiePTnGKM5ZCTxIRSCDUsHNnPDI/export?format=csv"
+    ).splitlines()))
+    got = [(int(r["Rank"]), r["Player"], r["Team"], r["Position"]) for r in ds if r.get("Rank")]
+    if len(got) < 100: raise RuntimeError(f"csak {len(got)} sor")
+    write("draftsociety", "The Draft Society 200", got)
+guarded("The Draft Society 200", _ds)
 
 # 3) OneFPL Top 100
-rows = table_rows(get("https://onefpl.com/blog/fpl-draft-rankings-top-100-2026-27"), "big")
-write("onefpl", "OneFPL 100",
-      [(int(r[0]), r[1], r[2], r[3]) for r in rows if len(r) >= 4 and r[0].isdigit()])
+def _onefpl():
+    rows = table_rows(get("https://onefpl.com/blog/fpl-draft-rankings-top-100-2026-27"), "big")
+    got = [(int(r[0]), r[1], r[2], r[3]) for r in rows if len(r) >= 4 and r[0].isdigit()]
+    if len(got) < 50: raise RuntimeError(f"csak {len(got)} sor — megváltozott az oldal?")
+    write("onefpl", "OneFPL 100", got)
+guarded("OneFPL 100", _onefpl)
 
 # 4) RotoWire Top 400
-rows = table_rows(get("https://www.rotowire.com/soccer/article/"
-                      "fantasy-premier-league-fpl-rankings-top-400-for-2026-27-season-124261"), "big")
-write("rotowire", "RotoWire 400",
-      [(int(r[0]), r[5], r[6], r[7]) for r in rows if len(r) >= 8 and r[0].isdigit()])
+def _roto():
+    rows = table_rows(get("https://www.rotowire.com/soccer/article/"
+                          "fantasy-premier-league-fpl-rankings-top-400-for-2026-27-season-124261"), "big")
+    got = [(int(r[0]), r[5], r[6], r[7]) for r in rows if len(r) >= 8 and r[0].isdigit()]
+    if len(got) < 200: raise RuntimeError(f"csak {len(got)} sor — megváltozott az oldal?")
+    write("rotowire", "RotoWire 400", got)
+guarded("RotoWire 400", _roto)
 
 # 5) DraftFantasy cheat sheet (VORP/Edge) — "Haaland MCI · FWD 1" formátum
-rows = table_rows(get("https://www.draftfantasy.com/fpl/draft-cheat-sheet"), "big")
-recs = []
-for r in rows:
-    if len(r) < 3 or not r[0].isdigit(): continue
-    m = re.match(r"^(.*?)\s+([A-Z]{3})\s*·\s*(GKP|DEF|MID|FWD)", STATUS.sub("", r[2]))
-    if m: recs.append((int(r[0]), m.group(1).strip(), m.group(2), m.group(3)))
-write("draftfantasy", "DraftFantasy cheat sheet", recs)
+def _dfan():
+    rows = table_rows(get("https://www.draftfantasy.com/fpl/draft-cheat-sheet"), "big")
+    recs = []
+    for r in rows:
+        if len(r) < 3 or not r[0].isdigit(): continue
+        m = re.match(r"^(.*?)\s+([A-Z]{3})\s*·\s*(GKP|DEF|MID|FWD)", STATUS.sub("", r[2]))
+        if m: recs.append((int(r[0]), m.group(1).strip(), m.group(2), m.group(3)))
+    if len(recs) < 120: raise RuntimeError(f"csak {len(recs)} sor — megváltozott az oldal?")
+    write("draftfantasy", "DraftFantasy cheat sheet", recs)
+guarded("DraftFantasy cheat sheet", _dfan)

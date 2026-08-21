@@ -92,6 +92,13 @@ A workflow így is frissíti a rangsorokat, a kereteket és a deadline utáni va
   nagyobb az ár (194,9 vs 198,9), mert a zöld-lista és a Solio 265-es készlete együtt
   szűkíti a választékot.
 - A **forrás dönti el, ki nyer.** A rangsorok Spearman-egyezése 0,48–0,79.
+- **A képernyőkép-alapú `squads.json` elavul, és ez NEM lehet halálos hiba.** A játékos-készlet
+  menet közben nő (599 -> 600), a klubok változnak, tehát egy név egyszer csak nem oldódik fel
+  (2026-08-21: „Konsa (0 találat)" — a CI három futáson elhasalt). A kezdő XI-t amúgy is a
+  legfrissebb **lezárt forduló valós felállása** adja; a képernyőkép csak tartalék.
+- **Egy scraper hibája ne döntse el a futást.** A `fetch_rankings.py` forrásonként
+  hibatűrő, és minimum sorszámot is ellenőriz — ha egy oldal átépül, az a rangsor kimarad,
+  a többi megy tovább.
 - **A waiverrel szerzett játékosnak NINCS pickje.** Az `element-status` az aktuális
   birtoklást adja, a `draft/{id}/choices` viszont csak a draftot — a draft után igazolt
   játékos nincs benne. `picks[i]` helyett mindenhol `picks.get(i)` kell, a rendezésnél
