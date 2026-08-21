@@ -1,7 +1,7 @@
 {
- "fetched_at": "2026-08-21T10:03:12Z",
- "current": null,
- "next": 1,
+ "fetched_at": "2026-08-21T18:04:03Z",
+ "current": 1,
+ "next": 2,
  "lock_after_minutes": 30,
  "events": [
   {

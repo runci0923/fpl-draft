@@ -320,6 +320,26 @@ function renderHist() {
           <td class="dimc">${v.n}</td></tr>`).join('') + '</tbody></table></div>';
   }
 
+  // felállítás-hatékonyság: a tényleges XI a lehető legjobbhoz mérve
+  const withEff = done.filter(r => r.efficiency && Object.keys(r.efficiency).length);
+  if (withEff.length) {
+    const rd = withEff[withEff.length - 1];
+    const k0 = Object.keys(rd.efficiency)[0];
+    html += `<h3 style="margin:22px 0 0;font-size:16px">Felállítás-hatékonyság — GW${rd.gw}</h3>
+      <p class="empty2" style="border:0;padding:0;margin:4px 0 0">Mennyit hagyott az asztalon
+      azzal, ahogy <b>kiállította</b> a csapatot: a tényleges kezdő XI becsült pontja a
+      keretből kihozható legjobb XI-hez mérve. ${esc(HI.sources[k0])} szerint.</p>
+      <div class="htbl"><table><thead><tr><th class="l">Manager</th>
+      <th>Tényleges XI</th><th>Lehető legjobb</th><th>Elhagyott</th></tr></thead><tbody>` +
+      Object.entries(rd.efficiency[k0]).map(([e, v]) => ({e, ...v}))
+        .sort((a, b2) => (a.left ?? 99) - (b2.left ?? 99))
+        .map(v => `<tr><td class="l nm3">${esc(nm(v.e))}</td>
+          <td class="dimc">${v.actual.toFixed(1)}</td>
+          <td class="dimc">${v.best === null ? '–' : v.best.toFixed(1)}</td>
+          <td class="${v.left > 3 ? 'd-pos' : 'dimc'}">${v.left === null ? '–' : v.left.toFixed(1)}</td>
+        </tr>`).join('') + '</tbody></table></div>';
+  }
+
   for (const rd of done.slice().reverse()) {
     html += `<h3 style="margin:22px 0 0;font-size:16px">GW${rd.gw}${
       rd.has_real ? '' : ' — még tart'}</h3>

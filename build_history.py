@@ -13,6 +13,26 @@ dl = json.loads((HERE / "deadlines.json").read_text(encoding="utf-8"))
 ENT = {m["entry"]: {"first": m["first"], "ini": m["initials"]} for m in data["managers"]}
 P = data["players"]
 
+FORM = [(a, b, c) for a in range(3, 6) for b in range(2, 6) for c in range(1, 4) if a + b + c == 10]
+
+def best_xi_pts(squad_ids, pts):
+    """A lehető legjobb legális XI pontja — ehhez mérjük a tényleges felállítást."""
+    byp = {}
+    for i in squad_ids: byp.setdefault(P.get(str(i), {}).get("p"), []).append(i)
+    for k in byp: byp[k].sort(key=lambda i: -pts.get(i, 0))
+    if not byp.get("GKP"): return None
+    gk = pts.get(byp["GKP"][0], 0)
+    best = None
+    for a, bb, c in FORM:
+        if len(byp.get("DEF", [])) < a or len(byp.get("MID", [])) < bb or len(byp.get("FWD", [])) < c:
+            continue
+        v = gk + sum(pts.get(i, 0) for i in byp["DEF"][:a] + byp["MID"][:bb] + byp["FWD"][:c])
+        best = v if best is None else max(best, v)
+    return best
+
+SQUAD = {m["entry"]: [s["id"] for s in m["squad"]] for m in data["managers"]}
+snapdirs = [HERE / "proj", HERE / "proj_private"]
+
 rounds, srcs = [], {}
 for f in sorted((HERE / "locked").glob("gw*.json")):
     r = json.loads(f.read_text(encoding="utf-8"))
@@ -33,7 +53,26 @@ for f in sorted((HERE / "locked").glob("gw*.json")):
             if a:
                 t["real"] = {"xi": a["xi"], "bench": a["bench"], "players": a["players"]}
         teams[ent] = t
+    # felállítás-hatékonyság: mennyit hagyott az asztalon a KIÁLLÍTÁSSAL
+    eff = {}
+    snapf = None
+    for dd in snapdirs:
+        p = dd / (r.get("snapshot") or "")
+        if r.get("snapshot") and p.exists(): snapf = p; break
+    if snapf:
+        sn = json.loads(snapf.read_text(encoding="utf-8"))
+        for src, tbl in sn["data"].items():
+            pts = {int(k): (v.get(str(gw), {}) or {}).get("pts", 0) for k, v in tbl.items()}
+            per = {}
+            for ent, lu in r["lineups"].items():
+                act = round(sum(pts.get(i, 0) for i in lu["xi"]), 2)
+                bst = best_xi_pts(SQUAD.get(int(ent), []), pts)
+                per[ent] = {"actual": act, "best": round(bst, 2) if bst else None,
+                            "left": round(bst - act, 2) if bst else None}
+            eff[src] = per
+
     rounds.append({"gw": gw, "deadline": r["deadline"], "snapshot_at": r.get("snapshot_at"),
+                   "efficiency": eff,
                    "has_tip": bool(r.get("tips")), "has_real": bool(r.get("actual")),
                    "matches": r.get("matches", []), "teams": teams})
 
