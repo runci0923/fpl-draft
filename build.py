@@ -113,17 +113,38 @@ for ent, ids in shot_ids.items():
     print(f"  {ENT[ent]['initials']} {ENT[ent]['name']:<20} {tag}")
 print(f"  -> {'mind a 6 keret egyezik' if ok else 'eltérés van, az API az irány'}\n")
 
+# A draft-slot a TÉNYLEGES draft-sorrendből jön, nem a jelenlegi keretből:
+# waiver/csere után a keret első tagjának már nem feltétlenül van pickje.
+slot = {}
+for o in lg["order"]:
+    slot.setdefault(o["entry"], o["index"])
+
 managers = []
 for ent, ids in owned.items():
     e = ENT[ent]
+    sq = []
+    for i in ids:
+        pk = picks.get(i)          # waiverrel szerzett játékosnak NINCS pickje
+        sq.append({"id": i, "start": xi.get(i, False),
+                   "pick": pk["index"] if pk else None,
+                   "round": pk["round"] if pk else None,
+                   "via": "draft" if pk else "waiver"})
+    sq.sort(key=lambda s: (s["pick"] is None, s["pick"] or 0))
     managers.append({
         "entry": ent, "name": e["name"], "first": e["first"], "team": e["team"],
-        "initials": e["initials"],
-        "squad": sorted(({"id": i, "start": xi.get(i, False),
-                          "pick": picks[i]["index"], "round": picks[i]["round"]} for i in ids),
-                        key=lambda s: s["pick"]),
+        "initials": e["initials"], "slot": slot.get(ent, 999),
+        "squad": sq,
     })
-managers.sort(key=lambda m: m["squad"][0]["pick"])
+managers.sort(key=lambda m: m["slot"])
+
+waivers = [(m["first"], [q["id"] for q in m["squad"] if q["via"] == "waiver"])
+           for m in managers]
+waivers = [(n, v) for n, v in waivers if v]
+if waivers:
+    print("Draft utáni szerzés (nincs pickjük):")
+    for n, v in waivers:
+        print(f"  {n}: " + ", ".join(players[i]["name"] for i in v))
+    print()
 
 # --- a tulaj saját vonal-értékelése (a lapon alapértékként jelenik meg)
 mr = json.loads((HERE / "my_rating.json").read_text(encoding="utf-8"))
@@ -172,10 +193,12 @@ for m in managers:
     line = []
     for s, _, _, _ in SOURCES:
         line.append(f"{sum(players[q['id']]['ranks'].get(s, sizes[s] + 1) for q in m['squad']):>5}")
-    print(f"{m['name']:<20} {m['squad'][0]['pick']:>7}   " + "  ".join(line))
+    print(f"{m['name']:<20} {m['slot']:>7}   " + "  ".join(line))
 
+# CSAK a draftolt játékosokra értelmes: a waiverrel szerzettnek nincs pick-sorszáma
 print("\nLegnagyobb lopások (pick-sorszám mínusz konszenzus-rang):")
-sur = sorted(((players[i]["ranks"]["consensus"], picks[i]["index"], i) for i in used),
+sur = sorted(((players[i]["ranks"]["consensus"], picks[i]["index"], i)
+              for i in used if i in picks),
              key=lambda t: -(t[1] - t[0]))
 for r, pk, i in sur[:6]:
     who = next(m["name"] for m in managers if any(q["id"] == i for q in m["squad"]))

@@ -39,7 +39,9 @@ def best_xi(squad, pts):
 # --- legfrissebb snapshot a TARTALOM taken_at-je szerint (a fájlnév-rendezés vegyes
 #     időzónánál hibázik: 18:03 UTC későbbi, mint 19:55 CEST)
 # a proj_private/ tartalmazza a fizetős forrásokat is; ha van, azt használjuk
-cands = list((HERE / "proj_private").glob("*.json")) or list((HERE / "proj").glob("*.json"))
+# a legfrissebb MINDKÉT mappából: a proj_private/ csak akkor tartalmaz többet, ha van
+# olyan forrás, amit nem publikálunk — különben elavult snapshotot választanánk
+cands = list((HERE / "proj").glob("*.json")) + list((HERE / "proj_private").glob("*.json"))
 if not cands: sys.exit("Nincs projekció-snapshot — futtasd a fetch_projections.py-t")
 def when(p):
     ts = json.loads(p.read_text(encoding="utf-8"))["taken_at"].replace("Z", "+00:00")
@@ -125,9 +127,11 @@ for gw in range(snap["gw_from"], snap["gw_to"] + 1):
                                encoding="utf-8")
 
 gw = out["next_event"] or out["current_event"] or snap["gw_from"]
-r = out["rounds"].get(str(gw), {}).get("fplform")
-print(f"Snapshot: {snapf.name}   GW{gw}   valós felállás: "
-      f"{'megvan' if str(gw) in act else 'még nincs (deadline előtt)'}")
+per = out["rounds"].get(str(gw), {})
+src = next(iter(per), None)
+r = per.get(src) if src else None
+print(f"Snapshot: {snapf.name}   GW{gw}   forrás: {snap['sources'][src]['label'] if src else '—'}"
+      f"   valós felállás: {'megvan' if str(gw) in act else 'még nincs (deadline előtt)'}")
 if r:
     ENT = {m["entry"]: m["first"] for m in data["managers"]}
     for m in r["matches"]:

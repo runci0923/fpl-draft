@@ -9,9 +9,14 @@ import json, pathlib, statistics
 HERE = pathlib.Path(__file__).parent
 H = 5   # fordulós ablak
 
-snap = sorted((HERE / "proj_private").glob("*.json")) or sorted((HERE / "proj").glob("*.json"))
-if not snap: raise SystemExit("nincs projekció-snapshot")
-S = json.loads(snap[-1].read_text(encoding="utf-8"))
+import datetime as _dt
+_c = list((HERE / "proj").glob("*.json")) + list((HERE / "proj_private").glob("*.json"))
+if not _c: raise SystemExit("nincs projekció-snapshot")
+def _w(p):
+    t = json.loads(p.read_text(encoding="utf-8"))["taken_at"].replace("Z", "+00:00")
+    x = _dt.datetime.fromisoformat(t)
+    return x if x.tzinfo else x.replace(tzinfo=_dt.timezone.utc)
+S = json.loads(sorted(_c, key=_w)[-1].read_text(encoding="utf-8"))
 gw0 = S["gw_from"]
 gws = [str(g) for g in range(gw0, gw0 + H)]
 

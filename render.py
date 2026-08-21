@@ -455,11 +455,14 @@ function evaluate(src) {
       lines[k] = {n: g.length, sum: g.reduce((a, p) => a + p.pt, 0), avg: avg(g.map(p => p.pt))};
     }
     const xi = picks.filter(p => p.start);
-    const byCost = [...picks].sort((a, b) => a.cost - b.cost);
+    // a waiverrel szerzett játékosra nincs draft-pillanat, tehát nincs elszalasztott rang
+  const drafted = picks.filter(p => p.pick != null);
+  const byCost = [...drafted].sort((a, b) => a.cost - b.cost);
     return {name: m.name, first: m.first, team: m.team, initials: m.initials, entry: m.entry,
-      slot: m.squad[0].pick, picks, lines,
-      left: picks.reduce((a, p) => a + p.cost, 0),
-      bpa: picks.filter(p => p.cost === 0).length,
+      slot: m.slot ?? 999, picks, lines,
+      left: drafted.reduce((a, p) => a + p.cost, 0),
+      bpa: drafted.filter(p => p.cost === 0).length,
+      waiver: picks.length - drafted.length,
       sharp: byCost[0], reach: byCost[byCost.length - 1],
       total: picks.reduce((a, p) => a + p.pt, 0),
       avg: avg(picks.map(p => p.pt)),
@@ -535,6 +538,7 @@ function renderTeams(ms, src) {
         <span>legnagyobb túlnyúlás: <b>${esc(m.reach.n)}</b> · ${m.reach.cost}</span>
         <span>${m.bpa}/15 pick a legjobb elérhető</span>
         <span>${m.slot}. helyről draftolt</span>
+        ${m.waiver ? `<span>${m.waiver} játékos waiverrel</span>` : ''}
       </footer>
       <div class="zz" aria-hidden="true"></div>
     </article>`).join('');
@@ -549,7 +553,7 @@ function renderDraft(ms, src) {
     if (!p) return '<td></td>';
     return `<td><span class="cell">
       <span class="top">${chip(p.rank)}<span class="who">${esc(p.n)}</span></span>
-      <span class="meta"><span>${esc(p.club)} · ${p.pos}</span><span>#${p.pick}</span>
+      <span class="meta"><span>${esc(p.club)} · ${p.pos}</span><span>#${p.pick ?? '–'}</span>
       <span class="sur ${p.cost === 0 ? 'pos' : 'neg'}">${p.cost === 0 ? 'BPA' : '−' + p.cost}</span>
       </span></span></td>`;
   };
@@ -570,7 +574,7 @@ function renderDraft(ms, src) {
     byLeft.map((m, i) => `<tr class="${i === 0 ? 'hi' : ''}">
       <td class="l mono">${i + 1}.</td><td class="l nm">${esc(m.name)}</td>
       <td class="strong">${m.left}</td>
-      <td class="${m.bpa ? 'best' : 'dimc'}">${m.bpa}/15</td>
+      <td class="${m.bpa ? 'best' : 'dimc'}">${m.bpa}/${m.picks.length - m.waiver}</td>
       <td class="l">${esc(m.reach.n)} <span class="pclub">${m.reach.cost} ranggal · pick ${m.reach.pick}</span></td>
     </tr>`).join('') + `</tbody>`;
 }

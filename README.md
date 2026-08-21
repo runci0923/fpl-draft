@@ -92,6 +92,15 @@ A workflow így is frissíti a rangsorokat, a kereteket és a deadline utáni va
   nagyobb az ár (194,9 vs 198,9), mert a zöld-lista és a Solio 265-es készlete együtt
   szűkíti a választékot.
 - A **forrás dönti el, ki nyer.** A rangsorok Spearman-egyezése 0,48–0,79.
+- **A waiverrel szerzett játékosnak NINCS pickje.** Az `element-status` az aktuális
+  birtoklást adja, a `draft/{id}/choices` viszont csak a draftot — a draft után igazolt
+  játékos nincs benne. `picks[i]` helyett mindenhol `picks.get(i)` kell, a rendezésnél
+  `None`-kezelés, és a draft-slot a `choices` sorrendjéből jöjjön, NE a jelenlegi keret
+  első tagjából. Ez 2026-08-21-én éles hibát okozott (Attila Pope-ot és Ballardot igazolt
+  Muñoz és Martinez helyett), és a CI három futáson elhasalt.
+- **A `proj_private/` csak akkor frissebb, ha van nem publikált forrás.** Amióta mindkét
+  becslés publikus, oda nem írunk — a „privát előbb" preferencia elavult snapshotot
+  választott. Mindig a legfrissebbet kell venni MINDKÉT mappából, `taken_at` szerint.
 - **Az igazolásokat nem kell külön követni.** Publikus tranzakció-végpont nincs (404), de az
   `element-status` mindig az aktuális birtoklást adja, és minden futás ebből épít. A változás
   a `rosters.json` git-diffjében olvasható: `git log -p rosters.json`.

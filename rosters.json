@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-08-20T16:52:14Z",
+ "taken_at": "2026-08-21T09:20:48Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -55,14 +55,14 @@
   "Attila": {
    "GKP": [
     "Donnarumma (MCI) · pick 63",
-    "Martinez (AVL) · pick 87"
+    "Pope (NEW) · waiver"
    ],
    "DEF": [
     "Senesi (TOT) · pick 51",
-    "Muñoz (CRY) · pick 58",
     "Milenković (NFO) · pick 70",
     "Maguire (MUN) · pick 75",
-    "White (ARS) · pick 82"
+    "White (ARS) · pick 82",
+    "Ballard (SUN) · waiver"
    ],
    "MID": [
     "Saka (ARS) · pick 3",

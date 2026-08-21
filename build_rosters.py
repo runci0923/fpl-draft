@@ -31,11 +31,13 @@ out = {"_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = 
        "taken_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
                      .isoformat().replace("+00:00", "Z"),
        "rosters": {}}
-for m in sorted(d["managers"], key=lambda m: m["squad"][0]["pick"]):
+for m in sorted(d["managers"], key=lambda m: m.get("slot", 999)):
     byp = {p: [] for p in POS}
-    for s in sorted(m["squad"], key=lambda s: s["pick"]):
+    for s in sorted(m["squad"], key=lambda s: (s["pick"] is None, s["pick"] or 0)):
         n, c, p = INFO[s["id"]]
-        byp[p].append(f"{n} ({c}) · pick {s['pick']}")
+        # waiverrel szerzett játékosnak nincs pickje — ez a diffben rögtön látszik
+        how = f"pick {s['pick']}" if s.get("pick") else "waiver"
+        byp[p].append(f"{n} ({c}) · {how}")
     out["rosters"][m["first"]] = byp
 
 (HERE / "rosters.json").write_text(json.dumps(out, ensure_ascii=False, indent=1) + "\n",

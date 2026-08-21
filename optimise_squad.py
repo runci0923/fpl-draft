@@ -23,8 +23,17 @@ NEED = {"GKP": 2, "DEF": 5, "MID": 5, "FWD": 3}
 XI_MIN = {"GKP": 1, "DEF": 3, "MID": 2, "FWD": 1}
 XI_MAX = {"GKP": 1, "DEF": 5, "MID": 5, "FWD": 3}
 
-snaps = sorted((HERE / "proj_private").glob("*.json")) or sorted((HERE / "proj").glob("*.json"))
-if not snaps: sys.exit("nincs projekció-snapshot")
+def _newest(*dirs):
+    import datetime as _dt
+    c = [p for d in dirs for p in (HERE / d).glob("*.json")]
+    if not c: return None
+    def w(p):
+        t = json.loads(p.read_text(encoding="utf-8"))["taken_at"].replace("Z", "+00:00")
+        x = _dt.datetime.fromisoformat(t)
+        return x if x.tzinfo else x.replace(tzinfo=_dt.timezone.utc)
+    return sorted(c, key=w)[-1]
+snaps = [_newest("proj", "proj_private")]
+if not snaps[0]: sys.exit("nincs projekció-snapshot")
 S = json.loads(snaps[-1].read_text(encoding="utf-8"))
 gw0 = S["gw_from"]
 gws = [str(g) for g in range(gw0, gw0 + GWS)]

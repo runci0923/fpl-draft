@@ -16,7 +16,7 @@ A = ap.parse_args()
 H2H = pathlib.Path(A.h2h).read_text(encoding="utf-8")
 D = json.loads(pathlib.Path(A.data).read_text(encoding="utf-8"))
 MGRS = json.dumps([{"entry": m["entry"], "first": m["first"], "initials": m["initials"],
-                    "team": m.get("team", "")} for m in D["managers"]],
+                    "team": m.get("team", ""), "slot": m.get("slot", 999)} for m in D["managers"]],
                   ensure_ascii=False, separators=(",", ":"))
 
 TPL = r"""<title>__TITLE__</title>__HEAD__
