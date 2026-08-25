@@ -37,6 +37,20 @@ rounds, srcs = [], {}
 for f in sorted((HERE / "locked").glob("gw*.json")):
     r = json.loads(f.read_text(encoding="utf-8"))
     gw = r["gw"]
+    # játékosonkénti becslés a kanonikus pillanatképből (a pályaképhez)
+    ptip = {}
+    snapf = None
+    for dd in snapdirs:
+        pp = dd / (r.get("snapshot") or "")
+        if r.get("snapshot") and pp.exists(): snapf = pp; break
+    if snapf:
+        sn = json.loads(snapf.read_text(encoding="utf-8"))
+        for src, tbl in sn["data"].items():
+            ptip[src] = {int(k): (v.get(str(gw), {}) or {}).get("pts")
+                         for k, v in tbl.items()}
+    realp = {int(k): v for ent in (r.get("actual") or {}).get("teams", {}).values()
+             for k, v in ent.get("players", {}).items()}
+
     teams = {}
     for ent, lu in r["lineups"].items():
         t = {"xi": [], "bench": [], "tip": {}, "real": None}
@@ -44,7 +58,10 @@ for f in sorted((HERE / "locked").glob("gw*.json")):
             for i in lu[grp]:
                 p = P.get(str(i)) or {}
                 t[grp].append({"id": i, "n": p.get("n", str(i)),
-                               "c": p.get("c"), "p": p.get("p")})
+                               "c": p.get("c"), "p": p.get("p"),
+                               "tip": {s2: (v.get(i) if v.get(i) is not None else None)
+                                       for s2, v in ptip.items()},
+                               "real": realp.get(i)})
         for src, tv in (r.get("tips") or {}).items():
             srcs[src] = tv["label"]
             t["tip"][src] = tv["teams"].get(ent)

@@ -150,9 +150,7 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
 <div class="wrap">
   <p class="kicker" id="kick"></p>
   <h1 id="h1">A forduló</h1>
-  <p class="lede">Mindenki kerete a pályán, a <b>projektált pont szerinti legjobb legális
-  felállásban</b> — vagyis kiket <i>kellene</i> játszatni. Egymás mellett a párosítás két
-  csapata, és hogy ebből ki nyerne. Deadline után a lap a <b>tényleges</b> felállásra vált.</p>
+  <p class="lede" id="lede"></p>
 
   <nav class="nav">
     <span class="spacer"></span>
@@ -167,6 +165,7 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
     <span class="pills" id="pills" role="group" aria-label="Projekciós forrás"></span>
   </div>
 
+  <div class="dlstrip" id="gwpick"></div>
   <div class="dlstrip" id="dls"></div>
 
   <div id="ties"></div>
@@ -174,7 +173,6 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
   <div class="sec">
     <div class="sec-h"><h2>Fordulók</h2>
       <p>lezárt fordulóknál a tipp és a végeredmény &middot; a jövőnél a becslés</p></div>
-    <div class="dlstrip" id="gwpick"></div>
     <div id="histview"></div>
   </div>
 
@@ -188,9 +186,14 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
 const H = JSON.parse(document.getElementById('h2h').textContent);
 const M = JSON.parse(document.getElementById('mgrs').textContent);
 const NAME = Object.fromEntries(M.map(m => [m.entry, m]));
-const GW = String(H.next_event || H.current_event || Object.keys(H.rounds)[0]);
-const SRCS = Object.entries(H.sources).map(([slug, s]) => ({slug, ...s}))
-  .filter(s => (H.rounds[GW] || {})[s.slug]);
+let GW = String(H.next_event || H.current_event || Object.keys(H.rounds)[0]);
+const HI0 = JSON.parse(document.getElementById('histdata').textContent || 'null');
+const LOCKED = Object.fromEntries(((HI0 && HI0.rounds) || []).map(r => [String(r.gw), r]));
+const ALLGW = [...new Set([...Object.keys(H.rounds || {}), ...Object.keys(LOCKED)])]
+  .map(Number).sort((a, b) => a - b);
+// alap: a legfrissebb LEZÁRT forduló, ha van; különben a következő
+if (Object.keys(LOCKED).length) GW = String(Math.max(...Object.keys(LOCKED).map(Number)));
+const SRCS = Object.entries(H.sources).map(([slug, s]) => ({slug, ...s}));
 // alapértelmezés: FPL Hub (a tulaj választása), különben az első elérhető
 let active = ['ffhub','fplform'].find(k => SRCS.some(s => s.slug === k)) || (SRCS[0] || {}).slug;
 
@@ -209,6 +212,35 @@ function playerCard(p, opts = {}) {
     <span class="pt">${p.proj.toFixed(1)}${p.act !== null && p.act !== undefined
       ? `<span class="real">valós ${p.act}</span>` : ''}</span>
   </span>`;
+}
+
+function lockedPitch(ent, t, srcKey) {
+  const rows = ROWS.map(([k]) => {
+    const g = t.xi.filter(p => p.p === k);
+    if (!g.length) return '';
+    return `<div class="row">${g.map(p => `<span class="pl">
+      <span class="n">${esc(p.n)}</span>
+      <span class="fx">${esc(p.c || '')} · ${p.p}</span>
+      <span class="pt">${p.real !== null && p.real !== undefined
+        ? p.real + `<span class="real">tipp ${(p.tip[srcKey] ?? 0).toFixed(1)}</span>`
+        : (p.tip[srcKey] ?? 0).toFixed(1)}</span></span>`).join('')}</div>`;
+  }).join('');
+  const bGk = t.bench.filter(p => p.p === 'GKP'), bOut = t.bench.filter(p => p.p !== 'GKP');
+  const card = p => `<span class="pl"><span class="n">${esc(p.n)}</span>
+    <span class="fx">${esc(p.c || '')} · ${p.p}</span>
+    <span class="pt">${p.real !== null && p.real !== undefined
+      ? p.real + `<span class="real">tipp ${(p.tip[srcKey] ?? 0).toFixed(1)}</span>`
+      : (p.tip[srcKey] ?? 0).toFixed(1)}</span></span>`;
+  const shown = t.real ? t.real.xi : (t.tip[srcKey] || {}).xi;
+  return `<div class="pitch">
+    <div class="turf">${rows}</div>
+    <div class="bench"><div class="plabel">Kispad</div><div class="row">
+      <span class="bgrp gk">${bGk.map(card).join('')}</span>
+      <span class="bgrp">${bOut.map(card).join('')}</span></div></div>
+    <div class="tot"><span>${t.real ? 'valós / tipp' : 'tipp'}</span>
+      <b>${t.real ? t.real.xi + ' / ' + ((t.tip[srcKey] || {}).xi ?? 0).toFixed(1)
+                  : (((t.tip[srcKey] || {}).xi) ?? 0).toFixed(1)}</b></div>
+  </div>`;
 }
 
 function pitch(ent, t, realMode) {
@@ -235,11 +267,26 @@ function pitch(ent, t, realMode) {
   </div>`;
 }
 
+function renderPick() {
+  document.getElementById('gwpick').innerHTML = ALLGW.map(g => {
+    const l = LOCKED[String(g)];
+    const tag = l ? (l.has_real ? 'eredmény' : 'lezárva') : 'becslés';
+    return `<button class="gwb ${l ? 'done' : 'fut'}" data-hgw="${g}"
+      aria-pressed="${String(g) === GW}">GW${g} · ${tag}</button>`;
+  }).join('');
+}
+
 function render() {
+  renderPick();
+  const lock = LOCKED[GW];
+  if (lock) return renderLocked(lock);
   const r = (H.rounds[GW] || {})[active];
   document.getElementById('kick').textContent =
     `${H.league.name} · ${H.league.size} csapat · FPL Draft ${'2026/27'}`;
   document.getElementById('h1').textContent = `${GW}. forduló`;
+  document.getElementById('lede').innerHTML = `<b>Még hátralévő forduló:</b> mindenki kerete a
+    pályán, a <b>projektált pont szerinti legjobb legális felállásban</b> — vagyis kiket
+    <i>kellene</i> játszatni. Egymás mellett a párosítás két csapata, és hogy ebből ki nyerne.`;
   document.getElementById('bgw').innerHTML = `<b>${GW}.</b>`;
   document.getElementById('bsnap').innerHTML = `<b>${esc(H.taken_at.replace('T',' ').replace('Z',' UTC'))}</b>`;
   const anyReal = r && Object.values(r.teams).some(t => t.real_xi);
@@ -293,10 +340,68 @@ function render() {
      olvashatók: <code>git log -p rosters.json</code>.`;
 }
 
+function renderLocked(lock) {
+  const avail = SRCS.filter(s => LOCKED[GW] && Object.keys(lock.teams).length
+    && Object.values(lock.teams)[0].tip && Object.values(lock.teams)[0].tip[s.slug]);
+  const use = avail.some(s => s.slug === active) ? active : (avail[0] || {}).slug;
+  document.getElementById('kick').textContent =
+    `${H.league.name} · ${H.league.size} csapat · FPL Draft 2026/27`;
+  document.getElementById('h1').textContent = `${GW}. forduló`;
+  document.getElementById('lede').innerHTML = lock.has_real
+    ? `<b>Lezárt forduló:</b> a pályán a <b>tényleges</b> felállás, a nagy szám a
+       <b>valós pont</b>, alatta a deadline előtti <b>tipp</b>. Így egymás mellett látszik,
+       mit mondott a becslés és mi lett belőle.`
+    : `<b>Lezárt forduló:</b> a pályán a <b>tényleges</b> felállás és a deadline előtti
+       <b>tipp</b>. A valós pontok még nincsenek meg.`;
+  document.getElementById('bgw').innerHTML = `<b>${GW}.</b>`;
+  document.getElementById('bsnap').innerHTML =
+    `<b>${esc((lock.snapshot_at || '').replace('T', ' ').replace(':00Z', ' UTC'))}</b>`;
+  document.getElementById('bstate').innerHTML = lock.has_real
+    ? `<span class="state">${lock.provisional ? 'ideiglenes eredmény' : 'végleges eredmény'}</span>`
+    : '<span class="state">lezárva · eredményre vár</span>';
+  document.getElementById('pills').innerHTML = avail.map(s =>
+    `<button class="pill" data-s="${s.slug}" aria-pressed="${s.slug === use}">${esc(s.label)}</button>`).join('');
+
+  const nmOf = e => (HI0 && HI0.managers[e] ? HI0.managers[e].first : (NAME[e] || {}).first || e);
+  document.getElementById('ties').innerHTML = (lock.matches || []).map(m => {
+    const th = lock.teams[m.home], ta = lock.teams[m.away];
+    const useReal = !!(th.real && ta.real);
+    const sh = useReal ? th.real.xi : (th.tip[use] || {}).xi;
+    const sa = useReal ? ta.real.xi : (ta.tip[use] || {}).xi;
+    const diff = Math.abs(sh - sa);
+    const txt = sh > sa ? `${esc(nmOf(m.home))} nyer, ${diff.toFixed(1)} ponttal`
+              : sa > sh ? `${esc(nmOf(m.away))} nyer, ${diff.toFixed(1)} ponttal` : 'döntetlen';
+    const fmt = v => useReal ? v : v.toFixed(1);
+    return `<section class="tie">
+      <header class="tie-h">
+        <span class="side"><span class="who ${sh > sa ? 'win' : ''}">${esc(nmOf(m.home))}</span>
+          <span class="sub">tényleges felállás</span></span>
+        <span class="vs"><span class="sc"><span class="${sh > sa ? 'win' : ''}">${fmt(sh)}</span>
+          <span class="mid">–</span><span class="${sa > sh ? 'win' : ''}">${fmt(sa)}</span></span>
+          <span class="tip${sh === sa ? ' draw' : ''}">${useReal ? '' : 'tipp: '}${txt}</span></span>
+        <span class="side r"><span class="who ${sa > sh ? 'win' : ''}">${esc(nmOf(m.away))}</span>
+          <span class="sub">tényleges felállás</span></span>
+      </header>
+      <div class="pitches">${lockedPitch(m.home, th, use)}${lockedPitch(m.away, ta, use)}</div>
+    </section>`;
+  }).join('');
+
+  const s0 = SRCS.find(x => x.slug === use) || {};
+  document.getElementById('foot').innerHTML =
+    `<b>Ez egy lezárt forduló.</b> A pályán a <b>tényleges</b> felállás áll — az, amit valóban
+     kiállítottak. A kártyán a nagy szám a ${lock.has_real ? 'VALÓS pont, alatta a tipp'
+     : 'tipp (a valós pontok még nincsenek meg)'}. A tipp a
+     ${esc((lock.snapshot_at || '').replace('T', ' ').replace(':00Z', ' UTC'))}-i,
+     tehát a deadline előtti utolsó becslésből (${esc(s0.label || '')}).<br>
+     <b>Miért nem módosítható.</b> A tipp csak akkor tipp, ha a deadline előtt rögzítettük.
+     Utólag nem írjuk át — ez a mérés lényege.`;
+  renderHist();
+}
+
 /* ---------- deadline-csík + tipp/valóság ---------- */
 const HI = JSON.parse(document.getElementById('histdata').textContent || 'null');
 
-let hgw = null;
+let hgw = null;   // a lenti szekció a fenti választót követi
 
 function gwCatalog() {
   const locked = {}, proj = {};
@@ -317,19 +422,9 @@ function renderHist() {
   } else strip.innerHTML = '';
 
   const {locked, proj, all} = gwCatalog();
-  const box = document.getElementById('histview'), pick = document.getElementById('gwpick');
-  if (!all.length) { pick.innerHTML = ''; box.innerHTML = ''; return; }
-  if (hgw === null) {
-    const doneGws = Object.keys(locked).map(Number);
-    hgw = doneGws.length ? Math.max(...doneGws) : all[0];
-  }
-
-  pick.innerHTML = all.map(g => {
-    const l = locked[g];
-    const cls = l ? 'done' : 'fut';
-    const tag = l ? (l.has_real ? 'eredmény' : 'lezárva') : 'becslés';
-    return `<button class="gwb ${cls}" data-hgw="${g}" aria-pressed="${g === hgw}">GW${g} · ${tag}</button>`;
-  }).join('');
+  const box = document.getElementById('histview');
+  if (!all.length) { box.innerHTML = ''; return; }
+  hgw = +GW;
 
   const nm = e => (HI && HI.managers[e] ? HI.managers[e].first : (NAME[e] || {}).first || e);
   const rd = locked[hgw];
@@ -442,7 +537,7 @@ function renderHist() {
 
 document.addEventListener('click', ev => {
   const b = ev.target.closest('.gwb');
-  if (b) { hgw = +b.dataset.hgw; renderHist(); }
+  if (b) { GW = String(+b.dataset.hgw); render(); }
 });
 
 document.getElementById('pills').addEventListener('click', ev => {
@@ -450,7 +545,7 @@ document.getElementById('pills').addEventListener('click', ev => {
   active = b.dataset.s; render();
 });
 render();
-renderHist();
+if (!LOCKED[GW]) renderHist();
 </script>
 """
 
