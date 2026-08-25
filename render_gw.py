@@ -116,6 +116,16 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
 .dlstrip span b{color:var(--fg);font-weight:500}
 .dlstrip span.nx{border-color:var(--coral);color:var(--coral)}
 .dlstrip span.nx b{color:var(--coral)}
+.gwb{font-family:var(--mono);font-size:11.5px;padding:5px 12px;border-radius:999px;
+  border:1.5px solid var(--rule);background:transparent;color:var(--dim);cursor:pointer}
+.gwb:hover{border-color:var(--fg);color:var(--fg)}
+.gwb[aria-pressed="true"]{background:var(--fg);border-color:var(--fg);color:var(--bg)}
+.gwb.done{border-style:solid}
+.gwb.fut{border-style:dashed}
+.hit{color:var(--coral);font-weight:500}
+.miss{color:var(--dim)}
+.prov{font-family:var(--mono);font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;
+  border:1px solid var(--coral);color:var(--coral);border-radius:999px;padding:1px 7px;margin-left:8px}
 .htbl{overflow-x:auto;border:1px solid var(--rule);border-radius:var(--r-md);
   background:var(--surface);box-shadow:var(--sh-sm);margin-top:16px}
 .htbl table{width:100%;border-collapse:collapse;min-width:640px}
@@ -162,8 +172,9 @@ h2{font-size:clamp(18px,2.2vw,24px);font-weight:600;letter-spacing:-.01em;margin
   <div id="ties"></div>
 
   <div class="sec">
-    <div class="sec-h"><h2>Tipp és valóság</h2>
-      <p>a deadline előtti utolsó becslés a TÉNYLEGES felállásra, majd a valós pontok</p></div>
+    <div class="sec-h"><h2>Fordulók</h2>
+      <p>lezárt fordulóknál a tipp és a végeredmény &middot; a jövőnél a becslés</p></div>
+    <div class="dlstrip" id="gwpick"></div>
     <div id="histview"></div>
   </div>
 
@@ -285,92 +296,154 @@ function render() {
 /* ---------- deadline-csík + tipp/valóság ---------- */
 const HI = JSON.parse(document.getElementById('histdata').textContent || 'null');
 
+let hgw = null;
+
+function gwCatalog() {
+  const locked = {}, proj = {};
+  for (const r of (HI && HI.rounds) || []) locked[r.gw] = r;
+  for (const k of Object.keys(H.rounds || {})) proj[+k] = true;
+  const all = [...new Set([...Object.keys(locked).map(Number), ...Object.keys(proj).map(Number)])]
+    .sort((a, b) => a - b);
+  return {locked, proj, all};
+}
+
 function renderHist() {
   const strip = document.getElementById('dls');
   if (HI && HI.upcoming && HI.upcoming.length) {
     const fmt = t => t.replace('T', ' ').replace(':00Z', ' UTC');
-    strip.innerHTML = HI.upcoming.slice(0, 5).map((e, i) =>
+    strip.innerHTML = HI.upcoming.slice(0, 4).map((e, i) =>
       `<span class="${i === 0 ? 'nx' : ''}">GW${e.gw} deadline: <b>${esc(fmt(e.deadline))}</b>${
-        i === 0 ? ` · lezárás +${HI.lock_after_minutes} perc` : ''}</span>`).join('');
+        i === 0 && HI.lock_after_minutes ? ` · lezárás +${HI.lock_after_minutes} perc` : ''}</span>`).join('');
   } else strip.innerHTML = '';
 
-  const box = document.getElementById('histview');
-  if (!HI) { box.innerHTML = ''; return; }
-  const done = (HI.rounds || []).filter(r => r.has_tip || r.has_real);
-  if (!done.length) {
-    box.innerHTML = `<p class="empty2">Még nincs lezárt forduló.
-      A rendszer a deadline után <b>${HI.lock_after_minutes} perccel</b> lezárja a fordulót:
-      lehúzza a <b>tényleges felállásokat</b> (előtte az API nem adja ki), és hozzájuk párosítja
-      a <b>deadline előtti utolsó becslést</b> — így a tipp arra a csapatra szól, amit valóban
-      kiállítottak. Amikor a forduló véget ér, ugyanabba a rekordba bekerülnek a <b>valós
-      pontok</b>, és innentől itt látszik a kettő egymás mellett, forrásonként.</p>`;
+  const {locked, proj, all} = gwCatalog();
+  const box = document.getElementById('histview'), pick = document.getElementById('gwpick');
+  if (!all.length) { pick.innerHTML = ''; box.innerHTML = ''; return; }
+  if (hgw === null) {
+    const doneGws = Object.keys(locked).map(Number);
+    hgw = doneGws.length ? Math.max(...doneGws) : all[0];
+  }
+
+  pick.innerHTML = all.map(g => {
+    const l = locked[g];
+    const cls = l ? 'done' : 'fut';
+    const tag = l ? (l.has_real ? 'eredmény' : 'lezárva') : 'becslés';
+    return `<button class="gwb ${cls}" data-hgw="${g}" aria-pressed="${g === hgw}">GW${g} · ${tag}</button>`;
+  }).join('');
+
+  const nm = e => (HI && HI.managers[e] ? HI.managers[e].first : (NAME[e] || {}).first || e);
+  const rd = locked[hgw];
+
+  // --- JÖVŐ: csak becslés van
+  if (!rd) {
+    const per = H.rounds[String(hgw)] || {};
+    const ks = Object.keys(per);
+    if (!ks.length) { box.innerHTML = '<p class="empty2">Erre a fordulóra nincs adat.</p>'; return; }
+    box.innerHTML = `<p class="empty2" style="border:0;padding:0;margin:10px 0 0">
+      GW${hgw} még nem volt — itt a <b>becslés</b> áll, a keretből kihozható legjobb legális
+      XI-re. A tipp majd a deadline után a <b>tényleges</b> felállásra rögzül.</p>
+      <div class="htbl"><table><thead><tr><th class="l">Párosítás</th>` +
+      ks.map(k => `<th>${esc(H.sources[k].label)}</th>`).join('') + `</tr></thead><tbody>` +
+      (per[ks[0]].matches || []).map(m => `<tr>
+        <td class="l nm3">${esc(nm(m.home))} – ${esc(nm(m.away))}</td>` +
+        ks.map(k => {
+          const mm = per[k].matches.find(x => x.home === m.home && x.away === m.away);
+          if (!mm) return '<td class="dimc">–</td>';
+          const w = mm.proj[0] > mm.proj[1] ? nm(m.home) : nm(m.away);
+          return `<td class="dimc">${mm.proj[0].toFixed(1)} – ${mm.proj[1].toFixed(1)}
+                  <span style="display:block;font-size:10px">${esc(w)}</span></td>`;
+        }).join('') + '</tr>').join('') + '</tbody></table></div>';
     return;
   }
-  const SR = Object.keys(HI.sources);
-  const nm = e => (HI.managers[e] || {}).first || e;
-  let html = '';
 
-  if (Object.values(HI.accuracy || {}).some(a => a.mae !== null)) {
-    html += `<h3 style="margin:18px 0 0;font-size:16px">Melyik becslés talál jobban</h3>
-      <div class="htbl"><table><thead><tr><th class="l">Forrás</th>
-      <th>Átlagos eltérés</th><th>Mintaszám</th></tr></thead><tbody>` +
+  // --- LEZÁRT forduló
+  const SR = Object.keys(HI.sources);
+  const prov = rd.has_real && (rd.provisional === true);
+  let html = `<p class="empty2" style="border:0;padding:0;margin:10px 0 0">
+    A tipp a <b>${esc((rd.snapshot_at || '').replace('T', ' ').replace(':00Z', ' UTC'))}</b>-i
+    becslésből, a <b>tényleges</b> felállásra — vagyis arra a csapatra, amit valóban kiállítottak.
+    ${rd.has_real ? '' : 'A valós pontok még nincsenek meg.'}
+    ${prov ? '<span class="prov">ideiglenes — a bónusz még nincs lezárva</span>' : ''}</p>`;
+
+  html += `<div class="htbl"><table><thead><tr><th class="l">Párosítás</th>` +
+    SR.map(k => `<th>${esc(HI.sources[k])}</th>`).join('') +
+    `<th>Végeredmény</th></tr></thead><tbody>`;
+  for (const m of rd.matches) {
+    const th = rd.teams[m.home], ta = rd.teams[m.away];
+    const realW = th.real && ta.real ? (th.real.xi > ta.real.xi ? m.home : m.away) : null;
+    html += `<tr><td class="l nm3">${esc(nm(m.home))} – ${esc(nm(m.away))}</td>` +
+      SR.map(k => {
+        const a = (th.tip || {})[k], b = (ta.tip || {})[k];
+        if (!a || !b) return '<td class="dimc">–</td>';
+        const w = a.xi > b.xi ? m.home : m.away;
+        const cls = realW === null ? 'dimc' : (w === realW ? 'hit' : 'miss');
+        return `<td class="${cls}">${a.xi.toFixed(1)} – ${b.xi.toFixed(1)}
+                <span style="display:block;font-size:10px">${esc(nm(w))}${
+                  realW === null ? '' : (w === realW ? ' ✓' : ' ✗')}</span></td>`;
+      }).join('') +
+      `<td>${th.real && ta.real
+        ? `<b>${th.real.xi} – ${ta.real.xi}</b><span style="display:block;font-size:10px" class="dimc">${esc(nm(realW))}</span>`
+        : '<span class="dimc">–</span>'}</td></tr>`;
+  }
+  html += '</tbody></table></div>';
+
+  // managerenkénti eltérés
+  if (rd.has_real) {
+    html += `<h3 style="margin:20px 0 0;font-size:16px">Managerenként</h3>
+      <div class="htbl"><table><thead><tr><th class="l">Manager</th>` +
+      SR.map(k => `<th>${esc(HI.sources[k])}</th>`).join('') +
+      `<th>Valós</th><th>Eltérés</th></tr></thead><tbody>` +
+      Object.entries(rd.teams).map(([e, t]) => ({e, t}))
+        .filter(x => x.t.real)
+        .sort((a, b) => b.t.real.xi - a.t.real.xi)
+        .map(({e, t}) => {
+          const d = t.real.xi - ((t.tip || {})[SR[0]] || {}).xi;
+          return `<tr><td class="l nm3">${esc(nm(e))}</td>` +
+            SR.map(k => `<td class="dimc">${(t.tip || {})[k] ? t.tip[k].xi.toFixed(1) : '–'}</td>`).join('') +
+            `<td><b>${t.real.xi}</b></td>
+             <td class="${Math.abs(d) > 10 ? 'hit' : 'dimc'}">${d >= 0 ? '+' : ''}${d.toFixed(1)}</td></tr>`;
+        }).join('') + '</tbody></table></div>';
+  }
+
+  // felállítás-hatékonyság
+  if (rd.efficiency && Object.keys(rd.efficiency).length) {
+    const k0 = Object.keys(rd.efficiency)[0];
+    html += `<h3 style="margin:20px 0 0;font-size:16px">Felállítás-hatékonyság</h3>
+      <p class="empty2" style="border:0;padding:0;margin:4px 0 0">Mennyit hagyott az asztalon
+      a <b>kiállítással</b>: a tényleges XI becsült pontja a keretből kihozható legjobbhoz mérve
+      (${esc(HI.sources[k0])}).</p>
+      <div class="htbl"><table><thead><tr><th class="l">Manager</th><th>Tényleges</th>
+      <th>Legjobb</th><th>Elhagyott</th></tr></thead><tbody>` +
+      Object.entries(rd.efficiency[k0]).map(([e, v]) => ({e, ...v}))
+        .sort((a, b) => (a.left ?? 99) - (b.left ?? 99))
+        .map(v => `<tr><td class="l nm3">${esc(nm(v.e))}</td>
+          <td class="dimc">${v.actual.toFixed(1)}</td>
+          <td class="dimc">${v.best === null ? '–' : v.best.toFixed(1)}</td>
+          <td class="${v.left > 3 ? 'hit' : 'dimc'}">${v.left === null ? '–' : v.left.toFixed(1)}</td>
+        </tr>`).join('') + '</tbody></table></div>';
+  }
+
+  // forrás-pontosság (összesített)
+  if (HI.accuracy && Object.values(HI.accuracy).some(a => a.mae !== null)) {
+    const n = Math.max(...Object.values(HI.accuracy).map(a => a.n || 0));
+    html += `<h3 style="margin:20px 0 0;font-size:16px">Melyik becslés talál jobban — összesítve</h3>
+      <p class="empty2" style="border:0;padding:0;margin:4px 0 0">Átlagos eltérés a kezdő XI-re,
+      minden lezárt fordulóból. ${n < 30 ? '<b>Vigyázat:</b> ' + n + ' mérésből ez még zaj — '
+      + '5-6 forduló után lesz értelme.' : ''}</p>
+      <div class="htbl"><table><thead><tr><th class="l">Forrás</th><th>Átlagos eltérés</th>
+      <th>Minta</th></tr></thead><tbody>` +
       Object.entries(HI.accuracy).sort((a, b) => (a[1].mae ?? 99) - (b[1].mae ?? 99))
         .map(([k, v]) => `<tr><td class="l nm3">${esc(v.label)}</td>
           <td>${v.mae === null ? '–' : v.mae.toFixed(2)}</td>
           <td class="dimc">${v.n}</td></tr>`).join('') + '</tbody></table></div>';
   }
-
-  // felállítás-hatékonyság: a tényleges XI a lehető legjobbhoz mérve
-  const withEff = done.filter(r => r.efficiency && Object.keys(r.efficiency).length);
-  if (withEff.length) {
-    const rd = withEff[withEff.length - 1];
-    const k0 = Object.keys(rd.efficiency)[0];
-    html += `<h3 style="margin:22px 0 0;font-size:16px">Felállítás-hatékonyság — GW${rd.gw}</h3>
-      <p class="empty2" style="border:0;padding:0;margin:4px 0 0">Mennyit hagyott az asztalon
-      azzal, ahogy <b>kiállította</b> a csapatot: a tényleges kezdő XI becsült pontja a
-      keretből kihozható legjobb XI-hez mérve. ${esc(HI.sources[k0])} szerint.</p>
-      <div class="htbl"><table><thead><tr><th class="l">Manager</th>
-      <th>Tényleges XI</th><th>Lehető legjobb</th><th>Elhagyott</th></tr></thead><tbody>` +
-      Object.entries(rd.efficiency[k0]).map(([e, v]) => ({e, ...v}))
-        .sort((a, b2) => (a.left ?? 99) - (b2.left ?? 99))
-        .map(v => `<tr><td class="l nm3">${esc(nm(v.e))}</td>
-          <td class="dimc">${v.actual.toFixed(1)}</td>
-          <td class="dimc">${v.best === null ? '–' : v.best.toFixed(1)}</td>
-          <td class="${v.left > 3 ? 'd-pos' : 'dimc'}">${v.left === null ? '–' : v.left.toFixed(1)}</td>
-        </tr>`).join('') + '</tbody></table></div>';
-  }
-
-  for (const rd of done.slice().reverse()) {
-    html += `<h3 style="margin:22px 0 0;font-size:16px">GW${rd.gw}${
-      rd.has_real ? '' : ' — még tart'}</h3>
-      <div class="htbl"><table><thead><tr><th class="l">Párosítás</th>` +
-      SR.map(k => `<th>${esc(HI.sources[k])}</th>`).join('') +
-      `<th>Valós</th><th class="l">Eltérés</th></tr></thead><tbody>`;
-    for (const m of rd.matches) {
-      const th = rd.teams[m.home], ta = rd.teams[m.away];
-      const cell = k => {
-        const a = (th.tip || {})[k], b = (ta.tip || {})[k];
-        return a && b ? `${a.xi.toFixed(1)} – ${b.xi.toFixed(1)}` : '–';
-      };
-      const real = th.real && ta.real ? `${th.real.xi} – ${ta.real.xi}` : '–';
-      let diff = '–';
-      if (th.real && ta.real && SR.length) {
-        const k = SR[0], a = (th.tip || {})[k], b = (ta.tip || {})[k];
-        if (a && b) {
-          const dh = th.real.xi - a.xi, da = ta.real.xi - b.xi;
-          diff = `${nm(m.home)} ${dh >= 0 ? '+' : ''}${dh.toFixed(1)} · ` +
-                 `${nm(m.away)} ${da >= 0 ? '+' : ''}${da.toFixed(1)}`;
-        }
-      }
-      html += `<tr><td class="l nm3">${esc(nm(m.home))} – ${esc(nm(m.away))}</td>` +
-        SR.map(k => `<td class="dimc">${cell(k)}</td>`).join('') +
-        `<td class="${th.real ? 'd-pos' : 'dimc'}">${real}</td>
-         <td class="l dimc">${esc(diff)}</td></tr>`;
-    }
-    html += '</tbody></table></div>';
-  }
   box.innerHTML = html;
 }
+
+document.addEventListener('click', ev => {
+  const b = ev.target.closest('.gwb');
+  if (b) { hgw = +b.dataset.hgw; renderHist(); }
+});
 
 document.getElementById('pills').addEventListener('click', ev => {
   const b = ev.target.closest('.pill'); if (!b) return;

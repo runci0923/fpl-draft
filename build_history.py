@@ -74,6 +74,7 @@ for f in sorted((HERE / "locked").glob("gw*.json")):
     rounds.append({"gw": gw, "deadline": r["deadline"], "snapshot_at": r.get("snapshot_at"),
                    "efficiency": eff,
                    "has_tip": bool(r.get("tips")), "has_real": bool(r.get("actual")),
+                   "provisional": bool((r.get("actual") or {}).get("provisional")),
                    "matches": r.get("matches", []), "teams": teams})
 
 # --- forrás-pontosság: |tipp - valós| a kezdő XI-re, csak lezárult fordulókból
