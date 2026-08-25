@@ -24,6 +24,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "Thomas",
+   "eid": 173,
    "club": "COV",
    "rate": "green",
    "fx": [
@@ -39,6 +40,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "Greaves",
+   "eid": 306,
    "club": "IPS",
    "rate": "green",
    "tag": "new",
@@ -55,6 +57,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "Diop",
+   "eid": 259,
    "club": "IPS",
    "rate": "green",
    "fx": [
@@ -70,6 +73,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "van Ewijk",
+   "eid": 175,
    "club": "COV",
    "rate": "green",
    "fx": [
@@ -85,6 +89,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "Davis",
+   "eid": 305,
    "club": "IPS",
    "rate": "yellow",
    "fx": [
@@ -100,6 +105,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "O'Shea",
+   "eid": 304,
    "club": "IPS",
    "rate": "yellow",
    "trend": "down",
@@ -116,6 +122,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "Hughes",
+   "eid": 278,
    "club": "HUL",
    "rate": "yellow",
    "fx": [
@@ -131,6 +138,7 @@
    "pos": "DEF",
    "price": 4.0,
    "n": "O'Nien",
+   "eid": 539,
    "club": "SUN",
    "rate": "orange",
    "tag": "new",
@@ -147,6 +155,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Shaw",
+   "eid": 423,
    "club": "MUN",
    "rate": "green",
    "fx": [
@@ -162,6 +171,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Ajer",
+   "eid": 87,
    "club": "BRE",
    "rate": "green",
    "trend": "up",
@@ -178,6 +188,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Kayode",
+   "eid": 88,
    "club": "BRE",
    "rate": "yellow",
    "fx": [
@@ -193,6 +204,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Rodon",
+   "eid": 329,
    "club": "LEE",
    "rate": "yellow",
    "tag": "new",
@@ -209,6 +221,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "De Cuyper",
+   "eid": 115,
    "club": "BHA",
    "rate": "yellow",
    "tag": "new",
@@ -224,7 +237,9 @@
   {
    "pos": "DEF",
    "price": 4.5,
-   "n": "Kadioglu",
+   "n": "F.Kadıoğlu",
+   "sheet_n": "Kadioglu",
+   "eid": 113,
    "club": "BHA",
    "rate": "yellow",
    "fx": [
@@ -240,6 +255,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Aina",
+   "eid": 473,
    "club": "NFO",
    "rate": "yellow",
    "fx": [
@@ -255,6 +271,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Cash",
+   "eid": 32,
    "club": "AVL",
    "rate": "orange",
    "trend": "down",
@@ -271,6 +288,7 @@
    "pos": "DEF",
    "price": 4.5,
    "n": "Chadi Riad",
+   "eid": 206,
    "club": "CRY",
    "rate": "orange",
    "tag": "new",
@@ -287,6 +305,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "Maguire",
+   "eid": 418,
    "club": "MUN",
    "rate": "green",
    "fx": [
@@ -302,6 +321,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "Ballard",
+   "eid": 532,
    "club": "SUN",
    "rate": "green",
    "fx": [
@@ -317,6 +337,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "Vuskovic",
+   "eid": 504,
    "club": "BHA",
    "rate": "green",
    "trend": "up",
@@ -333,6 +354,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "Jacquet",
+   "eid": 362,
    "club": "LIV",
    "rate": "green",
    "tag": "new",
@@ -348,7 +370,9 @@
   {
    "pos": "DEF",
    "price": 5.0,
-   "n": "van Hecke",
+   "n": "Van Hecke",
+   "sheet_n": "van Hecke",
+   "eid": 112,
    "club": "TOT",
    "rate": "green",
    "tag": "new",
@@ -365,6 +389,7 @@
    "pos": "MID",
    "price": 5.0,
    "n": "Gomez",
+   "eid": 127,
    "club": "BHA",
    "rate": "green",
    "fx": [
@@ -380,7 +405,9 @@
   {
    "pos": "MID",
    "price": 5.0,
-   "n": "Sangare",
+   "n": "I.Sangaré",
+   "sheet_n": "Sangare",
+   "eid": 488,
    "club": "NFO",
    "rate": "orange",
    "tag": "new",
@@ -398,6 +425,7 @@
    "pos": "MID",
    "price": 5.0,
    "n": "Nørgaard",
+   "eid": 21,
    "club": "BRE",
    "rate": "orange",
    "trend": "down",
@@ -411,6 +439,7 @@
    "pos": "MID",
    "price": 5.5,
    "n": "Groß",
+   "eid": 124,
    "club": "BHA",
    "rate": "green",
    "fx": [
@@ -426,7 +455,9 @@
   {
    "pos": "MID",
    "price": 5.5,
-   "n": "Sangaré",
+   "n": "M.Sangaré",
+   "sheet_n": "Sangaré",
+   "eid": 565,
    "club": "BRE",
    "rate": "green",
    "fx": [
@@ -443,6 +474,7 @@
    "pos": "MID",
    "price": 5.5,
    "n": "Iwobi",
+   "eid": 261,
    "club": "FUL",
    "rate": "yellow",
    "fx": [
@@ -459,6 +491,7 @@
    "pos": "MID",
    "price": 5.5,
    "n": "Ayari",
+   "eid": 129,
    "club": "BHA",
    "rate": "yellow",
    "tag": "new",
@@ -476,6 +509,7 @@
    "pos": "MID",
    "price": 5.5,
    "n": "Xhaka",
+   "eid": 544,
    "club": "SUN",
    "rate": "orange",
    "trend": "down",
@@ -493,6 +527,7 @@
    "pos": "MID",
    "price": 5.5,
    "n": "Wharton",
+   "eid": 210,
    "club": "CRY",
    "rate": "orange",
    "fx": [
@@ -509,6 +544,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Ndiaye",
+   "eid": 237,
    "club": "EVE",
    "rate": "green",
    "fx": [
@@ -525,6 +561,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Schade",
+   "eid": 94,
    "club": "BRE",
    "rate": "green",
    "fx": [
@@ -541,6 +578,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "E.Le Fée",
+   "eid": 542,
    "club": "SUN",
    "rate": "green",
    "fx": [
@@ -557,6 +595,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Buendía",
+   "eid": 41,
    "club": "AVL",
    "rate": "green",
    "trend": "up",
@@ -574,6 +613,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Tavernier",
+   "eid": 68,
    "club": "BOU",
    "rate": "yellow",
    "fx": [
@@ -590,6 +630,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Garner",
+   "eid": 239,
    "club": "EVE",
    "rate": "yellow",
    "fx": [
@@ -606,6 +647,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Tel",
+   "eid": 514,
    "club": "TOT",
    "rate": "yellow",
    "trend": "up",
@@ -623,6 +665,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Stach",
+   "eid": 335,
    "club": "LEE",
    "rate": "yellow",
    "fx": [
@@ -639,6 +682,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Kluivert",
+   "eid": 70,
    "club": "BOU",
    "rate": "orange",
    "fx": [
@@ -655,6 +699,7 @@
    "pos": "MID",
    "price": 6.0,
    "n": "Scott",
+   "eid": 69,
    "club": "BOU",
    "rate": "orange",
    "fx": [
@@ -671,6 +716,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "Sarr",
+   "eid": 208,
    "club": "CRY",
    "rate": "green",
    "fx": [
@@ -687,6 +733,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "O.Dango",
+   "eid": 95,
    "club": "BRE",
    "rate": "green",
    "fx": [
@@ -703,6 +750,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "Anderson",
+   "eid": 481,
    "club": "MCI",
    "rate": "green",
    "fx": [
@@ -719,6 +767,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "Tzolis",
+   "eid": 557,
    "club": "ARS",
    "rate": "green",
    "trend": "up",
@@ -736,6 +785,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "Ødegaard",
+   "eid": 15,
    "club": "ARS",
    "rate": "green",
    "trend": "up",
@@ -753,6 +803,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "Rayan",
+   "eid": 67,
    "club": "BOU",
    "rate": "yellow",
    "fx": [
@@ -769,6 +820,7 @@
    "pos": "MID",
    "price": 6.5,
    "n": "Dewsbury-Hall",
+   "eid": 236,
    "club": "EVE",
    "rate": "yellow",
    "fx": [
@@ -785,6 +837,7 @@
    "pos": "MID",
    "price": 7.0,
    "n": "Szoboszlai",
+   "eid": 368,
    "club": "LIV",
    "rate": "green",
    "fx": [
@@ -801,6 +854,7 @@
    "pos": "MID",
    "price": 7.5,
    "n": "Wirtz",
+   "eid": 366,
    "club": "LIV",
    "rate": "green",
    "fx": [
@@ -817,6 +871,7 @@
    "pos": "MID",
    "price": 7.0,
    "n": "Foden",
+   "eid": 398,
    "club": "MCI",
    "rate": "yellow",
    "fx": [
@@ -833,6 +888,7 @@
    "pos": "MID",
    "price": 7.0,
    "n": "Gakpo",
+   "eid": 367,
    "club": "LIV",
    "rate": "yellow",
    "fx": [
@@ -849,6 +905,7 @@
    "pos": "MID",
    "price": 7.5,
    "n": "Rogers",
+   "eid": 40,
    "club": "CHE",
    "rate": "yellow",
    "fx": [
@@ -865,6 +922,7 @@
    "pos": "MID",
    "price": 7.5,
    "n": "Rice",
+   "eid": 13,
    "club": "ARS",
    "rate": "yellow",
    "fx": [
@@ -881,6 +939,7 @@
    "pos": "MID",
    "price": 7.0,
    "n": "Enzo",
+   "eid": 155,
    "club": "CHE",
    "rate": "orange",
    "fx": [
@@ -897,6 +956,7 @@
    "pos": "MID",
    "price": 7.0,
    "n": "Bruno G.",
+   "eid": 452,
    "club": "ARS",
    "rate": "orange",
    "fx": [
@@ -913,6 +973,7 @@
    "pos": "MID",
    "price": 7.5,
    "n": "Cherki",
+   "eid": 399,
    "club": "MCI",
    "rate": "red",
    "trend": "down",
@@ -930,6 +991,7 @@
    "pos": "MID",
    "price": 8.0,
    "n": "Mbeumo",
+   "eid": 427,
    "club": "MUN",
    "rate": "green",
    "fx": [
@@ -946,6 +1008,7 @@
    "pos": "MID",
    "price": 8.5,
    "n": "Semenyo",
+   "eid": 397,
    "club": "MCI",
    "rate": "green",
    "fx": [
@@ -962,6 +1025,7 @@
    "pos": "MID",
    "price": 8.0,
    "n": "Gibbs-White",
+   "eid": 480,
    "club": "NFO",
    "rate": "yellow",
    "fx": [
@@ -978,6 +1042,7 @@
    "pos": "MID",
    "price": 8.0,
    "n": "Cunha",
+   "eid": 428,
    "club": "MUN",
    "rate": "orange",
    "trend": "down",
@@ -995,6 +1060,7 @@
    "pos": "MID",
    "price": 9.5,
    "n": "Palmer",
+   "eid": 154,
    "club": "CHE",
    "rate": "yellow",
    "trend": "down",
@@ -1012,6 +1078,7 @@
    "pos": "MID",
    "price": 9.5,
    "n": "Saka",
+   "eid": 12,
    "club": "ARS",
    "rate": "orange",
    "fx": [
@@ -1028,6 +1095,7 @@
    "pos": "MID",
    "price": 12.0,
    "n": "B.Fernandes",
+   "eid": 426,
    "club": "MUN",
    "rate": "green",
    "fx": [
@@ -1043,7 +1111,9 @@
   {
    "pos": "FWD",
    "price": 4.5,
-   "n": "Walle-Egeli",
+   "n": "Walle Egeli",
+   "sheet_n": "Walle-Egeli",
+   "eid": 321,
    "club": "IPS",
    "rate": "yellow",
    "tag": "new",
@@ -1060,6 +1130,7 @@
    "pos": "FWD",
    "price": 5.0,
    "n": "Simms",
+   "eid": 195,
    "club": "COV",
    "rate": "orange",
    "tag": "new",
@@ -1076,6 +1147,7 @@
    "pos": "FWD",
    "price": 5.5,
    "n": "Barry",
+   "eid": 249,
    "club": "EVE",
    "rate": "green",
    "trend": "up",
@@ -1092,6 +1164,7 @@
    "pos": "FWD",
    "price": 5.5,
    "n": "McBurnie",
+   "eid": 295,
    "club": "HUL",
    "rate": "yellow",
    "fx": [
@@ -1107,6 +1180,7 @@
    "pos": "FWD",
    "price": 5.5,
    "n": "Georginio",
+   "eid": 125,
    "club": "BHA",
    "rate": "yellow",
    "trend": "up",
@@ -1123,6 +1197,7 @@
    "pos": "FWD",
    "price": 6.0,
    "n": "Calvert-Lewin",
+   "eid": 346,
    "club": "LEE",
    "rate": "green",
    "fx": [
@@ -1138,6 +1213,7 @@
    "pos": "FWD",
    "price": 6.0,
    "n": "Brobbey",
+   "eid": 552,
    "club": "SUN",
    "rate": "green",
    "fx": [
@@ -1153,6 +1229,7 @@
    "pos": "FWD",
    "price": 6.0,
    "n": "Richarlison",
+   "eid": 527,
    "club": "TOT",
    "rate": "yellow",
    "tag": "new",
@@ -1169,6 +1246,7 @@
    "pos": "FWD",
    "price": 6.0,
    "n": "Igor Jesus",
+   "eid": 491,
    "club": "NFO",
    "rate": "yellow",
    "trend": "down",
@@ -1185,6 +1263,7 @@
    "pos": "FWD",
    "price": 6.0,
    "n": "Evanilson",
+   "eid": 79,
    "club": "BOU",
    "rate": "yellow",
    "tag": "new",
@@ -1201,6 +1280,7 @@
    "pos": "FWD",
    "price": 6.0,
    "n": "Gonzalo",
+   "eid": 569,
    "club": "FUL",
    "rate": "yellow",
    "fx": [
@@ -1216,6 +1296,7 @@
    "pos": "FWD",
    "price": 7.5,
    "n": "João Pedro",
+   "eid": 165,
    "club": "CHE",
    "rate": "green",
    "fx": [
@@ -1231,6 +1312,7 @@
    "pos": "FWD",
    "price": 7.5,
    "n": "Havertz",
+   "eid": 26,
    "club": "ARS",
    "rate": "yellow",
    "fx": [
@@ -1246,6 +1328,7 @@
    "pos": "FWD",
    "price": 7.5,
    "n": "Gyökeres",
+   "eid": 25,
    "club": "ARS",
    "rate": "orange",
    "fx": [
@@ -1261,6 +1344,7 @@
    "pos": "FWD",
    "price": 8.0,
    "n": "Thiago",
+   "eid": 106,
    "club": "BRE",
    "rate": "green",
    "tag": "new",
@@ -1277,6 +1361,7 @@
    "pos": "FWD",
    "price": 9.0,
    "n": "Isak",
+   "eid": 379,
    "club": "LIV",
    "rate": "yellow",
    "trend": "up",
@@ -1293,6 +1378,7 @@
    "pos": "FWD",
    "price": 8.0,
    "n": "Watkins",
+   "eid": 55,
    "club": "AVL",
    "rate": "yellow",
    "fx": [
@@ -1308,6 +1394,7 @@
    "pos": "FWD",
    "price": 15.5,
    "n": "Haaland",
+   "eid": 411,
    "club": "MCI",
    "rate": "green",
    "fx": [
@@ -1323,6 +1410,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "Muharemović",
+   "eid": 334,
    "club": "LEE",
    "rate": "yellow",
    "tag": "new",
@@ -1339,6 +1427,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "N.Williams",
+   "eid": 469,
    "club": "NFO",
    "rate": "yellow",
    "fx": [
@@ -1354,6 +1443,7 @@
    "pos": "DEF",
    "price": 5.0,
    "n": "Colwill",
+   "eid": 149,
    "club": "CHE",
    "rate": "orange",
    "trend": "down",
@@ -1367,6 +1457,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "White",
+   "eid": 10,
    "club": "ARS",
    "rate": "green",
    "tag": "new",
@@ -1383,6 +1474,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Calafiori",
+   "eid": 8,
    "club": "ARS",
    "rate": "green",
    "fx": [
@@ -1398,6 +1490,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Frimpong",
+   "eid": 357,
    "club": "LIV",
    "rate": "green",
    "trend": "up",
@@ -1414,6 +1507,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Mosquera",
+   "eid": 11,
    "club": "ARS",
    "rate": "yellow",
    "fx": [
@@ -1429,6 +1523,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Gvardiol",
+   "eid": 391,
    "club": "MCI",
    "rate": "yellow",
    "trend": "down",
@@ -1445,6 +1540,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Pedro Porro",
+   "eid": 499,
    "club": "TOT",
    "rate": "yellow",
    "trend": "down",
@@ -1461,6 +1557,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Palestra",
+   "eid": 152,
    "club": "CHE",
    "rate": "yellow",
    "fx": [
@@ -1476,6 +1573,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Hill",
+   "eid": 60,
    "club": "BOU",
    "rate": "orange",
    "trend": "down",
@@ -1492,6 +1590,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Kerkez",
+   "eid": 358,
    "club": "LIV",
    "rate": "orange",
    "trend": "down",
@@ -1508,6 +1607,7 @@
    "pos": "DEF",
    "price": 5.5,
    "n": "Truffert",
+   "eid": 61,
    "club": "BOU",
    "rate": "orange",
    "fx": [
@@ -1523,6 +1623,7 @@
    "pos": "DEF",
    "price": 6.5,
    "n": "Virgil",
+   "eid": 356,
    "club": "LIV",
    "rate": "yellow",
    "fx": [
@@ -1538,6 +1639,7 @@
    "pos": "DEF",
    "price": 6.5,
    "n": "O'Reilly",
+   "eid": 387,
    "club": "MCI",
    "rate": "yellow",
    "fx": [
@@ -1553,6 +1655,7 @@
    "pos": "DEF",
    "price": 6.0,
    "n": "Tarkowski",
+   "eid": 229,
    "club": "EVE",
    "rate": "yellow",
    "trend": "up",
@@ -1569,6 +1672,7 @@
    "pos": "DEF",
    "price": 6.0,
    "n": "Guéhi",
+   "eid": 388,
    "club": "MCI",
    "rate": "red",
    "trend": "down",
@@ -1585,6 +1689,7 @@
    "pos": "DEF",
    "price": 6.0,
    "n": "Senesi",
+   "eid": 498,
    "club": "TOT",
    "rate": "red",
    "fx": [
@@ -1600,6 +1705,7 @@
    "pos": "DEF",
    "price": 6.0,
    "n": "Lacroix",
+   "eid": 200,
    "club": "CHE",
    "rate": "red",
    "fx": [
@@ -1615,6 +1721,7 @@
    "pos": "DEF",
    "price": 8.0,
    "n": "Gabriel",
+   "eid": 4,
    "club": "ARS",
    "rate": "green",
    "fx": [

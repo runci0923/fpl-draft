@@ -1,0 +1,1742 @@
+{
+ "_doc": [
+  "FPL Fran GW2 final cheat sheet, képernyőképekről rögzítve 2026-08-25-én.",
+  "Jelmagyarázat a forrásból: green = Great Option, yellow = Good Option,",
+  "orange = Differential Option, red = Avoid.",
+  "A fixtúra NAGYBETŰVEL = hazai meccs, kisbetűvel = idegenbeli; a szín a forrásban",
+  "zöld = magasabb projektált gólszám / nagyobb clean sheet-esély, piros = alacsonyabb.",
+  "A klubot a fixtúra-hármasból oldottuk fel (mind a 20 hármas egyedi), nem a badge-ből.",
+  "tag: new = új a listán; up/down = a GW1-es listához képest fel-/lecsúszott.",
+  "Statisztikák: 25/26-os szezon per 90 perc."
+ ],
+ "source": "FPL Fran (@FPL__fran) GW2 final cheat sheet",
+ "date": "2026-08-25",
+ "gw": 2,
+ "legend": {
+  "green": "Great Option",
+  "yellow": "Good Option",
+  "orange": "Differential Option",
+  "red": "Avoid"
+ },
+ "stats_note": "MID: npxG/90, xAG/90 (a fájlban xa kulcs), G+A/90, CBIT/90 | FWD: npxG/90, xA/90, G+A/90 | DEF: npxG+xAG/90, G+A/90, CBIT/90 | CBIT/90 = Clearances+Blocks+Recoveries+Interceptions+Tackles",
+ "missing": [
+  "GKP tábla — nincs a képernyőképeken (a kapus szabadon választható)",
+  "MID £5m alatt — a lap teteje a videó-overlay alatt volt",
+  "FWD £5m alatt — csak a £4.5m Walle-Egeli látszott",
+  "Colwill (DEF £5m) és Norgaard* (MID £5m) statjai a forrásban üresek"
+ ],
+ "players": [
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "O'Shea",
+   "eid": 304,
+   "club": "IPS",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "mun",
+    "LIV",
+    "cry"
+   ],
+   "npxg_xag": 0.11,
+   "ga": 0.04,
+   "cbit": 8.74
+  },
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "Egan",
+   "eid": 277,
+   "club": "HUL",
+   "rate": "green",
+   "tag": "new",
+   "fx": [
+    "cov",
+    "AVL",
+    "che"
+   ],
+   "npxg_xag": 0.09,
+   "ga": 0.08,
+   "cbit": 10.08
+  },
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "Thomas",
+   "eid": 173,
+   "club": "COV",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "HUL",
+    "mci",
+    "BHA"
+   ],
+   "npxg_xag": 0.19,
+   "ga": 0.21,
+   "cbit": 8.56
+  },
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "Greaves",
+   "eid": 306,
+   "club": "IPS",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "mun",
+    "LIV",
+    "cry"
+   ],
+   "npxg_xag": 0.16,
+   "ga": 0.13,
+   "cbit": 9.62
+  },
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "Diop",
+   "eid": 259,
+   "club": "IPS",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "mun",
+    "LIV",
+    "cry"
+   ],
+   "npxg_xag": 0.09,
+   "ga": 0.11,
+   "cbit": 6.76
+  },
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "Davis",
+   "eid": 305,
+   "club": "IPS",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "mun",
+    "LIV",
+    "cry"
+   ],
+   "npxg_xag": 0.28,
+   "ga": 0.17,
+   "cbit": 4.29
+  },
+  {
+   "pos": "DEF",
+   "price": 4.0,
+   "n": "van Ewijk",
+   "eid": 175,
+   "club": "COV",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "HUL",
+    "mci",
+    "BHA"
+   ],
+   "npxg_xag": 0.17,
+   "ga": 0.19,
+   "cbit": 6.42
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Ajer",
+   "eid": 87,
+   "club": "BRE",
+   "rate": "green",
+   "fx": [
+    "lee",
+    "SUN",
+    "bou"
+   ],
+   "npxg_xag": 0.07,
+   "ga": 0.1,
+   "cbit": 9.47
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Rodon",
+   "eid": 329,
+   "club": "LEE",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "BRE",
+    "bha",
+    "NEW"
+   ],
+   "npxg_xag": 0.06,
+   "ga": 0.06,
+   "cbit": 8.29
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "De Cuyper",
+   "eid": 115,
+   "club": "BHA",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg_xag": 0.38,
+   "ga": 0.32,
+   "cbit": 4.17
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Justin",
+   "eid": 332,
+   "club": "LEE",
+   "rate": "yellow",
+   "tag": "new",
+   "fx": [
+    "BRE",
+    "bha",
+    "NEW"
+   ],
+   "npxg_xag": 0.14,
+   "ga": 0.14,
+   "cbit": 8.8
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Shaw",
+   "eid": 423,
+   "club": "MUN",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "IPS",
+    "eve",
+    "MCI"
+   ],
+   "npxg_xag": 0.08,
+   "ga": 0.06,
+   "cbit": 6.2
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Kayode",
+   "eid": 88,
+   "club": "BRE",
+   "rate": "yellow",
+   "fx": [
+    "lee",
+    "SUN",
+    "bou"
+   ],
+   "npxg_xag": 0.11,
+   "ga": 0.09,
+   "cbit": 6.05
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Aina",
+   "eid": 473,
+   "club": "NFO",
+   "rate": "yellow",
+   "fx": [
+    "liv",
+    "TOT",
+    "avl"
+   ],
+   "npxg_xag": 0.07,
+   "ga": 0.11,
+   "cbit": 7.37
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "Cash",
+   "eid": 32,
+   "club": "AVL",
+   "rate": "orange",
+   "fx": [
+    "ARS",
+    "hul",
+    "NFO"
+   ],
+   "npxg_xag": 0.13,
+   "ga": 0.18,
+   "cbit": 5.58
+  },
+  {
+   "pos": "DEF",
+   "price": 4.5,
+   "n": "F.Kadıoğlu",
+   "sheet_n": "Kadioglu*",
+   "eid": 113,
+   "club": "BHA",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg_xag": 0.16,
+   "ga": 0.09,
+   "cbit": 4.89
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Vuskovic",
+   "eid": 504,
+   "club": "BHA",
+   "rate": "green",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg_xag": 0.21,
+   "ga": 0.22,
+   "cbit": 12.5
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Thiaw",
+   "eid": 445,
+   "club": "NEW",
+   "rate": "green",
+   "tag": "new",
+   "fx": [
+    "tot",
+    "BOU",
+    "lee"
+   ],
+   "npxg_xag": 0.17,
+   "ga": 0.12,
+   "cbit": 8.87
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Silva",
+   "sheet_n": "A. Silva",
+   "eid": 566,
+   "club": "BOU",
+   "rate": "green",
+   "tag": "new",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg_xag": 0.16,
+   "ga": 0.1,
+   "cbit": 7.51
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Jacquet",
+   "eid": 362,
+   "club": "LIV",
+   "rate": "green",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg_xag": 0.09,
+   "ga": 0.0,
+   "cbit": 8.29
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Richards",
+   "eid": 202,
+   "club": "CRY",
+   "rate": "yellow",
+   "tag": "new",
+   "fx": [
+    "MCI",
+    "ful",
+    "IPS"
+   ],
+   "npxg_xag": 0.12,
+   "ga": 0.03,
+   "cbit": 9.94
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Ballard",
+   "eid": 532,
+   "club": "SUN",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "FUL",
+    "bre",
+    "ARS"
+   ],
+   "npxg_xag": 0.13,
+   "ga": 0.16,
+   "cbit": 11.0
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Maguire",
+   "eid": 418,
+   "club": "MUN",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "IPS",
+    "eve",
+    "MCI"
+   ],
+   "npxg_xag": 0.09,
+   "ga": 0.16,
+   "cbit": 8.13
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Van Hecke",
+   "sheet_n": "van Hecke",
+   "eid": 112,
+   "club": "TOT",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "NEW",
+    "nfo",
+    "EVE"
+   ],
+   "npxg_xag": 0.14,
+   "ga": 0.17,
+   "cbit": 8.89
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Bijol",
+   "eid": 327,
+   "club": "LEE",
+   "rate": "yellow",
+   "tag": "new",
+   "fx": [
+    "BRE",
+    "bha",
+    "NEW"
+   ],
+   "npxg_xag": 0.08,
+   "ga": 0.19,
+   "cbit": 10.53
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Muharemović",
+   "sheet_n": "Muharemovic",
+   "eid": 334,
+   "club": "LEE",
+   "rate": "yellow",
+   "fx": [
+    "BRE",
+    "bha",
+    "NEW"
+   ],
+   "npxg_xag": 0.06,
+   "ga": 0.12,
+   "cbit": 10.86
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "N.Williams",
+   "sheet_n": "Williams",
+   "eid": 469,
+   "club": "NFO",
+   "rate": "yellow",
+   "fx": [
+    "liv",
+    "TOT",
+    "avl"
+   ],
+   "npxg_xag": 0.17,
+   "ga": 0.14,
+   "cbit": 6.97
+  },
+  {
+   "pos": "DEF",
+   "price": 5.0,
+   "n": "Colwill",
+   "eid": 149,
+   "club": "CHE",
+   "rate": "orange",
+   "fx": [
+    "BHA",
+    "ars",
+    "HUL"
+   ],
+   "npxg_xag": null,
+   "ga": null
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "White",
+   "eid": 10,
+   "club": "ARS",
+   "rate": "green",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg_xag": 0.15,
+   "ga": 0.13,
+   "cbit": 6.82
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Calafiori",
+   "eid": 8,
+   "club": "ARS",
+   "rate": "green",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg_xag": 0.22,
+   "ga": 0.16,
+   "cbit": 5.41
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Frimpong",
+   "eid": 357,
+   "club": "LIV",
+   "rate": "green",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg_xag": 0.18,
+   "ga": 0.44,
+   "cbit": 2.62
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Gvardiol",
+   "eid": 391,
+   "club": "MCI",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg_xag": 0.21,
+   "ga": 0.26,
+   "cbit": 6.83
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Murillo",
+   "eid": 472,
+   "club": "NFO",
+   "rate": "green",
+   "tag": "new",
+   "fx": [
+    "liv",
+    "TOT",
+    "avl"
+   ],
+   "npxg_xag": 0.05,
+   "ga": 0.04,
+   "cbit": 9.42
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Mosquera",
+   "sheet_n": "Mosquera*",
+   "eid": 11,
+   "club": "ARS",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg_xag": 0.07,
+   "ga": 0.0,
+   "cbit": 8.4
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Hill",
+   "eid": 60,
+   "club": "BOU",
+   "rate": "orange",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg_xag": 0.09,
+   "ga": 0.13,
+   "cbit": 11.22
+  },
+  {
+   "pos": "DEF",
+   "price": 5.5,
+   "n": "Palestra",
+   "sheet_n": "Palestra*",
+   "eid": 152,
+   "club": "CHE",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "BHA",
+    "ars",
+    "HUL"
+   ],
+   "npxg_xag": 0.15,
+   "ga": 0.15,
+   "cbit": 3.5
+  },
+  {
+   "pos": "DEF",
+   "price": 6.5,
+   "n": "Virgil",
+   "eid": 356,
+   "club": "LIV",
+   "rate": "yellow",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg_xag": 0.14,
+   "ga": 0.19,
+   "cbit": 9.21
+  },
+  {
+   "pos": "DEF",
+   "price": 6.5,
+   "n": "O'Reilly",
+   "eid": 387,
+   "club": "MCI",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg_xag": 0.3,
+   "ga": 0.31,
+   "cbit": 5.86
+  },
+  {
+   "pos": "DEF",
+   "price": 6.0,
+   "n": "Tarkowski",
+   "eid": 229,
+   "club": "EVE",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "bou",
+    "MUN",
+    "tot"
+   ],
+   "npxg_xag": 0.13,
+   "ga": 0.13,
+   "cbit": 10.19
+  },
+  {
+   "pos": "DEF",
+   "price": 6.0,
+   "n": "Guéhi",
+   "sheet_n": "Guehi",
+   "eid": 388,
+   "club": "MCI",
+   "rate": "yellow",
+   "trend": "up",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg_xag": 0.19,
+   "ga": 0.23,
+   "cbit": 8.06
+  },
+  {
+   "pos": "DEF",
+   "price": 6.0,
+   "n": "Senesi",
+   "eid": 498,
+   "club": "TOT",
+   "rate": "orange",
+   "trend": "up",
+   "fx": [
+    "NEW",
+    "nfo",
+    "EVE"
+   ],
+   "npxg_xag": 0.17,
+   "ga": 0.16,
+   "cbit": 11.39
+  },
+  {
+   "pos": "DEF",
+   "price": 6.0,
+   "n": "Lacroix",
+   "eid": 200,
+   "club": "CHE",
+   "rate": "orange",
+   "trend": "up",
+   "fx": [
+    "BHA",
+    "ars",
+    "HUL"
+   ],
+   "npxg_xag": 0.1,
+   "ga": 0.09,
+   "cbit": 10.94
+  },
+  {
+   "pos": "DEF",
+   "price": 8.0,
+   "n": "Gabriel",
+   "eid": 4,
+   "club": "ARS",
+   "rate": "green",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg_xag": 0.16,
+   "ga": 0.26,
+   "cbit": 9.03
+  },
+  {
+   "pos": "MID",
+   "price": 5.0,
+   "n": "Gomez",
+   "eid": 127,
+   "club": "BHA",
+   "rate": "green",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg": 0.27,
+   "xa": 0.07,
+   "ga": 0.26,
+   "cbit": 10.2
+  },
+  {
+   "pos": "MID",
+   "price": 5.0,
+   "n": "I.Sangaré",
+   "sheet_n": "Sangare",
+   "eid": 488,
+   "club": "NFO",
+   "rate": "orange",
+   "fx": [
+    "liv",
+    "TOT",
+    "avl"
+   ],
+   "npxg": 0.05,
+   "xa": 0.08,
+   "ga": 0.17,
+   "cbit": 11.64
+  },
+  {
+   "pos": "MID",
+   "price": 5.0,
+   "n": "Nørgaard",
+   "sheet_n": "Norgaard*",
+   "eid": 21,
+   "club": "EVE",
+   "rate": "orange",
+   "fx": [
+    "bou",
+    "MUN",
+    "tot"
+   ],
+   "npxg": null,
+   "xa": null,
+   "ga": null
+  },
+  {
+   "pos": "MID",
+   "price": 5.5,
+   "n": "Groß",
+   "sheet_n": "Gross",
+   "eid": 124,
+   "club": "BHA",
+   "rate": "green",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg": 0.08,
+   "xa": 0.21,
+   "ga": 0.39,
+   "cbit": 8.03
+  },
+  {
+   "pos": "MID",
+   "price": 5.5,
+   "n": "M.Sangaré",
+   "sheet_n": "Sangare",
+   "eid": 565,
+   "club": "BRE",
+   "rate": "green",
+   "fx": [
+    "lee",
+    "SUN",
+    "bou"
+   ],
+   "npxg": 0.12,
+   "xa": 0.08,
+   "ga": 0.27,
+   "cbit": 14.2
+  },
+  {
+   "pos": "MID",
+   "price": 5.5,
+   "n": "Xhaka",
+   "eid": 544,
+   "club": "SUN",
+   "rate": "yellow",
+   "trend": "up",
+   "fx": [
+    "FUL",
+    "bre",
+    "ARS"
+   ],
+   "npxg": 0.03,
+   "xa": 0.12,
+   "ga": 0.22,
+   "cbit": 11.26
+  },
+  {
+   "pos": "MID",
+   "price": 5.5,
+   "n": "Wharton",
+   "eid": 210,
+   "club": "CRY",
+   "rate": "yellow",
+   "trend": "up",
+   "fx": [
+    "MCI",
+    "ful",
+    "IPS"
+   ],
+   "npxg": 0.05,
+   "xa": 0.26,
+   "ga": 0.25,
+   "cbit": 10.83
+  },
+  {
+   "pos": "MID",
+   "price": 5.5,
+   "n": "Ayari",
+   "eid": 129,
+   "club": "BHA",
+   "rate": "yellow",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg": 0.13,
+   "xa": 0.05,
+   "ga": 0.33,
+   "cbit": 10.54
+  },
+  {
+   "pos": "MID",
+   "price": 5.5,
+   "n": "Iwobi",
+   "eid": 261,
+   "club": "FUL",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "sun",
+    "CRY",
+    "liv"
+   ],
+   "npxg": 0.07,
+   "xa": 0.17,
+   "ga": 0.26,
+   "cbit": 7.03
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Ndiaye",
+   "eid": 237,
+   "club": "EVE",
+   "rate": "green",
+   "fx": [
+    "bou",
+    "MUN",
+    "tot"
+   ],
+   "npxg": 0.17,
+   "xa": 0.14,
+   "ga": 0.29,
+   "cbit": 9.22
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Stach",
+   "eid": 335,
+   "club": "LEE",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "BRE",
+    "bha",
+    "NEW"
+   ],
+   "npxg": 0.11,
+   "xa": 0.17,
+   "ga": 0.42,
+   "cbit": 10.07
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Schade",
+   "eid": 94,
+   "club": "BRE",
+   "rate": "green",
+   "fx": [
+    "lee",
+    "SUN",
+    "bou"
+   ],
+   "npxg": 0.37,
+   "xa": 0.07,
+   "ga": 0.42,
+   "cbit": 6.13
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Buendía",
+   "sheet_n": "Buendia",
+   "eid": 41,
+   "club": "AVL",
+   "rate": "green",
+   "fx": [
+    "ARS",
+    "hul",
+    "NFO"
+   ],
+   "npxg": 0.18,
+   "xa": 0.12,
+   "ga": 0.41,
+   "cbit": 10.11
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Tavernier",
+   "eid": 68,
+   "club": "BOU",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg": 0.25,
+   "xa": 0.15,
+   "ga": 0.36,
+   "cbit": 8.3
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "E.Le Fée",
+   "sheet_n": "Le Fee",
+   "eid": 542,
+   "club": "SUN",
+   "rate": "green",
+   "trend": "down",
+   "fx": [
+    "FUL",
+    "bre",
+    "ARS"
+   ],
+   "npxg": 0.16,
+   "xa": 0.18,
+   "ga": 0.33,
+   "cbit": 9.83
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Kluivert",
+   "eid": 70,
+   "club": "BOU",
+   "rate": "orange",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg": 0.22,
+   "xa": 0.15,
+   "ga": 0.19,
+   "cbit": 6.1
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Scott",
+   "eid": 69,
+   "club": "BOU",
+   "rate": "orange",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg": 0.12,
+   "xa": 0.09,
+   "ga": 0.15,
+   "cbit": 12.2
+  },
+  {
+   "pos": "MID",
+   "price": 6.0,
+   "n": "Tel",
+   "eid": 514,
+   "club": "TOT",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "NEW",
+    "nfo",
+    "EVE"
+   ],
+   "npxg": 0.16,
+   "xa": 0.16,
+   "ga": 0.4,
+   "cbit": 7.49
+  },
+  {
+   "pos": "MID",
+   "price": 6.5,
+   "n": "Tzolis",
+   "eid": 557,
+   "club": "ARS",
+   "rate": "green",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg": 0.51,
+   "xa": 0.47,
+   "ga": 1.17,
+   "cbit": 2.2
+  },
+  {
+   "pos": "MID",
+   "price": 6.5,
+   "n": "Ødegaard",
+   "sheet_n": "Odegaard",
+   "eid": 15,
+   "club": "ARS",
+   "rate": "green",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg": 0.08,
+   "xa": 0.24,
+   "ga": 0.53,
+   "cbit": 6.74
+  },
+  {
+   "pos": "MID",
+   "price": 6.5,
+   "n": "Anderson",
+   "sheet_n": "Anderson*",
+   "eid": 481,
+   "club": "MCI",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg": 0.06,
+   "xa": 0.13,
+   "ga": 0.25,
+   "cbit": 13.88
+  },
+  {
+   "pos": "MID",
+   "price": 6.5,
+   "n": "O.Dango",
+   "sheet_n": "Dango",
+   "eid": 95,
+   "club": "BRE",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "lee",
+    "SUN",
+    "bou"
+   ],
+   "npxg": 0.31,
+   "xa": 0.17,
+   "ga": 0.6,
+   "cbit": 7.33
+  },
+  {
+   "pos": "MID",
+   "price": 6.5,
+   "n": "Rayan",
+   "eid": 67,
+   "club": "BOU",
+   "rate": "yellow",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg": 0.24,
+   "xa": 0.15,
+   "ga": 0.57,
+   "cbit": 6.65
+  },
+  {
+   "pos": "MID",
+   "price": 6.5,
+   "n": "Dewsbury-Hall",
+   "eid": 236,
+   "club": "EVE",
+   "rate": "yellow",
+   "fx": [
+    "bou",
+    "MUN",
+    "tot"
+   ],
+   "npxg": 0.15,
+   "xa": 0.18,
+   "ga": 0.51,
+   "cbit": 7.91
+  },
+  {
+   "pos": "MID",
+   "price": 7.0,
+   "n": "Szoboszlai",
+   "eid": 368,
+   "club": "LIV",
+   "rate": "yellow",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg": 0.11,
+   "xa": 0.19,
+   "ga": 0.36,
+   "cbit": 9.41
+  },
+  {
+   "pos": "MID",
+   "price": 7.0,
+   "n": "Gakpo",
+   "eid": 367,
+   "club": "LIV",
+   "rate": "yellow",
+   "trend": "up",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg": 0.28,
+   "xa": 0.15,
+   "ga": 0.39,
+   "cbit": 5.03
+  },
+  {
+   "pos": "MID",
+   "price": 7.0,
+   "n": "Foden",
+   "eid": 398,
+   "club": "MCI",
+   "rate": "yellow",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg": 0.28,
+   "xa": 0.21,
+   "ga": 0.52,
+   "cbit": 7.02
+  },
+  {
+   "pos": "MID",
+   "price": 7.5,
+   "n": "Cherki",
+   "eid": 399,
+   "club": "MCI",
+   "rate": "yellow",
+   "trend": "up",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg": 0.15,
+   "xa": 0.44,
+   "ga": 0.86,
+   "cbit": 6.7
+  },
+  {
+   "pos": "MID",
+   "price": 7.5,
+   "n": "Wirtz",
+   "eid": 366,
+   "club": "LIV",
+   "rate": "yellow",
+   "trend": "down",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg": 0.27,
+   "xa": 0.2,
+   "ga": 0.34,
+   "cbit": 6.63
+  },
+  {
+   "pos": "MID",
+   "price": 7.5,
+   "n": "Rogers",
+   "eid": 40,
+   "club": "CHE",
+   "rate": "yellow",
+   "fx": [
+    "BHA",
+    "ars",
+    "HUL"
+   ],
+   "npxg": 0.19,
+   "xa": 0.12,
+   "ga": 0.49,
+   "cbit": 6.28
+  },
+  {
+   "pos": "MID",
+   "price": 7.5,
+   "n": "Rice",
+   "eid": 13,
+   "club": "ARS",
+   "rate": "yellow",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg": 0.09,
+   "xa": 0.2,
+   "ga": 0.38,
+   "cbit": 10.97
+  },
+  {
+   "pos": "MID",
+   "price": 7.0,
+   "n": "Bruno G.",
+   "sheet_n": "Bruno G*",
+   "eid": 452,
+   "club": "ARS",
+   "rate": "orange",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg": 0.21,
+   "xa": 0.18,
+   "ga": 0.59,
+   "cbit": 9.16
+  },
+  {
+   "pos": "MID",
+   "price": 8.0,
+   "n": "Mbeumo",
+   "eid": 427,
+   "club": "MUN",
+   "rate": "green",
+   "fx": [
+    "IPS",
+    "eve",
+    "MCI"
+   ],
+   "npxg": 0.42,
+   "xa": 0.17,
+   "ga": 0.48,
+   "cbit": 4.79
+  },
+  {
+   "pos": "MID",
+   "price": 8.5,
+   "n": "Semenyo",
+   "eid": 397,
+   "club": "MCI",
+   "rate": "green",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg": 0.27,
+   "xa": 0.09,
+   "ga": 0.65,
+   "cbit": 6.67
+  },
+  {
+   "pos": "MID",
+   "price": 8.0,
+   "n": "Gibbs-White",
+   "eid": 480,
+   "club": "NFO",
+   "rate": "green",
+   "fx": [
+    "liv",
+    "TOT",
+    "avl"
+   ],
+   "npxg": 0.29,
+   "xa": 0.08,
+   "ga": 0.56,
+   "cbit": 5.17
+  },
+  {
+   "pos": "MID",
+   "price": 8.0,
+   "n": "Cunha",
+   "eid": 428,
+   "club": "MUN",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "IPS",
+    "eve",
+    "MCI"
+   ],
+   "npxg": 0.25,
+   "xa": 0.12,
+   "ga": 0.5,
+   "cbit": 7.65
+  },
+  {
+   "pos": "MID",
+   "price": 9.5,
+   "n": "Palmer",
+   "eid": 154,
+   "club": "CHE",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "BHA",
+    "ars",
+    "HUL"
+   ],
+   "npxg": 0.27,
+   "xa": 0.11,
+   "ga": 0.55,
+   "cbit": 6.22
+  },
+  {
+   "pos": "MID",
+   "price": 9.5,
+   "n": "Saka",
+   "eid": 12,
+   "club": "ARS",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg": 0.27,
+   "xa": 0.29,
+   "ga": 0.69,
+   "cbit": 7.51
+  },
+  {
+   "pos": "MID",
+   "price": 12.0,
+   "n": "B.Fernandes",
+   "sheet_n": "B. Fernandes",
+   "eid": 426,
+   "club": "MUN",
+   "rate": "green",
+   "fx": [
+    "IPS",
+    "eve",
+    "MCI"
+   ],
+   "npxg": 0.18,
+   "xa": 0.36,
+   "ga": 0.96,
+   "cbit": 8.46
+  },
+  {
+   "pos": "FWD",
+   "price": 4.5,
+   "n": "Walle Egeli",
+   "sheet_n": "Walle-Egeli",
+   "eid": 321,
+   "club": "IPS",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "mun",
+    "LIV",
+    "cry"
+   ],
+   "npxg": 0.19,
+   "xa": 0.13,
+   "ga": 0.36
+  },
+  {
+   "pos": "FWD",
+   "price": 5.5,
+   "n": "Barry",
+   "eid": 249,
+   "club": "EVE",
+   "rate": "green",
+   "fx": [
+    "bou",
+    "MUN",
+    "tot"
+   ],
+   "npxg": 0.39,
+   "xa": 0.02,
+   "ga": 0.38
+  },
+  {
+   "pos": "FWD",
+   "price": 5.5,
+   "n": "McBurnie",
+   "eid": 295,
+   "club": "HUL",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "cov",
+    "AVL",
+    "che"
+   ],
+   "npxg": 0.31,
+   "xa": 0.07,
+   "ga": 0.75
+  },
+  {
+   "pos": "FWD",
+   "price": 5.5,
+   "n": "Emersonn",
+   "eid": 316,
+   "club": "IPS",
+   "rate": "orange",
+   "tag": "new",
+   "fx": [
+    "mun",
+    "LIV",
+    "cry"
+   ],
+   "npxg": 0.43,
+   "xa": 0.05,
+   "ga": 0.48
+  },
+  {
+   "pos": "FWD",
+   "price": 5.5,
+   "n": "Georginio",
+   "eid": 125,
+   "club": "BHA",
+   "rate": "orange",
+   "fx": [
+    "che",
+    "LEE",
+    "cov"
+   ],
+   "npxg": 0.15,
+   "xa": 0.15,
+   "ga": 0.41
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Wissa",
+   "eid": 464,
+   "club": "NEW",
+   "rate": "green",
+   "tag": "new",
+   "fx": [
+    "tot",
+    "BOU",
+    "lee"
+   ],
+   "npxg": 0.64,
+   "xa": 0.1,
+   "ga": 0.35
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Calvert-Lewin",
+   "eid": 346,
+   "club": "LEE",
+   "rate": "green",
+   "fx": [
+    "BRE",
+    "bha",
+    "NEW"
+   ],
+   "npxg": 0.39,
+   "xa": 0.04,
+   "ga": 0.53
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Gonzalo",
+   "eid": 569,
+   "club": "FUL",
+   "rate": "green",
+   "trend": "up",
+   "fx": [
+    "sun",
+    "CRY",
+    "liv"
+   ],
+   "npxg": 0.51,
+   "xa": 0.11,
+   "ga": 0.66
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Osula",
+   "sheet_n": "Osula*",
+   "eid": 465,
+   "club": "NEW",
+   "rate": "yellow",
+   "tag": "new",
+   "fx": [
+    "tot",
+    "BOU",
+    "lee"
+   ],
+   "npxg": 0.55,
+   "xa": 0.07,
+   "ga": 0.89
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Igor Jesus",
+   "eid": 491,
+   "club": "NFO",
+   "rate": "yellow",
+   "fx": [
+    "liv",
+    "TOT",
+    "avl"
+   ],
+   "npxg": 0.23,
+   "xa": 0.05,
+   "ga": 0.48
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Evanilson",
+   "eid": 79,
+   "club": "BOU",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "EVE",
+    "new",
+    "BRE"
+   ],
+   "npxg": 0.35,
+   "xa": 0.05,
+   "ga": 0.43
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Brobbey",
+   "eid": 552,
+   "club": "SUN",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "FUL",
+    "bre",
+    "ARS"
+   ],
+   "npxg": 0.28,
+   "xa": 0.03,
+   "ga": 0.42
+  },
+  {
+   "pos": "FWD",
+   "price": 6.0,
+   "n": "Richarlison",
+   "sheet_n": "Richarlison*",
+   "eid": 527,
+   "club": "TOT",
+   "rate": "orange",
+   "trend": "down",
+   "fx": [
+    "NEW",
+    "nfo",
+    "EVE"
+   ],
+   "npxg": 0.37,
+   "xa": 0.07,
+   "ga": 0.69
+  },
+  {
+   "pos": "FWD",
+   "price": 7.5,
+   "n": "João Pedro",
+   "sheet_n": "Joao Pedro",
+   "eid": 165,
+   "club": "CHE",
+   "rate": "green",
+   "fx": [
+    "BHA",
+    "ars",
+    "HUL"
+   ],
+   "npxg": 0.51,
+   "xa": 0.07,
+   "ga": 0.81
+  },
+  {
+   "pos": "FWD",
+   "price": 7.5,
+   "n": "Havertz",
+   "eid": 26,
+   "club": "ARS",
+   "rate": "green",
+   "fx": [
+    "avl",
+    "CHE",
+    "sun"
+   ],
+   "npxg": 0.4,
+   "xa": 0.07,
+   "ga": 0.77
+  },
+  {
+   "pos": "FWD",
+   "price": 8.0,
+   "n": "Thiago",
+   "eid": 106,
+   "club": "BRE",
+   "rate": "green",
+   "fx": [
+    "lee",
+    "SUN",
+    "bou"
+   ],
+   "npxg": 0.37,
+   "xa": 0.05,
+   "ga": 0.63
+  },
+  {
+   "pos": "FWD",
+   "price": 9.0,
+   "n": "Isak",
+   "eid": 379,
+   "club": "LIV",
+   "rate": "green",
+   "fx": [
+    "NFO",
+    "ips",
+    "FUL"
+   ],
+   "npxg": 0.32,
+   "xa": 0.01,
+   "ga": 0.52
+  },
+  {
+   "pos": "FWD",
+   "price": 15.5,
+   "n": "Haaland",
+   "eid": 411,
+   "club": "MCI",
+   "rate": "green",
+   "fx": [
+    "cry",
+    "COV",
+    "mun"
+   ],
+   "npxg": 0.68,
+   "xa": 0.09,
+   "ga": 1.06
+  }
+ ]
+}

@@ -4,7 +4,7 @@
 Exakt MILP (pulp + CBC). A cél a KEZDŐ XI összpontja fordulónként — DE GW1-ben
 BENCH BOOST van, ott mind a 15 játékos pontja számít. Kapitány minden fordulóban duplázik.
 
-A „csak zöld" változat a cheatsheet/gw1_fran.json „green" (Great Option) minősítésű
+A „csak zöld" változat a legfrissebb cheatsheet/gw*_fran.json „green" (Great Option) minősítésű
 játékosaira szorít — kivéve a kapust, mert a kapus-táblát nem ismerjük (a tulaj engedélyével).
 
 Megkötések: 15 fő · 2 GK / 5 DEF / 5 MID / 3 FWD · max 3 játékos klubonként · <= 100.0m
@@ -12,13 +12,22 @@ Felállás fordulónként: 11 fő, pontosan 1 GK, DEF 3-5, MID 2-5, FWD 1-3.
 
 Változatok: szabad · Haaland+Bruno · csak Haaland (Bruno tiltva) · csak Bruno (Haaland tiltva)
 """
-import json, pathlib, subprocess, sys
+import json, pathlib, re, subprocess, sys
 import pulp
 
 HERE = pathlib.Path(__file__).parent
+_ap = __import__("argparse").ArgumentParser()
+_ap.add_argument("--from", dest="gw_from", type=int, default=None,
+                 help="kezdő forduló; alapból az első le nem játszott")
+_ap.add_argument("--bboost", type=int, default=None,
+                 help="bench boost fordulószáma (nem index); alapból nincs")
+_ARGS = _ap.parse_args()
 BUDGET = 1000          # tized-millióban (100.0m)
-BBOOST_GW = 0          # 0-alapú index: az ELSŐ vizsgált fordulóban van a bench boost
 GWS = 3
+# Bench boost: melyik vizsgált fordulóban játszik mind a 15 (0-alapú index a GWS ablakban).
+# A GW1-es chip elment, ezért alapból NINCS boost; ha megint lesz, add meg fordulószámmal:
+#   --bboost 7   -> a GW7-es fordulóban, ha az ablakba esik
+BBOOST_GW = None
 NEED = {"GKP": 2, "DEF": 5, "MID": 5, "FWD": 3}
 XI_MIN = {"GKP": 1, "DEF": 3, "MID": 2, "FWD": 1}
 XI_MAX = {"GKP": 1, "DEF": 5, "MID": 5, "FWD": 3}
@@ -35,8 +44,22 @@ def _newest(*dirs):
 snaps = [_newest("proj", "proj_private")]
 if not snaps[0]: sys.exit("nincs projekció-snapshot")
 S = json.loads(snaps[-1].read_text(encoding="utf-8"))
-gw0 = S["gw_from"]
+# A snapshot GW1-től GW5-ig tartalmaz becslést, de a lejátszott fordulót nincs értelme
+# optimalizálni: alapból a legutolsó LEZÁRT forduló utáni körrel kezdünk.
+played = max((int(f.stem[2:]) for f in (HERE / "locked").glob("gw*.json")), default=0)
+gw0 = max(S["gw_from"], played + 1)
+if _ARGS.gw_from is not None: gw0 = _ARGS.gw_from
+top = S.get("gw_to") or (S["gw_from"] + GWS - 1)
+if gw0 + GWS - 1 > top:
+    gw0 = max(S["gw_from"], top - GWS + 1)
+    print(f"  (a snapshot csak GW{top}-ig ér, ezért GW{gw0}-tól számolunk)")
 gws = [str(g) for g in range(gw0, gw0 + GWS)]
+if _ARGS.bboost is not None:
+    if gw0 <= _ARGS.bboost < gw0 + GWS: BBOOST_GW = _ARGS.bboost - gw0
+    else: sys.exit(f"a bench boost fordulója (GW{_ARGS.bboost}) nincs a GW{gw0}"
+                   f"–{gw0 + GWS - 1} ablakban")
+print(f"Ablak: GW{gw0}–{gw0 + GWS - 1} · bench boost: "
+      + (f"GW{gw0 + BBOOST_GW}" if BBOOST_GW is not None else "nincs"))
 
 idmap = json.loads((HERE / "idmap.json").read_text(encoding="utf-8"))
 D2M = {int(k): v for k, v in idmap["draft_to_main"].items()}
@@ -69,7 +92,7 @@ def solve(pool, force=(), ban=(), label=""):
     y = {(i, g): pulp.LpVariable(f"y{i}_{g}", cat="Binary") for i in ids for g in range(GWS)}
     c = {(i, g): pulp.LpVariable(f"c{i}_{g}", cat="Binary") for i in ids for g in range(GWS)}
 
-    # GW1 (bench boost): a KERET minden tagja pontot hoz -> x, nem y.
+    # Bench boost fordulójában a KERET minden tagja pontot hoz -> x, nem y.
     # A többi fordulóban csak a kezdő XI (y). A kapitány mindig duplázik (c).
     prob += pulp.lpSum(
         pool[i]["pts"][g] * ((x[i] if g == BBOOST_GW else y[(i, g)]) + c[(i, g)])
@@ -141,25 +164,41 @@ print("Mag-négyes: " + ", ".join(
     + f'  = £{sum(MAIN[D2M[i]]["cost"] for i in CORE)/10:.1f}m')
 
 # --- „csak zöld": a cheat sheet Great Option minősítése
-cs = HERE / "cheatsheet" / "gw1_fran.json"
+# a legfrissebb cheat sheet (fordulószám szerint), nem fixen a GW1-es
+def _newest_cs():
+    fs = sorted((HERE / "cheatsheet").glob("gw*_fran.json"),
+                key=lambda f: int(f.stem.split("_")[0][2:]))
+    return fs[-1] if fs else None
+cs = _newest_cs()
+CS_GW = int(cs.stem.split("_")[0][2:]) if cs else None
 GREEN = set()
-if cs.exists():
+if cs:
     import unicodedata
     def nz(t):
         t = (t or "").lower()
         for a, b in [("ø","o"),("æ","ae"),("đ","d"),("ł","l"),("ß","ss"),("ı","i")]: t = t.replace(a, b)
         t = "".join(ch for ch in unicodedata.normalize("NFKD", t) if not unicodedata.combining(ch))
         return "".join(ch for ch in t if ch.isalnum())
+    def base(t):
+        """kezdőbetű-előtag nélküli vezetéknév: 'M.Sangare' / 'A. Silva' -> 'sangare' / 'silva'"""
+        t = re.sub(r"^\s*[A-Za-z]\s*[.\s]\s*", "", (t or "").strip())
+        return nz(t)
     rows = [r for r in json.loads(cs.read_text(encoding="utf-8"))["players"] if r["rate"] == "green"]
-    by = {}
+    by, byb = {}, {}
     for m, info in MAIN.items():
-        by.setdefault((nz(info["web"]), info["club"], info["pos"]), []).append(m)
+        k = (info["club"], info["pos"])
+        by.setdefault((nz(info["web"]), *k), []).append(m)
+        byb.setdefault((base(info["web"]), *k), []).append(m)
     miss = []
     for r in rows:
-        hit = by.get((nz(r["n"]), r["club"], r["pos"]))
+        # elsődlegesen az eid (canon_cheatsheet.py írja be), utána névre esünk vissza
+        if r.get("eid") in MAIN: GREEN.add(r["eid"]); continue
+        hit = by.get((nz(r["n"]), r["club"], r["pos"])) \
+              or byb.get((base(r["n"]), r["club"], r["pos"]))
         if hit and len(hit) == 1: GREEN.add(hit[0])
-        else: miss.append(f'{r["n"]} ({r["club"]}/{r["pos"]})')
-    print(f"Zöld (Great Option) lista: {len(GREEN)}/{len(rows)} párosítva"
+        else: miss.append(f'{r["n"]} ({r["club"]}/{r["pos"]})'
+                          + (f' — {len(hit)} találat' if hit else ''))
+    print(f"Zöld (Great Option) lista GW{CS_GW}-ből: {len(GREEN)}/{len(rows)} párosítva"
           + (f", kimaradt: {', '.join(miss)}" if miss else ""))
 
 VARIANTS = [("free", "Szabad", (), (), False),
@@ -170,7 +209,8 @@ VARIANTS = [("free", "Szabad", (), (), False),
             ("green_core", "Zöldek + a mag-négyes", tuple(CORE), (), True)]
 
 out = {"gw_from": gw0, "gws": GWS, "budget": BUDGET / 10, "taken_at": S["taken_at"],
-       "bboost_gw": gw0 + BBOOST_GW,
+       "cs_gw": CS_GW,
+       "bboost_gw": (gw0 + BBOOST_GW) if BBOOST_GW is not None else None,
        "sources": {}, "variants": [{"key": k, "label": l, "green": gr}
                                    for k, l, _, _, gr in VARIANTS]}
 for src in S["data"]:
