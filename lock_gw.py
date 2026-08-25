@@ -10,7 +10,9 @@ Három szakasz fordulónként:
   1. deadline előtt        -> nincs teendő
   2. deadline után         -> TIPP LEZÁRÁSA: valós felállás + a deadline előtti utolsó
                               projekció-pillanatkép -> „ezt tippeltük erre a felállásra"
-  3. a forduló véget ért   -> VALÓS PONTOK beírása ugyanabba a fájlba
+  3. minden meccs elkezdődött -> IDEIGLENES pontok (`provisional: true`). Az FPL a
+     bónuszpontok véglegesítéséig `finished=False`-t ad, de a pontszám már látszik.
+  4. a forduló véglegesen lezárult -> a pontok FELÜLÍRÓDNAK, `provisional: false`
 
 A projekciót NEM tudja lehúzni: az FPL Hub és a Solio bejelentkezést kér. Ha a deadline
 előtt nincs friss pillanatkép, a szkript ezt kiírja és a tipp-részt kihagyja — a valós
@@ -109,9 +111,14 @@ for e in dl["events"]:
         changed.append(f"GW{gw} tipp+felállás lezárva"
                        + (f" ({len(tips)} forrás)" if tips else " (tipp nélkül)"))
 
-    # --- 3. szakasz: valós pontok, ha a forduló véget ért
+    # --- 3-4. szakasz: pontok. Ideiglenesen már akkor, ha minden meccs elkezdődött;
+    # véglegesen, amikor az API lezárja (a bónusz miatt ez órákkal később van).
     ms = matches.get(gw, [])
-    if ms and all(m["finished"] for m in ms) and not rec.get("actual"):
+    final = bool(ms) and all(m["finished"] for m in ms)
+    started = bool(ms) and all(m["started"] for m in ms)
+    have = rec.get("actual") or {}
+    need = (final and (not have or have.get("provisional"))) or (started and not have)
+    if need:
         live = api(f"event/{gw}/live") or {}
         pts = {int(k): (v.get("stats", {}) or {}).get("total_points")
                for k, v in (live.get("elements") or {}).items()}
@@ -120,8 +127,9 @@ for e in dl["events"]:
             g = lambda ids: sum(pts.get(i) or 0 for i in ids)
             per[ent] = {"xi": g(lu["xi"]), "bench": g(lu["bench"]),
                         "players": {str(i): pts.get(i) for i in lu["xi"] + lu["bench"]}}
-        rec["actual"] = {"teams": per, "matches": ms}
-        changed.append(f"GW{gw} valós pontok beírva")
+        rec["actual"] = {"teams": per, "matches": ms, "provisional": not final,
+                         "recorded_at": now.replace(microsecond=0).isoformat().replace("+00:00", "Z")}
+        changed.append(f"GW{gw} pontok beírva ({'VÉGLEGES' if final else 'ideiglenes — a bónusz még nincs lezárva'})")
 
     rec["matches"] = matches.get(gw, [])
     f.write_text(json.dumps(rec, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

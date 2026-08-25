@@ -4,7 +4,8 @@
 Miért: a projekció lehúzása kézi (bejelentkezés kell), tehát a gépnek csak akkor van
 dolga, ha
   (a) elmúlt egy deadline és az a forduló még nincs lezárva, vagy
-  (b) egy lezárt forduló összes meccse véget ért, de a valós pontok még nincsenek beírva,
+  (b) minden meccs elkezdődött, de még nincsenek pontok (ideiglenes beírás), vagy
+  (b2) a forduló VÉGLEGESEN lezárult, de csak ideiglenes pontok vannak (véglegesítés),
   (c) vagy kézzel indítottuk (FORCE=1).
 
 Így a futások nagy része azonnal, munka nélkül zárul — nincs zaj és nincs hibázási felület.
@@ -49,8 +50,14 @@ else:
             continue
         rec = json.loads(f.read_text(encoding="utf-8"))
         ms = by_gw.get(gw, [])
-        if ms and all(m["finished"] for m in ms) and not rec.get("actual"):
-            reasons.append(f"GW{gw}: véget ért, a valós pontok még nincsenek beírva")
+        if not ms: continue
+        final = all(m["finished"] for m in ms)
+        started = all(m["started"] for m in ms)
+        have = rec.get("actual") or {}
+        if final and (not have or have.get("provisional")):
+            reasons.append(f"GW{gw}: véglegesen lezárult, a pontokat véglegesíteni kell")
+        elif started and not have:
+            reasons.append(f"GW{gw}: minden meccs elkezdődött, ideiglenes pontok beírása")
 
 work = bool(reasons)
 out = os.environ.get("GITHUB_OUTPUT")
