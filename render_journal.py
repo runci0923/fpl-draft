@@ -112,12 +112,28 @@ for gw, d in MY["gws"].items():
     }
 LAST_SQUAD = max(squads, key=int) if squads else None
 
-# a cheat sheet minősítése — kontextus a watchlisthez
+# A cheat sheet minősítése — CSAK A LEGFRISSEBB LAPRÓL. A lapokat összemosni
+# félrevezető: aki a GW1-esen zöld volt, de a GW2-esről lekerült, annak Frannek
+# most nincs róla véleménye. Az előző minősítés csak a súgóban jelenik meg.
+_sheets = sorted(((json.loads(f.read_text(encoding="utf-8")), f)
+                  for f in (HERE / "cheatsheet").glob("gw*_fran.json")),
+                 key=lambda x: x[0].get("gw") or int(x[1].stem.split("_")[0][2:]))
 CS = {}
-for f in sorted((HERE / "cheatsheet").glob("gw*_fran.json")):
-    d = json.loads(f.read_text(encoding="utf-8"))
-    for r in d["players"]:
-        if r.get("eid"): CS[r["eid"]] = {"rate": r["rate"], "gw": d.get("gw")}
+if _sheets:
+    _new = _sheets[-1][0]
+    _prev = {r["eid"]: r["rate"] for r in _sheets[-2][0]["players"]
+             if r.get("eid")} if len(_sheets) > 1 else {}
+    _pgw = (_sheets[-2][0].get("gw")
+            or int(_sheets[-2][1].stem.split("_")[0][2:])) if len(_sheets) > 1 else None
+    for r in _new["players"]:
+        if not r.get("eid"): continue
+        e = {"rate": r["rate"], "gw": _new.get("gw")}
+        was = _prev.get(r["eid"])
+        if was and was != r["rate"]: e["was"], e["was_gw"] = was, _pgw
+        CS[r["eid"]] = e
+    print(f'  cheat sheet: GW{_new.get("gw")} · {len(CS)} sor'
+          + (f' · {sum(1 for v in CS.values() if "was" in v)} átminősítve '
+             f'a GW{_pgw}-eshez képest' if _prev else ''))
 
 DATA = {
     "team": MY["team_name"], "manager": MY["manager"],
@@ -128,6 +144,7 @@ DATA = {
     "taken_at": S["taken_at"], "srcs": ORDER,
     "squads": squads, "last_squad": LAST_SQUAD,
     "pool": pool, "cs": CS,
+    "cs_gw": (_sheets[-1][0].get("gw") if _sheets else None),
 }
 
 state = {"v": 1, "updated": None, "rounds": {}}

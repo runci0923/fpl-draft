@@ -66,6 +66,11 @@ function squadOf(gw) {
 /* ---------- becslés ---------- */
 let src = (D.srcs[0] || {}).slug, GW = null, win = 3;
 let fPos = 'ALL', fQ = '', fSort = 'proj', fDir = -1, fFree = false;
+const fRate = new Set();      // Fran-minősítés: VAGY-kapcsolat, üresen nincs szűrés
+const myRate = (id, gw) => {  // az ÉN értékelésem — mindig csak az adott fordulóra
+  const r = S.rounds[String(gw)];
+  return ((r && r.post && r.post.players && r.post.players[id]) || {}).r || null;
+};
 
 function winGws(from) {
   return D.gws.filter(g => g >= from && g < from + win);
@@ -275,7 +280,8 @@ function renderSquad() {
       <span class="pn">
         <span class="nm">${esc(p.n)}
           ${e.cap ? '<span class="tag c">C</span>' : e.vice ? '<span class="tag">VC</span>' : ''}
-          ${cs ? `<span class="rate ${cs.rate}" title="FPL Fran GW${cs.gw}: ${cs.rate}"></span>` : ''}
+          ${cs ? `<span class="fran"><span class="fl">Fran</span><span class="rate ${cs.rate}"
+            title="FPL Fran GW${cs.gw}: ${cs.rate}"></span></span>` : ''}
           ${wl.has(e.id) ? '<span class="tag w">watch</span>' : ''}</span>
         <span class="meta">${esc(p.club)} · ${esc(p.pos)} · £${p.price.toFixed(1)}m · ${p.own}%
           ${p.st !== 'a' && p.news ? ` · <span class="inj">${esc(p.news)}</span>` : ''}</span>
@@ -292,8 +298,9 @@ function renderSquad() {
     <div class="sq">
       <div class="sqh"><span>kezdő</span>
         <span style="margin-left:auto;text-transform:none;letter-spacing:0">
-          <span class="rate green"></span> jó · <span class="rate yellow"></span> elmegy ·
-          <span class="rate orange"></span> gyenge · <span class="rate red"></span> kuka</span>
+          az én értékelésem: <span class="rate green"></span> jó ·
+          <span class="rate yellow"></span> elmegy · <span class="rate orange"></span> gyenge ·
+          <span class="rate red"></span> kuka</span>
         <span>${win > 1 ? `becslés GW${winGws(GW)[0]}–${winGws(GW)[winGws(GW).length-1]}`
         : `becslés GW${GW}`}</span></div>
       ${sq.xi.map(e => line(e, false)).join('')}
@@ -360,7 +367,10 @@ function renderWatch() {
       return `<div class="wr">
         <span class="pn"><span class="nm">${esc(p.n)}
             <span class="tag">${esc(POSL[p.pos] || p.pos)}</span>
-            ${cs ? `<span class="rate ${cs.rate}" title="FPL Fran GW${cs.gw}"></span>` : ''}</span>
+            ${(() => { const mr = myRate(x.id, GW); return mr
+            ? `<span class="rate ${mr}" title="a te értékelésed"></span>` : ''; })()}
+          ${cs ? `<span class="tag">Fran</span><span class="rate ${cs.rate}"
+            title="FPL Fran GW${cs.gw}"></span>` : ''}</span>
           <span class="meta">${esc(p.club)} · £${p.price.toFixed(1)}m · ${p.own}% ·
             becslés ${pj == null ? '–' : pj.toFixed(1)} (GW${gs[0]}${gs.length > 1 ? '–' + gs[gs.length-1] : ''})
             ${p.st !== 'a' && p.news ? ` · <span class="inj">${esc(p.news)}</span>` : ''}</span>
@@ -379,7 +389,8 @@ function renderPick() {
   const gs = winGws(GW);
   let rows = D.pool.filter(p => (fPos === 'ALL' || p.pos === fPos)
     && (!fQ || (p.n + ' ' + p.club).toLowerCase().includes(fQ))
-    && (!fFree || !ownSet.has(p.id)));
+    && (!fFree || !ownSet.has(p.id))
+    && (!fRate.size || fRate.has((D.cs[p.id] || {}).rate || 'none')));
   const key = p => fSort === 'proj' ? (proj(p.id, GW, false) ?? -1)
     : fSort === 'ppm' ? ((proj(p.id, GW, false) ?? 0) / p.price)
     : fSort === 'price' ? p.price : fSort === 'own' ? p.own : p.n;
@@ -401,13 +412,23 @@ function renderPick() {
         ['MID', 'közép'], ['FWD', 'csatár']].map(([k, l]) =>
         `<button class="b" data-pos="${k}" aria-pressed="${fPos === k}">${l}</button>`).join('')}</span>
       <span class="grp"><button class="b" data-free="1" aria-pressed="${fFree}">akik nincsenek nálam</button></span>
+      <span class="lbl">fran${D.cs_gw ? ' gw' + D.cs_gw : ''}</span><span class="grp">${
+        [['green', 'zöld'], ['yellow', 'sárga'], ['orange', 'narancs'], ['red', 'piros'],
+         ['none', 'nincs a lapon']].map(([k, l]) =>
+        `<button class="b rb" data-rate="${k}" aria-pressed="${fRate.has(k)}">${
+          k === 'none' ? '' : `<span class="rate ${k}"></span>`}${l}</button>`).join('')}${
+        fRate.size ? `<button class="b" data-rate="clear">szűrő törlése</button>` : ''}</span>
     </div>
+    <p class="legend2"><b>Én</b> = a te értékelésed, mindig csak a kiválasztott fordulóra
+      (${GW}. forduló) · <b>Fran</b> = a legfrissebb FPL Fran cheat sheet${D.cs_gw ? ` (GW${D.cs_gw})` : ''}
+      minősítése; aki arról lekerült, annál „–" áll, nem a régi szín.
+      A Fran-szűrő több színt is elfogad: amit benyomsz, azok <b>bármelyike</b> megfelel.</p>
     <div class="tw pick"><table>
       <thead><tr>${th('n', 'Játékos', 'l')}<th>Poz</th>${th('price', 'Ár')}${th('own', 'Mezőny')}
         ${th('proj', `GW${gs[0]}${gs.length > 1 ? '–' + gs[gs.length - 1] : ''}`)}
-        ${th('ppm', 'Pont/£')}<th class="l">Fixtúra</th><th>Fran</th><th></th></tr></thead>
+        ${th('ppm', 'Pont/£')}<th class="l">Fixtúra</th><th>Én</th><th>Fran</th><th></th></tr></thead>
       <tbody>${shown.map(p => {
-        const pj = proj(p.id, GW, false), cs = D.cs[p.id];
+        const pj = proj(p.id, GW, false), cs = D.cs[p.id], mine = myRate(p.id, GW);
         return `<tr class="${ownSet.has(p.id) ? 'mine' : ''}">
           <td class="l">${esc(p.n)}${ownSet.has(p.id) ? ' <span class="tag c">nálam</span>' : ''}
             ${p.st !== 'a' ? ' <span class="inj">!</span>' : ''}</td>
@@ -416,7 +437,11 @@ function renderPick() {
           <td><b>${pj == null ? '–' : pj.toFixed(1)}</b></td>
           <td>${pj == null ? '–' : (pj / p.price).toFixed(2)}</td>
           <td class="l">${gs.map(g => esc(fx1(p.id, g))).join(' ')}</td>
-          <td>${cs ? `<span class="rate ${cs.rate}" title="GW${cs.gw}"></span>` : '<span class="dimc">–</span>'}</td>
+          <td>${mine ? `<span class="rate ${mine}" title="a te értékelésed a ${GW}. fordulóra"></span>`
+            : '<span class="dimc">–</span>'}</td>
+          <td>${cs ? `<span class="rate ${cs.rate}" title="FPL Fran GW${cs.gw}: ${cs.rate}${
+            cs.was ? ` (GW${cs.was_gw}-ben ${cs.was} volt)` : ''}"></span>`
+            : '<span class="dimc">–</span>'}</td>
           <td><button class="plus" data-add="${p.id}" aria-pressed="${wl.has(p.id)}"
             title="${wl.has(p.id) ? 'le a watchlistről' : 'fel a watchlistre'}">${wl.has(p.id) ? '−' : '+'}</button></td>
         </tr>`; }).join('')}</tbody>
@@ -432,7 +457,10 @@ function renderPick() {
     <b>Keret.</b> Az API-ból jön (<code>fetch_my_fpl.py</code>), lezárt fordulóra a tényleges
     felállás, kapitánnyal és kispaddal. A még le nem játszott fordulónál az utolsó ismert keret
     látszik, mert a picks-végpont a deadline előtt 404-et ad.<br>
-    <b>Fran-oszlop.</b> A cheat sheet minősítése (zöld = Great Option), ha az a játékos rajta van.`;
+    <b>Két értékelés, külön.</b> Az <b>Én</b> a te heti jelzőlámpád: minden fordulóhoz saját,
+    tehát ugyanaz a játékos lehet a 2. fordulóban zöld és a 3.-ban narancs — a régi hetek nem
+    változnak. A <b>Fran</b> az FPL Fran cheat sheetjének minősítése, fordulónként egy lap,
+    a videó képkockáiból ellenőrizve. A kereső Fran-szűrője több színt is elfogad.`;
 }
 
 function renderStatus() {
@@ -510,6 +538,12 @@ document.addEventListener('click', ev => {
   if (t.dataset.win) { win = +t.dataset.win; renderBar(); renderAll(); return; }
   if (t.dataset.pos) { fPos = t.dataset.pos; renderPick(); return; }
   if (t.dataset.free) { fFree = !fFree; renderPick(); return; }
+  if (t.dataset.rate) {
+    const k = t.dataset.rate;
+    if (k === 'clear') fRate.clear();
+    else if (fRate.has(k)) fRate.delete(k); else fRate.add(k);
+    renderPick(); return;
+  }
   if (t.dataset.sort) { return; }
   if (t.dataset.v && t.dataset.pid) {
     const r = round(GW); r.post = r.post || {}; r.post.players = r.post.players || {};

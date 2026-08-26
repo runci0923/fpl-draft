@@ -224,3 +224,12 @@ tbody tr.mine{box-shadow:inset 3px 0 0 var(--coral)}
 .bench .prow{justify-content:flex-start}
 .bench .pc{background:var(--raised)}
 .gkslot{border-right:1px solid var(--rule);padding-right:clamp(5px,1vw,12px);margin-right:2px}
+
+.legend2{margin:0;padding:9px 14px;border-bottom:1px solid var(--rule);font-family:var(--mono);
+  font-size:10.5px;line-height:1.65;color:var(--dim);background:var(--surface-2)}
+.legend2 b{color:var(--fg);font-weight:500}
+.b.rb{display:inline-flex;align-items:center;gap:5px}
+.b.rb .rate{width:8px;height:8px}
+.fran{display:inline-flex;align-items:center;gap:3px}
+.fran .fl{font-family:var(--mono);font-size:7.5px;letter-spacing:.06em;color:var(--dim);
+  text-transform:uppercase}
