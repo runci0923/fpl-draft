@@ -67,6 +67,14 @@ function squadOf(gw) {
 let src = (D.srcs[0] || {}).slug, GW = null, win = 3;
 let fPos = 'ALL', fQ = '', fSort = 'proj', fDir = -1, fFree = false;
 const fRate = new Set();      // Fran-minősítés: VAGY-kapcsolat, üresen nincs szűrés
+const SORTS = [
+  {k: 'proj',  d: -1, l: 'becslés'},
+  {k: 'price', d: -1, l: 'ár · drága elöl'},
+  {k: 'price', d:  1, l: 'ár · olcsó elöl'},
+  {k: 'ppm',   d: -1, l: 'pont/£'},
+  {k: 'own',   d: -1, l: 'mezőny'},
+  {k: 'n',     d:  1, l: 'név'},
+];
 const myRate = (id, gw) => {  // az ÉN értékelésem — mindig csak az adott fordulóra
   const r = S.rounds[String(gw)];
   return ((r && r.post && r.post.players && r.post.players[id]) || {}).r || null;
@@ -172,8 +180,9 @@ function pcard(e, opts) {
     const fx = ((p.fx || {})[String(g)] || ['–'])[0];
     return `<span class="g1 ${cl}"><b>${v == null ? '–' : v.toFixed(1)}</b><em>${esc(fx)}</em></span>`;
   }).join('');
-  return `<div class="pc${p.st !== 'a' ? ' out' : ''}"${p.st !== 'a' && p.news
-      ? ` title="${esc(p.news)}"` : ''}>
+  const mr = myRate(e.id, GW);   // az én értékelésem: a kártya bal széle, nem pötty
+  return `<div class="pc${p.st !== 'a' ? ' out' : ''}${mr ? ' me-' + mr : ''}"${
+      p.st !== 'a' && p.news ? ` title="${esc(p.news)}"` : ''}>
     <span class="pcn">${esc(p.n)}${e.cap ? ' <span class="tag c">C</span>'
       : e.vice ? ' <span class="tag">VC</span>' : ''}${
       cs ? ` <span class="rate ${cs.rate}" title="FPL Fran GW${cs.gw}: ${cs.rate}"></span>` : ''}</span>
@@ -202,6 +211,9 @@ function renderPitch() {
       : `${art(gw)} ${gw}. fordulóból · ${art(GW)} ${GW}. még nincs lezárva`} · ${form}
       · kezdő XI becslés <b>${sum.toFixed(1)}</b> pont
       (GW${gs[0]}${gs.length > 1 ? '–' + gs[gs.length - 1] : ''})</span></h2>
+    <p class="legend2">A kártya <b>bal széle</b> a te heti értékelésed
+      (${GW}. forduló), a név mellett a <b>pötty</b> az FPL Fran cheat sheetje${
+      D.cs_gw ? ` (GW${D.cs_gw})` : ''}. Alul a becslés fordulónként, az ellenféllel.</p>
     <div class="pitch">${rows}</div>
     <div class="bench"><div class="bh">kispad</div>
       <div class="prow">${bench.map((e, i) =>
@@ -394,9 +406,12 @@ function renderPick() {
   const key = p => fSort === 'proj' ? (proj(p.id, GW, false) ?? -1)
     : fSort === 'ppm' ? ((proj(p.id, GW, false) ?? 0) / p.price)
     : fSort === 'price' ? p.price : fSort === 'own' ? p.own : p.n;
+  // holtversenyben a becslés dönt: az „olcsó elöl" különben a 0 pontos £4-eseket hozná
   rows.sort((a, b) => {
     const x = key(a), y = key(b);
-    return (typeof x === 'string' ? x.localeCompare(y, 'hu') : x - y) * fDir;
+    const c = (typeof x === 'string' ? x.localeCompare(y, 'hu') : x - y) * fDir;
+    if (c) return c;
+    return (proj(b.id, GW, false) ?? -1) - (proj(a.id, GW, false) ?? -1);
   });
   const shown = rows.slice(0, 120);
   const th = (k, l, cls) => `<th class="${cls || ''}" data-sort="${k}"
@@ -412,6 +427,9 @@ function renderPick() {
         ['MID', 'közép'], ['FWD', 'csatár']].map(([k, l]) =>
         `<button class="b" data-pos="${k}" aria-pressed="${fPos === k}">${l}</button>`).join('')}</span>
       <span class="grp"><button class="b" data-free="1" aria-pressed="${fFree}">akik nincsenek nálam</button></span>
+      <span class="lbl">rendezés</span><span class="grp">${
+        SORTS.map((o, i) => `<button class="b" data-si="${i}"
+          aria-pressed="${fSort === o.k && fDir === o.d}">${esc(o.l)}</button>`).join('')}</span>
       <span class="lbl">fran${D.cs_gw ? ' gw' + D.cs_gw : ''}</span><span class="grp">${
         [['green', 'zöld'], ['yellow', 'sárga'], ['orange', 'narancs'], ['red', 'piros'],
          ['none', 'nincs a lapon']].map(([k, l]) =>
@@ -538,6 +556,9 @@ document.addEventListener('click', ev => {
   if (t.dataset.win) { win = +t.dataset.win; renderBar(); renderAll(); return; }
   if (t.dataset.pos) { fPos = t.dataset.pos; renderPick(); return; }
   if (t.dataset.free) { fFree = !fFree; renderPick(); return; }
+  if (t.dataset.si) {
+    const o = SORTS[+t.dataset.si]; fSort = o.k; fDir = o.d; renderPick(); return;
+  }
   if (t.dataset.rate) {
     const k = t.dataset.rate;
     if (k === 'clear') fRate.clear();
@@ -583,7 +604,7 @@ document.addEventListener('click', ev => {
 document.addEventListener('click', ev => {
   const th = ev.target.closest('th[data-sort]');
   if (!th) return;
-  const k = th.dataset.sort;
+  const k = th.dataset.sort;   // a fejléc továbbra is működik, és a választó követi
   if (fSort === k) fDir = -fDir; else { fSort = k; fDir = k === 'n' ? 1 : -1; }
   renderPick();
 });

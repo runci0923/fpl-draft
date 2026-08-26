@@ -233,3 +233,10 @@ tbody tr.mine{box-shadow:inset 3px 0 0 var(--coral)}
 .fran{display:inline-flex;align-items:center;gap:3px}
 .fran .fl{font-family:var(--mono);font-size:7.5px;letter-spacing:.06em;color:var(--dim);
   text-transform:uppercase}
+
+/* az én heti értékelésem a pálya-kártyán: bal szél, hogy formában is eltérjen a Fran-pöttytől */
+.pc.me-green {box-shadow:var(--sh-sm), inset 3px 0 0 var(--g)}
+.pc.me-yellow{box-shadow:var(--sh-sm), inset 3px 0 0 var(--y)}
+.pc.me-orange{box-shadow:var(--sh-sm), inset 3px 0 0 var(--o)}
+.pc.me-red   {box-shadow:var(--sh-sm), inset 3px 0 0 var(--r)}
+.pitchcard .legend2{border-bottom:0;background:transparent;padding:0 clamp(8px,2vw,26px) 2px}
