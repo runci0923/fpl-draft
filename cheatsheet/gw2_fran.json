@@ -7,7 +7,8 @@
   "zöld = magasabb projektált gólszám / nagyobb clean sheet-esély, piros = alacsonyabb.",
   "A klubot a fixtúra-hármasból oldottuk fel (mind a 20 hármas egyedi), nem a badge-ből.",
   "tag: new = új a listán; up/down = a GW1-es listához képest fel-/lecsúszott.",
-  "Statisztikák: 25/26-os szezon per 90 perc."
+  "Statisztikák: 25/26-os szezon per 90 perc.",
+  "A minősítéseket 2026-08-26-án a videó képkockáiból ellenőriztük (fetch_cheatsheet_frames.py, Todp-JE5kbo, 1080p, webkamera kivágva): 7 sor színe javításra került a képernyőképről olvasottal szemben."
  ],
  "source": "FPL Fran (@FPL__fran) GW2 final cheat sheet",
  "date": "2026-08-25",
@@ -20,9 +21,7 @@
  },
  "stats_note": "MID: npxG/90, xAG/90 (a fájlban xa kulcs), G+A/90, CBIT/90 | FWD: npxG/90, xA/90, G+A/90 | DEF: npxG+xAG/90, G+A/90, CBIT/90 | CBIT/90 = Clearances+Blocks+Recoveries+Interceptions+Tackles",
  "missing": [
-  "GKP tábla — nincs a képernyőképeken (a kapus szabadon választható)",
-  "MID £5m alatt — a lap teteje a videó-overlay alatt volt",
-  "FWD £5m alatt — csak a £4.5m Walle-Egeli látszott",
+  "GKP tábla — a videóban nincs ilyen fejezet, a kapus szabadon választható",
   "Colwill (DEF £5m) és Norgaard* (MID £5m) statjai a forrásban üresek"
  ],
  "players": [
@@ -637,7 +636,7 @@
    "n": "Virgil",
    "eid": 356,
    "club": "LIV",
-   "rate": "yellow",
+   "rate": "green",
    "fx": [
     "NFO",
     "ips",
@@ -1180,7 +1179,7 @@
    "n": "Szoboszlai",
    "eid": 368,
    "club": "LIV",
-   "rate": "yellow",
+   "rate": "green",
    "fx": [
     "NFO",
     "ips",
@@ -1197,7 +1196,7 @@
    "n": "Gakpo",
    "eid": 367,
    "club": "LIV",
-   "rate": "yellow",
+   "rate": "green",
    "trend": "up",
    "fx": [
     "NFO",
@@ -1354,7 +1353,7 @@
    "n": "Gibbs-White",
    "eid": 480,
    "club": "NFO",
-   "rate": "green",
+   "rate": "yellow",
    "fx": [
     "liv",
     "TOT",
@@ -1371,7 +1370,7 @@
    "n": "Cunha",
    "eid": 428,
    "club": "MUN",
-   "rate": "green",
+   "rate": "yellow",
    "trend": "up",
    "fx": [
     "IPS",
@@ -1407,7 +1406,7 @@
    "n": "Saka",
    "eid": 12,
    "club": "ARS",
-   "rate": "green",
+   "rate": "yellow",
    "trend": "up",
    "fx": [
     "avl",
@@ -1680,7 +1679,7 @@
    "n": "Havertz",
    "eid": 26,
    "club": "ARS",
-   "rate": "green",
+   "rate": "yellow",
    "fx": [
     "avl",
     "CHE",
@@ -1738,5 +1737,18 @@
    "xa": 0.09,
    "ga": 1.06
   }
- ]
+ ],
+ "verified_from": {
+  "video": "Todp-JE5kbo",
+  "date": "2026-08-26",
+  "corrected": [
+   "Cunha green→yellow",
+   "Gakpo yellow→green",
+   "Gibbs-White green→yellow",
+   "Havertz green→yellow",
+   "Saka green→yellow",
+   "Szoboszlai yellow→green",
+   "Virgil yellow→green"
+  ]
+ }
 }
