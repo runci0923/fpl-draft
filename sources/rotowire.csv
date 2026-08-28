@@ -172,7 +172,6 @@ element_id,rank,web_name,club,pos
 304,171,O'Shea,IPS,DEF
 316,172,Emersonn,IPS,FWD
 357,173,Frimpong,LIV,DEF
-403,174,Savinho,TOT,MID
 581,175,Diomande,NFO,DEF
 340,176,Gelhardt,HUL,MID
 96,177,Damsgaard,BRE,MID
@@ -210,7 +209,7 @@ element_id,rank,web_name,club,pos
 574,209,Yirenkyi,COV,MID
 183,210,Rudoni,COV,MID
 149,211,Colwill,CHE,DEF
-401,212,Marmoush,MCI,FWD
+401,212,Marmoush,TOT,FWD
 563,213,Maeda,IPS,MID
 336,214,Okafor,LEE,MID
 579,215,Charles,FUL,MID
@@ -281,7 +280,7 @@ element_id,rank,web_name,club,pos
 596,280,Ruggeri,AVL,DEF
 185,281,Sakamoto,COV,MID
 104,282,Onyeka,COV,MID
-405,283,N.Gonzalez,MCI,MID
+405,283,N.Gonzalez,NEW,MID
 282,284,Giles,HUL,DEF
 290,285,Slater,HUL,MID
 461,286,Touré,NEW,MID
@@ -343,7 +342,7 @@ element_id,rank,web_name,club,pos
 224,343,Nketiah,CRY,FWD
 245,344,Dibling,EVE,MID
 90,345,Hickey,BRE,DEF
-131,346,Baleba,BHA,MID
+131,346,Baleba,MUN,MID
 279,347,Ajayi,HUL,DEF
 592,348,Ouattara,IPS,DEF
 108,349,Wilson,BRE,FWD

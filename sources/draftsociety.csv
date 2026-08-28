@@ -127,7 +127,6 @@ element_id,rank,web_name,club,pos
 515,126,Maddison,TOT,MID
 415,127,Dorgu,MUN,MID
 463,128,Woltemade,NEW,FWD
-403,129,Savinho,TOT,MID
 316,130,Emersonn,IPS,FWD
 423,131,Shaw,MUN,DEF
 447,132,Botman,NEW,DEF
@@ -195,7 +194,7 @@ element_id,rank,web_name,club,pos
 138,194,Kostoulas,BHA,FWD
 34,195,Pau,AVL,DEF
 483,196,Ndoye,NFO,MID
-401,197,Marmoush,MCI,FWD
+401,197,Marmoush,TOT,FWD
 527,198,Richarlison,TOT,FWD
 556,199,M.Sangaré,BRE,MID
 10,200,White,ARS,DEF

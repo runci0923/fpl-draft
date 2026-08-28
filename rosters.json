@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-08-26T06:59:20Z",
+ "taken_at": "2026-08-28T18:28:48Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -23,8 +23,8 @@
    ],
    "FWD": [
     "Haaland (MCI) · pick 1",
-    "Watkins (AVL) · pick 12",
-    "Woltemade (NEW) · pick 84"
+    "Gonzalo (FUL) · waiver",
+    "Barry (EVE) · waiver"
    ]
   },
   "Daniel": {
@@ -67,9 +67,9 @@
    "MID": [
     "Saka (ARS) · pick 3",
     "Szoboszlai (LIV) · pick 10",
-    "Rice (ARS) · pick 22",
     "Tzolis (ARS) · pick 27",
-    "Anderson (MCI) · pick 46"
+    "Anderson (MCI) · pick 46",
+    "M.Sangaré (BRE) · waiver"
    ],
    "FWD": [
     "Calvert-Lewin (LEE) · pick 15",
@@ -117,9 +117,9 @@
    "MID": [
     "Palmer (CHE) · pick 5",
     "Rogers (CHE) · pick 17",
-    "Sarr (CRY) · pick 32",
     "Gakpo (LIV) · pick 65",
-    "E.Le Fée (SUN) · pick 77"
+    "E.Le Fée (SUN) · pick 77",
+    "Sávio (TOT) · waiver"
    ],
    "FWD": [
     "Thiago (BRE) · pick 8",
@@ -129,22 +129,22 @@
   },
   "Norbert": {
    "GKP": [
-    "Sánchez (CHE) · pick 67",
+    "Martinez (AVL) · pick 87",
     "Henderson (CRY) · pick 90"
    ],
    "DEF": [
     "O'Reilly (MCI) · pick 19",
     "Guéhi (MCI) · pick 31",
     "James (CHE) · pick 43",
-    "Hincapie (ARS) · pick 54",
-    "Kerkez (LIV) · pick 55"
+    "Kerkez (LIV) · pick 55",
+    "De Cuyper (BHA) · waiver"
    ],
    "MID": [
     "Doku (MCI) · pick 18",
     "Ødegaard (ARS) · pick 30",
-    "Maddison (TOT) · pick 42",
-    "Mac Allister (LIV) · pick 66",
-    "Barnes (NEW) · pick 79"
+    "Lewis-Potter (BRE) · waiver",
+    "Stach (LEE) · waiver",
+    "Ngumoha (LIV) · waiver"
    ],
    "FWD": [
     "Isak (LIV) · pick 6",
