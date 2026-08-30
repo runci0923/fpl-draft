@@ -94,12 +94,14 @@ for f in sorted((HERE / "locked").glob("gw*.json")):
                    "provisional": bool((r.get("actual") or {}).get("provisional")),
                    "matches": r.get("matches", []), "teams": teams})
 
-# --- forrás-pontosság: |tipp - valós| a kezdő XI-re, csak lezárult fordulókból
+# --- forrás-pontosság: |tipp - valós| a kezdő XI-re, CSAK VÉGLEGES fordulókból.
+# A futó forduló pontjai még hiányosak (a le nem játszott meccsek 0-t adnak), ezért
+# egy ideiglenes fordulót beszámítva a tipp 40 pontja 0-hoz mérődne: a MAE hazudna.
 acc = {}
+final_rounds = [rd for rd in rounds if rd["has_real"] and not rd["provisional"]]
 for src, label in srcs.items():
     errs, n = [], 0
-    for rd in rounds:
-        if not rd["has_real"]: continue
+    for rd in final_rounds:
         for ent, t in rd["teams"].items():
             tip = (t["tip"] or {}).get(src)
             if not tip or not t["real"]: continue
@@ -113,7 +115,7 @@ for src in srcs:
     per = {}
     for ent in ENT:
         d = [rd["teams"][str(ent)]["real"]["xi"] - rd["teams"][str(ent)]["tip"][src]["xi"]
-             for rd in rounds if rd["has_real"] and str(ent) in rd["teams"]
+             for rd in final_rounds if str(ent) in rd["teams"]
              and rd["teams"][str(ent)]["real"] and (rd["teams"][str(ent)]["tip"] or {}).get(src)]
         if d: per[str(ent)] = {"sum": round(sum(d), 1), "n": len(d)}
     luck[src] = per
@@ -121,7 +123,7 @@ for src in srcs:
 out = {"built_at": dt.datetime.now(dt.timezone.utc).replace(microsecond=0)
                      .isoformat().replace("+00:00", "Z"),
        "managers": ENT, "sources": srcs, "rounds": rounds,
-       "accuracy": acc, "luck": luck,
+       "accuracy": acc, "accuracy_gws": [rd["gw"] for rd in final_rounds], "luck": luck,
        "upcoming": [e for e in dl["events"]
                     if e["deadline"] and e["deadline"] > dt.datetime.now(dt.timezone.utc)
                        .isoformat().replace("+00:00", "Z")][:6],
@@ -135,6 +137,9 @@ if acc:
     print("Forrás-pontosság (átlagos eltérés a kezdő XI-re):")
     for s, v in sorted(acc.items(), key=lambda kv: (kv[1]["mae"] is None, kv[1]["mae"])):
         print(f"  {v['label']:<24} MAE {v['mae']}  (n={v['n']})")
+    prov = [rd["gw"] for rd in rounds if rd["has_real"] and rd["provisional"]]
+    if prov:
+        print(f"  (a GW{', GW'.join(map(str, prov))} ideiglenes, ezért nem számít bele)")
 else:
     print("Pontosság: még nincs lezárult forduló — a GW1 után lesz első adat.")
 print(f"Következő deadline: GW{out['upcoming'][0]['gw']} {out['upcoming'][0]['deadline']}"
