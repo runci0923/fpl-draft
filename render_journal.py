@@ -107,8 +107,12 @@ for gw, d in MY["gws"].items():
         "chip": d["chip"], "points": d["points"], "bench_points": d["bench_points"],
         "rank": d["overall_rank"], "transfers": d["transfers"],
         "cost": d["transfer_cost"], "bank": d["bank"], "value": d["value"],
-        "xi": [{"id": x["id"], "cap": x["cap"], "vice": x["vice"]} for x in d["xi"]],
-        "bench": [{"id": x["id"]} for x in d["bench"]],
+        # a futó fordulónál is van tényleges pont — enélkül nem lehet menet közben értékelni
+        "finished": d.get("finished", True), "live": d.get("live_total"),
+        "xi": [{"id": x["id"], "cap": x["cap"], "vice": x["vice"],
+                "pts": x.get("pts"), "mins": x.get("mins")} for x in d["xi"]],
+        "bench": [{"id": x["id"], "pts": x.get("pts"), "mins": x.get("mins")}
+                  for x in d["bench"]],
     }
 LAST_SQUAD = max(squads, key=int) if squads else None
 
@@ -164,7 +168,8 @@ def j(o):
 CSS = (HERE / "journal.css").read_text(encoding="utf-8")
 APP = (HERE / "journal.js").read_text(encoding="utf-8")
 
-HTML = """<link rel="preconnect" href="https://fonts.googleapis.com">
+HTML = """<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Mono:wght@400;500&display=swap">
 <title>FPL napló</title>

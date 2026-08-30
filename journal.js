@@ -95,9 +95,16 @@ const fx1 = (id, gw) => {
 
 /* ---------- kirajzolás ---------- */
 function shell() {
-  const upcoming = D.gws.filter(g => !D.squads[String(g)]);
-  const dflt = upcoming.length ? upcoming[0] : D.gws[D.gws.length - 1];
-  if (GW === null) GW = dflt;
+  // alapból a FUTÓ forduló: az a legutolsó, amire már van keret. Csak ha minden
+  // ismert forduló lezárult, akkor lépünk a következő, tervezhető fordulóra.
+  if (GW === null) {
+    const withSquad = D.gws.filter(g => D.squads[String(g)]);
+    const live = withSquad.filter(g => !D.squads[String(g)].finished);
+    const upcoming = D.gws.filter(g => !D.squads[String(g)]);
+    GW = live.length ? live[live.length - 1]
+       : upcoming.length ? upcoming[0]
+       : withSquad.length ? withSquad[withSquad.length - 1] : D.gws[0];
+  }
   document.getElementById('root').innerHTML = `
   <div class="wrap">
     <p class="kicker">csak neked · a heti naplód</p>
@@ -182,7 +189,9 @@ function pcard(e, opts) {
   }).join('');
   const mr = myRate(e.id, GW);   // az én értékelésem: a kártya bal széle, nem pötty
   return `<div class="pc${p.st !== 'a' ? ' out' : ''}${mr ? ' me-' + mr : ''}"${
-      p.st !== 'a' && p.news ? ` title="${esc(p.news)}"` : ''}>
+      p.st !== 'a' && p.news ? ` title="${esc(p.news)}"` : ''}>${e.pts == null ? ''
+      : `<span class="livept${e.mins ? '' : ' zero'}"
+           title="${e.mins || 0} perc a fordulóban">${e.pts}</span>`}
     <span class="pcn">${esc(p.n)}${e.cap ? ' <span class="tag c">C</span>'
       : e.vice ? ' <span class="tag">VC</span>' : ''}${
       cs ? ` <span class="rate ${cs.rate}" title="FPL Fran GW${cs.gw}: ${cs.rate}"></span>` : ''}</span>
@@ -207,13 +216,16 @@ function renderPitch() {
     ((P[a.id] || {}).pos === 'GKP' ? 0 : 1) - ((P[b.id] || {}).pos === 'GKP' ? 0 : 1));
   const sum = sq.xi.reduce((t, e) => t + (proj(e.id, GW, false) || 0), 0);
   box.innerHTML = `<div class="card pitchcard">
-    <h2>A keretem <span class="m">${real ? `${GW}. forduló · tényleges`
-      : `${art(gw)} ${gw}. fordulóból · ${art(GW)} ${GW}. még nincs lezárva`} · ${form}
+    <h2>A keretem <span class="m">${real
+      ? `${GW}. forduló · ${sq.finished ? 'végleges' : 'folyamatban'}`
+      : `${art(gw)} ${gw}. fordulóból · ${art(GW)} ${GW}. még nincs lezárva`} · ${form}${
+      real && sq.live != null ? ` · <b>${sq.live}</b> pont eddig` : ''}
       · kezdő XI becslés <b>${sum.toFixed(1)}</b> pont
       (GW${gs[0]}${gs.length > 1 ? '–' + gs[gs.length - 1] : ''})</span></h2>
     <p class="legend2">A kártya <b>bal széle</b> a te heti értékelésed
       (${GW}. forduló), a név mellett a <b>pötty</b> az FPL Fran cheat sheetje${
-      D.cs_gw ? ` (GW${D.cs_gw})` : ''}. Alul a becslés fordulónként, az ellenféllel.</p>
+      D.cs_gw ? ` (GW${D.cs_gw})` : ''}. Alul a becslés fordulónként, az ellenféllel; a sarokban
+      a fordulóban eddig szerzett <b>tényleges pont</b>, ha a forduló már fut.</p>
     <div class="pitch">${rows}</div>
     <div class="bench"><div class="bh">kispad</div>
       <div class="prow">${bench.map((e, i) =>
@@ -262,8 +274,13 @@ function renderJournal() {
     </div>
   </div>
   <div class="card" style="margin-top:16px">
-    <h2>Utána <span class="m">${h ? `${h.points} pont · ${h.overall_rank.toLocaleString('hu-HU')}. hely`
-      : 'a forduló még nincs lezárva'}</span></h2>
+    <h2>Utána <span class="m">${(() => {
+      const {sq: s2, real: r2} = squadOf(GW);
+      if (r2 && s2 && !s2.finished) return `${GW}. forduló FOLYAMATBAN${
+        s2.live != null ? ` · ${s2.live} pont eddig` : ''} — értékelhetsz már most`;
+      if (h) return `${h.points} pont · ${h.overall_rank.toLocaleString('hu-HU')}. hely`;
+      return 'a forduló még nincs lezárva';
+    })()}</span></h2>
     <div class="pad">
       <label class="fld"><span>mit gondolok, mi történt</span>
         <textarea data-f="post.note" rows="4" placeholder="Milyen forduló volt, bejöttek-e a döntések…">${esc(post.note)}</textarea></label>
@@ -299,12 +316,18 @@ function renderSquad() {
           ${p.st !== 'a' && p.news ? ` · <span class="inj">${esc(p.news)}</span>` : ''}</span>
         <input type="text" data-f="rate.${e.id}" value="${esc(rt.c)}" placeholder="megjegyzés">
       </span>
-      <span class="pts"><span class="big">${pj == null ? '–' : pj.toFixed(1)}</span>
-        <span class="x2">${esc(fx1(e.id, GW))}</span></span>
+      <span class="pts">${e.pts == null
+        ? `<span class="big">${pj == null ? '–' : pj.toFixed(1)}</span>
+           <span class="x2">${esc(fx1(e.id, GW))}</span>`
+        : `<span class="big real">${e.pts}</span>
+           <span class="x2">${e.mins != null ? e.mins + ' perc · ' : ''}becslés ${
+             pj == null ? '–' : pj.toFixed(1)}</span>`}</span>
     </div>`;
   };
   box.innerHTML = `<div class="card">
-    <h2>Játékosaim <span class="m">${real ? `${GW}. forduló tényleges kerete`
+    <h2>Játékosaim <span class="m">${real
+      ? `${GW}. forduló · ${sq.finished ? 'végleges' : 'FOLYAMATBAN'}${
+          sq.live != null ? ` · ${sq.live} pont` : ''}`
       : `${art(gw)} ${gw}. forduló kerete — ${art(GW)} ${GW}. még nincs lezárva`}${
       sq.chip ? ' · ' + esc(sq.chip) : ''}</span></h2>
     <div class="sq">

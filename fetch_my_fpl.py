@@ -34,14 +34,22 @@ entry = get(f"entry/{ENTRY}/")
 hist = get(f"entry/{ENTRY}/history/")
 tr = get(f"entry/{ENTRY}/transfers/") or []
 
-# hol áll a szezon: csak a lezárt fordulókra van picks
+# hol áll a szezon: a picks a deadline UTÁN érhető el, tehát a futó forduló is benne van
 finished = [e["id"] for e in bs["events"] if e["finished"]]
 current = next((e["id"] for e in bs["events"] if e["is_current"]), 0)
+FIN = {e["id"]: e["finished"] for e in bs["events"]}
 gws = {}
 for gw in sorted(set(finished + ([current] if current else []))):
     p = get(f"entry/{ENTRY}/event/{gw}/picks/")
     if not p: continue
     picks = p["picks"]
+    # tényleges pont játékosonként — futó fordulóban is, hogy menet közben lehessen értékelni
+    live = get(f"event/{gw}/live/") or {}
+    LV = {e["id"]: e["stats"] for e in (live.get("elements") or [])}
+    def stat(i):
+        st = LV.get(i) or {}
+        return {"pts": st.get("total_points"), "mins": st.get("minutes"),
+                "bonus": st.get("bonus")}
     gws[str(gw)] = {
         "chip": p.get("active_chip"),
         "points": p["entry_history"]["points"],
@@ -54,12 +62,16 @@ for gw in sorted(set(finished + ([current] if current else []))):
         "value": p["entry_history"]["value"] / 10,
         "auto_subs": [{"in": s["element_in"], "out": s["element_out"]}
                       for s in p.get("automatic_subs", [])],
+        "finished": FIN.get(gw, False),
+        "live_total": sum((stat(x["element"])["pts"] or 0) * x["multiplier"]
+                          for x in picks if x["position"] <= 11),
         "xi": [dict(pl(x["element"]), slot=x["position"],
                     cap=x["is_captain"], vice=x["is_vice_captain"],
-                    mult=x["multiplier"]) for x in picks if x["position"] <= 11],
+                    mult=x["multiplier"], **stat(x["element"])) for x in picks
+               if x["position"] <= 11],
         "bench": [dict(pl(x["element"]), slot=x["position"],
-                       cap=x["is_captain"], vice=x["is_vice_captain"])
-                  for x in picks if x["position"] > 11],
+                       cap=x["is_captain"], vice=x["is_vice_captain"],
+                       **stat(x["element"])) for x in picks if x["position"] > 11],
     }
 
 out = {
@@ -81,6 +93,7 @@ out = {
     "gws": gws,
 }
 (HERE / "my_fpl.json").write_text(json.dumps(out, ensure_ascii=False, indent=1), encoding="utf-8")
+_st = ", ".join(f'GW{g}{"" if d["finished"] else " (fut)"}' for g, d in gws.items())
 print(f'my_fpl.json — {out["team_name"]} ({out["manager"]}), {out["total_points"]} pt, '
-      f'{out["overall_rank"]:,} hely · lezárt fordulók: {", ".join(gws) or "nincs"} · '
+      f'{out["overall_rank"]:,} hely · {_st or "nincs forduló"} · '
       f'{len(out["transfers"])} transfer'.replace(",", " "))

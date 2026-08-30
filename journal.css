@@ -240,3 +240,10 @@ tbody tr.mine{box-shadow:inset 3px 0 0 var(--coral)}
 .pc.me-orange{box-shadow:var(--sh-sm), inset 3px 0 0 var(--o)}
 .pc.me-red   {box-shadow:var(--sh-sm), inset 3px 0 0 var(--r)}
 .pitchcard .legend2{border-bottom:0;background:transparent;padding:0 clamp(8px,2vw,26px) 2px}
+
+.pts .big.real{color:var(--fg)}
+.pc{position:relative}
+.livept{position:absolute;top:-7px;right:-7px;min-width:20px;height:20px;padding:0 5px;
+  border-radius:999px;background:var(--coral);color:#fff;font-family:var(--mono);font-size:11px;
+  line-height:20px;text-align:center;box-shadow:var(--sh-sm)}
+.livept.zero{background:var(--dim)}
