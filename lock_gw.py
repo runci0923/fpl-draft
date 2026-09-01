@@ -117,7 +117,9 @@ for e in dl["events"]:
     final = bool(ms) and all(m["finished"] for m in ms)
     started = bool(ms) and all(m["started"] for m in ms)
     have = rec.get("actual") or {}
-    need = (final and (not have or have.get("provisional"))) or (started and not have)
+    # Amíg nincs VÉGLEGES pont, minden futáskor frissítünk: a lezárás után fél órával
+    # rögzített ideiglenes állás még csupa nulla, és magától sosem javulna ki.
+    need = (final or started) and (not have or have.get("provisional"))
     if need:
         live = api(f"event/{gw}/live") or {}
         pts = {int(k): (v.get("stats", {}) or {}).get("total_points")
@@ -129,7 +131,11 @@ for e in dl["events"]:
                         "players": {str(i): pts.get(i) for i in lu["xi"] + lu["bench"]}}
         rec["actual"] = {"teams": per, "matches": ms, "provisional": not final,
                          "recorded_at": now.replace(microsecond=0).isoformat().replace("+00:00", "Z")}
-        changed.append(f"GW{gw} pontok beírva ({'VÉGLEGES' if final else 'ideiglenes — a bónusz még nincs lezárva'})")
+        was = sum(t["xi"] for t in (have.get("teams") or {}).values()) if have else None
+        now_sum = sum(t["xi"] for t in per.values())
+        changed.append(f"GW{gw} pontok {'frissítve' if have else 'beírva'} "
+                       f"({'VÉGLEGES' if final else 'ideiglenes — a bónusz még nincs lezárva'})"
+                       + (f", kezdő XI összesen {was} -> {now_sum}" if have else ""))
 
     rec["matches"] = matches.get(gw, [])
     f.write_text(json.dumps(rec, ensure_ascii=False, separators=(",", ":")), encoding="utf-8")

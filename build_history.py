@@ -83,13 +83,28 @@ for f in sorted((HERE / "locked").glob("gw*.json")):
             per = {}
             for ent, lu in r["lineups"].items():
                 act = round(sum(pts.get(i, 0) for i in lu["xi"]), 2)
-                bst = best_xi_pts(SQUAD.get(int(ent), []), pts)
+                bst = best_xi_pts(lu["xi"] + lu["bench"], pts)   # az AKKORI 15
                 per[ent] = {"actual": act, "best": round(bst, 2) if bst else None,
                             "left": round(bst - act, 2) if bst else None}
             eff[src] = per
 
+    # utólagos hatékonyság: a VALÓS pontokkal mennyit hagyott a padon a kiállítás.
+    # Az `efficiency` a deadline előtti becsléssel mér (döntés-minőség), ez a tényekkel
+    # (mennyi pont maradt bent) — a kettő nem ugyanaz, ezért külön mező.
+    hind = {}
+    if r.get("actual"):
+        rp = {}
+        for ent, a in r["actual"]["teams"].items():
+            rp.update({int(k): (v or 0) for k, v in (a.get("players") or {}).items()})
+        for ent, lu in r["lineups"].items():
+            act = sum(rp.get(i, 0) for i in lu["xi"])
+            bst = best_xi_pts(lu["xi"] + lu["bench"], rp)        # az AKKORI 15
+            if bst is not None:
+                hind[ent] = {"actual": act, "best": round(bst, 2),
+                             "left": round(bst - act, 2)}
+
     rounds.append({"gw": gw, "deadline": r["deadline"], "snapshot_at": r.get("snapshot_at"),
-                   "efficiency": eff,
+                   "efficiency": eff, "hindsight": hind,
                    "has_tip": bool(r.get("tips")), "has_real": bool(r.get("actual")),
                    "provisional": bool((r.get("actual") or {}).get("provisional")),
                    "matches": r.get("matches", []), "teams": teams})

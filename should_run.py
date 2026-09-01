@@ -6,6 +6,7 @@ dolga, ha
   (a) elmúlt egy deadline és az a forduló még nincs lezárva, vagy
   (b) minden meccs elkezdődött, de még nincsenek pontok (ideiglenes beírás), vagy
   (b2) a forduló VÉGLEGESEN lezárult, de csak ideiglenes pontok vannak (véglegesítés),
+  (b3) vagy az ideiglenes pontok azóta változtak (a lezárás utáni fél órában még nulla volt),
   (c) vagy kézzel indítottuk (FORCE=1).
 
 Így a futások nagy része azonnal, munka nélkül zárul — nincs zaj és nincs hibázási felület.
@@ -58,6 +59,12 @@ else:
             reasons.append(f"GW{gw}: véglegesen lezárult, a pontokat véglegesíteni kell")
         elif started and not have:
             reasons.append(f"GW{gw}: minden meccs elkezdődött, ideiglenes pontok beírása")
+        elif started and have.get("provisional"):
+            # az ideiglenes állás menet közben változik — ha eltér a rögzítettől, van dolgunk
+            rec_pts = sorted((m["home_pts"], m["away_pts"]) for m in (have.get("matches") or []))
+            live_pts = sorted((m["league_entry_1_points"], m["league_entry_2_points"]) for m in ms)
+            if rec_pts != live_pts:
+                reasons.append(f"GW{gw}: az ideiglenes pontok elavultak")
 
 work = bool(reasons)
 out = os.environ.get("GITHUB_OUTPUT")

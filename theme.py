@@ -3,7 +3,8 @@ hogy a tokenek ne csússzanak szét a draft- és a forduló-oldal között.
 A `<style>` NYITVA marad: a lapok a saját szabályaikat utána fűzik.
 """
 
-HEAD = r'''<link rel="preconnect" href="https://fonts.googleapis.com">
+HEAD = r'''<meta charset="utf-8">
+<link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,200..800&family=DM+Mono:wght@400;500&display=swap">
 <style>

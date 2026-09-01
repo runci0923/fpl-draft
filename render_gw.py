@@ -518,6 +518,22 @@ function renderHist() {
         </tr>`).join('') + '</tbody></table></div>';
   }
 
+  // utólagos felállítás-hatékonyság: a VALÓS pontokkal
+  if (rd.hindsight && Object.keys(rd.hindsight).length) {
+    html += `<h3 style="margin:20px 0 0;font-size:16px">Mennyi maradt a padon — utólag</h3>
+      <p class="empty2" style="border:0;padding:0;margin:4px 0 0">Ugyanez a <b>tényleges</b>
+      pontokkal: a kiállított XI hozama, és amennyit az AKKORI 15-ből ki lehetett volna hozni.
+      Ez már nem döntés-minőség, hanem tiszta utólagos mérleg — a becslés nem játszik bele.</p>
+      <div class="htbl"><table><thead><tr><th class="l">Manager</th><th>Kiállt</th>
+      <th>Legjobb XI</th><th>A padon maradt</th></tr></thead><tbody>` +
+      Object.entries(rd.hindsight).map(([e, v]) => ({e, ...v}))
+        .sort((a, b) => b.left - a.left)
+        .map(v => `<tr><td class="l nm3">${esc(nm(v.e))}</td>
+          <td class="dimc">${v.actual}</td><td class="dimc">${v.best.toFixed(0)}</td>
+          <td class="${v.left > 5 ? 'hit' : 'dimc'}">${v.left.toFixed(0)}</td>
+        </tr>`).join('') + '</tbody></table></div>';
+  }
+
   // forrás-pontosság (összesített)
   if (HI.accuracy && Object.values(HI.accuracy).some(a => a.mae !== null)) {
     const n = Math.max(...Object.values(HI.accuracy).map(a => a.n || 0));
