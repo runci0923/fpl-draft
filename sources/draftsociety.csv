@@ -22,8 +22,8 @@ element_id,rank,web_name,club,pos
 552,21,Brobbey,SUN,FWD
 208,22,Sarr,CRY,MID
 335,23,Stach,LEE,MID
-155,24,Enzo,CHE,MID
-237,25,Ndiaye,EVE,MID
+155,24,Enzo,MCI,MID
+237,25,Ndiaye,MCI,MID
 25,26,Gyökeres,ARS,FWD
 236,27,Dewsbury-Hall,EVE,MID
 499,28,Pedro Porro,TOT,DEF
@@ -54,7 +54,7 @@ element_id,rank,web_name,club,pos
 526,53,Solanke,TOT,FWD
 159,54,Caicedo,CHE,MID
 336,55,Okafor,LEE,MID
-201,56,Muñoz,CRY,DEF
+201,56,Muñoz,NFO,DEF
 84,57,Collins,BRE,DEF
 95,58,O.Dango,BRE,MID
 67,59,Rayan,BOU,MID
@@ -91,7 +91,7 @@ element_id,rank,web_name,club,pos
 471,90,Milenković,NFO,DEF
 82,91,Kelleher,BRE,GKP
 112,92,Van Hecke,TOT,DEF
-238,93,Grealish,MCI,MID
+238,93,Grealish,EVE,MID
 249,94,Barry,EVE,FWD
 472,95,Murillo,NFO,DEF
 529,96,Roefs,SUN,GKP
