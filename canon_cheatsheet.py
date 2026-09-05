@@ -72,7 +72,7 @@ def main(paths):
             row["eid"], row["n"] = eid, api
         # az eid/sheet_n a név mellé kerüljön, ne a sor végére
         order = ["pos", "price", "n", "sheet_n", "eid", "club", "rate", "tag", "trend",
-                 "fx", "npxg", "npxg_xag", "xa", "ga", "cbit"]
+                 "fx", "npxg", "npxg_xag", "xa", "ga", "cbit", "saves90"]
         d["players"] = [{k: r[k] for k in order if k in r} for r in d["players"]]
         p.write_text(json.dumps(d, ensure_ascii=False, indent=1), encoding="utf-8")
         print(f"{p.name}: {len(d['players'])} sor, {changed} módosult"
