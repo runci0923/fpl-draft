@@ -1,5 +1,5 @@
 {
- "fetched_at": "2026-09-06T10:42:12Z",
+ "fetched_at": "2026-09-07T12:10:43Z",
  "current": 3,
  "next": 4,
  "lock_after_minutes": 30,
@@ -31,7 +31,7 @@
    "lock_at": "2026-09-04T18:00:00Z",
    "waivers": "2026-09-03T17:30:00Z",
    "trades": "2026-09-02T17:30:00Z",
-   "finished": false,
+   "finished": true,
    "avg_score": null
   },
   {
