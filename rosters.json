@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-09-07T12:10:49Z",
+ "taken_at": "2026-09-13T11:32:54Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -37,14 +37,14 @@
     "Pedro Porro (TOT) · pick 47",
     "Van Hecke (TOT) · pick 71",
     "Konsa (ARS) · pick 74",
-    "Collins (BRE) · pick 83"
+    "Mitchell (CRY) · waiver"
    ],
    "MID": [
     "B.Fernandes (MUN) · pick 2",
     "Wirtz (LIV) · pick 11",
     "Cunha (MUN) · pick 23",
-    "Wilson (LEE) · pick 38",
-    "Tavernier (BOU) · pick 59"
+    "Tavernier (BOU) · pick 59",
+    "Barnes (NEW) · pick 79"
    ],
    "FWD": [
     "McBurnie (HUL) · waiver",
@@ -58,11 +58,11 @@
     "Pope (NEW) · waiver"
    ],
    "DEF": [
-    "Senesi (TOT) · pick 51",
     "Milenković (NFO) · pick 70",
     "White (ARS) · pick 82",
     "Ballard (SUN) · waiver",
-    "Hall (NEW) · waiver"
+    "Hall (NEW) · waiver",
+    "Muharemović (LEE) · waiver"
    ],
    "MID": [
     "Saka (ARS) · pick 3",
@@ -98,8 +98,8 @@
    ],
    "FWD": [
     "Igor Jesus (NFO) · pick 28",
-    "Georginio (BHA) · pick 69",
-    "Marmoush (TOT) · waiver"
+    "Marmoush (TOT) · waiver",
+    "Kostoulas (BHA) · waiver"
    ]
   },
   "Dominik": {
@@ -110,9 +110,9 @@
    "DEF": [
     "Gvardiol (MCI) · pick 41",
     "Tarkowski (EVE) · pick 44",
-    "Frimpong (LIV) · pick 53",
-    "Mosquera (ARS) · pick 56",
-    "Canvot (CRY) · pick 80"
+    "Canvot (CRY) · pick 80",
+    "Thiaw (NEW) · waiver",
+    "Araujo (LIV) · waiver"
    ],
    "MID": [
     "Palmer (CHE) · pick 5",
@@ -144,7 +144,7 @@
     "Lewis-Potter (BRE) · waiver",
     "Cherki (MCI) · waiver",
     "Stach (LEE) · waiver",
-    "Munoz (LIV) · waiver"
+    "Scott (BOU) · waiver"
    ],
    "FWD": [
     "Isak (LIV) · pick 6",
