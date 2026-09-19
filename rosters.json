@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-09-15T11:31:09Z",
+ "taken_at": "2026-09-19T10:42:38Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -49,7 +49,7 @@
    "FWD": [
     "McBurnie (HUL) · waiver",
     "Nketiah (CRY) · waiver",
-    "N.Jackson (AVL) · waiver"
+    "Delap (NFO) · waiver"
    ]
   },
   "Attila": {
@@ -58,17 +58,17 @@
     "Pope (NEW) · waiver"
    ],
    "DEF": [
-    "Milenković (NFO) · pick 70",
     "White (ARS) · pick 82",
     "Ballard (SUN) · waiver",
     "Hall (NEW) · waiver",
+    "Van de Ven (TOT) · waiver",
     "Muharemović (LEE) · waiver"
    ],
    "MID": [
     "Saka (ARS) · pick 3",
     "Szoboszlai (LIV) · pick 10",
     "Tzolis (ARS) · pick 27",
-    "Elanga (NEW) · waiver",
+    "Schade (BRE) · waiver",
     "M.Sangaré (BRE) · waiver"
    ],
    "FWD": [
@@ -110,8 +110,8 @@
    "DEF": [
     "Gvardiol (MCI) · pick 41",
     "Tarkowski (EVE) · pick 44",
-    "Canvot (CRY) · pick 80",
     "Thiaw (NEW) · waiver",
+    "Vuskovic (BHA) · waiver",
     "Araujo (LIV) · waiver"
    ],
    "MID": [
@@ -130,7 +130,7 @@
   "Norbert": {
    "GKP": [
     "Martinez (CHE) · pick 87",
-    "Henderson (CRY) · pick 90"
+    "Tzolakis (HUL) · waiver"
    ],
    "DEF": [
     "O'Reilly (MCI) · pick 19",
@@ -149,7 +149,7 @@
    "FWD": [
     "Isak (LIV) · pick 6",
     "João Pedro (CHE) · pick 7",
-    "Madjo (AVL) · pick 78"
+    "Emersonn (IPS) · waiver"
    ]
   }
  }
