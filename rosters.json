@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-10-13T13:58:34Z",
+ "taken_at": "2026-10-17T10:27:51Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -12,7 +12,7 @@
     "Rúben (MCI) · pick 37",
     "Truffert (BOU) · pick 60",
     "Mukiele (SUN) · pick 61",
-    "Palestra (CHE) · pick 72"
+    "Jacquet (LIV) · waiver"
    ],
    "MID": [
     "Semenyo (MCI) · pick 13",
@@ -30,12 +30,12 @@
   "Daniel": {
    "GKP": [
     "A.Becker (LIV) · pick 62",
-    "Kelleher (BRE) · pick 86"
+    "Verbruggen (BHA) · waiver"
    ],
    "DEF": [
-    "Pedro Porro (TOT) · pick 47",
     "Van Hecke (TOT) · pick 71",
     "Konsa (ARS) · pick 74",
+    "Justin (LEE) · waiver",
     "Bogle (LEE) · waiver",
     "Mitchell (CRY) · waiver"
    ],
@@ -48,7 +48,7 @@
    ],
    "FWD": [
     "Strand Larsen (CRY) · pick 81",
-    "McBurnie (HUL) · waiver",
+    "Solanke (TOT) · waiver",
     "Delap (NFO) · waiver"
    ]
   },
@@ -117,9 +117,9 @@
    "MID": [
     "Palmer (CHE) · pick 5",
     "Rogers (CHE) · pick 17",
-    "Gakpo (LIV) · pick 65",
     "E.Le Fée (SUN) · pick 77",
-    "Enzo (MCI) · waiver"
+    "Enzo (MCI) · waiver",
+    "Manzambi (AVL) · waiver"
    ],
    "FWD": [
     "Thiago (BRE) · pick 8",
@@ -141,15 +141,15 @@
    ],
    "MID": [
     "Ødegaard (ARS) · pick 30",
+    "McGinn (AVL) · waiver",
     "Lewis-Potter (BRE) · waiver",
     "Cherki (MCI) · waiver",
-    "Stach (LEE) · waiver",
-    "Scott (BOU) · waiver"
+    "Stach (LEE) · waiver"
    ],
    "FWD": [
     "Isak (LIV) · pick 6",
     "João Pedro (CHE) · pick 7",
-    "Emersonn (IPS) · waiver"
+    "N.Jackson (AVL) · waiver"
    ]
   }
  }
