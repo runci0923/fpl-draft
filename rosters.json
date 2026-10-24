@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-10-20T11:17:41Z",
+ "taken_at": "2026-10-24T10:42:19Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -58,7 +58,7 @@
     "Pope (NEW) · waiver"
    ],
    "DEF": [
-    "White (ARS) · pick 82",
+    "Ajer (BRE) · waiver",
     "Branthwaite (EVE) · waiver",
     "Hall (NEW) · waiver",
     "Van de Ven (TOT) · waiver",
@@ -67,9 +67,9 @@
    "MID": [
     "Saka (ARS) · pick 3",
     "Szoboszlai (LIV) · pick 10",
+    "Madueke (ARS) · waiver",
     "Schade (BRE) · waiver",
-    "M.Sangaré (BRE) · waiver",
-    "King (FUL) · waiver"
+    "Hinshelwood (BHA) · waiver"
    ],
    "FWD": [
     "Calvert-Lewin (LEE) · pick 15",
@@ -94,7 +94,7 @@
     "Gibbs-White (NFO) · pick 16",
     "Groß (BHA) · pick 40",
     "Foden (MCI) · pick 45",
-    "Ndiaye (MCI) · pick 57"
+    "Gakpo (LIV) · pick 65"
    ],
    "FWD": [
     "Igor Jesus (NFO) · pick 28",
