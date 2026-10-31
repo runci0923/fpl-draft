@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-10-26T12:40:51Z",
+ "taken_at": "2026-10-31T12:01:56Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -80,24 +80,24 @@
   "David": {
    "GKP": [
     "Kinsky (TOT) · pick 76",
-    "Sels (NFO) · pick 88"
+    "Trafford (LEE) · waiver"
    ],
    "DEF": [
     "Gabriel (ARS) · pick 4",
     "Virgil (LIV) · pick 21",
-    "Calafiori (ARS) · pick 33",
-    "Lacroix (CHE) · pick 52",
-    "Shaw (MUN) · pick 64"
+    "White (ARS) · pick 82",
+    "Castagne (FUL) · waiver",
+    "Hill (BOU) · waiver"
    ],
    "MID": [
     "Mbeumo (MUN) · pick 9",
-    "Gibbs-White (NFO) · pick 16",
+    "Rice (ARS) · pick 22",
     "Groß (BHA) · pick 40",
     "Foden (MCI) · pick 45",
-    "Gakpo (LIV) · pick 65"
+    "Belloumi (HUL) · waiver"
    ],
    "FWD": [
-    "Igor Jesus (NFO) · pick 28",
+    "McBurnie (HUL) · waiver",
     "Marmoush (TOT) · waiver",
     "Kostoulas (BHA) · waiver"
    ]

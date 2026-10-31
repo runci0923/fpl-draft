@@ -1,7 +1,7 @@
 {
- "fetched_at": "2026-10-26T12:40:46Z",
- "current": 8,
- "next": 9,
+ "fetched_at": "2026-10-31T12:01:52Z",
+ "current": 9,
+ "next": 10,
  "lock_after_minutes": 30,
  "events": [
   {
@@ -139,8 +139,8 @@
    "name": "Gameweek 14",
    "deadline": "2026-12-05T11:00:00Z",
    "lock_at": "2026-12-05T11:30:00Z",
-   "waivers": "2026-12-04T11:00:00Z",
-   "trades": "2026-12-03T11:00:00Z",
+   "waivers": "2026-12-04T14:00:00Z",
+   "trades": "2026-12-03T14:00:00Z",
    "finished": false,
    "avg_score": null
   },
