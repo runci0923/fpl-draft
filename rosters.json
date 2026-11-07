@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-11-03T13:57:26Z",
+ "taken_at": "2026-11-07T12:47:14Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -58,9 +58,9 @@
     "Pope (NEW) · waiver"
    ],
    "DEF": [
+    "Calafiori (ARS) · pick 33",
     "Ajer (BRE) · waiver",
-    "Branthwaite (EVE) · waiver",
-    "Hall (NEW) · waiver",
+    "Silva (BOU) · waiver",
     "Van de Ven (TOT) · waiver",
     "Muharemović (LEE) · waiver"
    ],
@@ -69,7 +69,7 @@
     "Szoboszlai (LIV) · pick 10",
     "Madueke (ARS) · waiver",
     "Schade (BRE) · waiver",
-    "Hinshelwood (BHA) · waiver"
+    "Kroupi.Jr (BOU) · waiver"
    ],
    "FWD": [
     "Calvert-Lewin (LEE) · pick 15",
@@ -129,8 +129,8 @@
   },
   "Norbert": {
    "GKP": [
-    "Martinez (CHE) · pick 87",
-    "Tzolakis (HUL) · waiver"
+    "Tzolakis (HUL) · waiver",
+    "Penders (CHE) · waiver"
    ],
    "DEF": [
     "Guéhi (MCI) · pick 31",
@@ -144,7 +144,7 @@
     "McGinn (AVL) · waiver",
     "Lewis-Potter (BRE) · waiver",
     "Cherki (MCI) · waiver",
-    "Stach (LEE) · waiver"
+    "Ayari (BHA) · waiver"
    ],
    "FWD": [
     "Isak (LIV) · pick 6",
