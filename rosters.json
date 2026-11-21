@@ -1,6 +1,6 @@
 {
  "_doc": "Aktuális keretek. A git-történet ennek a fájlnak a diffje = átigazolás-napló.",
- "taken_at": "2026-11-09T15:52:20Z",
+ "taken_at": "2026-11-21T14:29:08Z",
  "rosters": {
   "Krisztian": {
    "GKP": [
@@ -15,7 +15,7 @@
     "Jacquet (LIV) · waiver"
    ],
    "MID": [
-    "Semenyo (MCI) · pick 13",
+    "Doku (MCI) · pick 18",
     "Dewsbury-Hall (EVE) · pick 24",
     "Bruno G. (ARS) · pick 25",
     "Neto (CHE) · pick 73",
@@ -93,12 +93,12 @@
     "Mbeumo (MUN) · pick 9",
     "Rice (ARS) · pick 22",
     "Groß (BHA) · pick 40",
-    "Foden (MCI) · pick 45",
-    "Belloumi (HUL) · waiver"
+    "Gakpo (LIV) · pick 65",
+    "Gomez (BHA) · waiver"
    ],
    "FWD": [
     "McBurnie (HUL) · waiver",
-    "Marmoush (TOT) · waiver",
+    "Emersonn (IPS) · waiver",
     "Kostoulas (BHA) · waiver"
    ]
   },
@@ -110,7 +110,7 @@
    "DEF": [
     "Gvardiol (MCI) · pick 41",
     "Tarkowski (EVE) · pick 44",
-    "Thiaw (NEW) · waiver",
+    "Saliba (ARS) · waiver",
     "Vuskovic (BHA) · waiver",
     "Araujo (LIV) · waiver"
    ],
@@ -129,15 +129,15 @@
   },
   "Norbert": {
    "GKP": [
-    "Tzolakis (HUL) · waiver",
-    "Penders (CHE) · waiver"
+    "Martinez (CHE) · pick 87",
+    "Tzolakis (HUL) · waiver"
    ],
    "DEF": [
     "Guéhi (MCI) · pick 31",
     "James (CHE) · pick 43",
     "Kerkez (LIV) · pick 55",
-    "De Cuyper (BHA) · waiver",
-    "Maitland-Niles (EVE) · waiver"
+    "Mykolenko (EVE) · waiver",
+    "De Cuyper (BHA) · waiver"
    ],
    "MID": [
     "Ødegaard (ARS) · pick 30",
